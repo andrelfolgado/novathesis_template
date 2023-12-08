@@ -135,6 +135,7 @@
 
 \RequirePackage{NOVAthesisFiles/fix-profiling}
 \documentclass{novathesis}
+\usepackage{glossaries}
 
 
 %============================================================
@@ -209,7 +210,7 @@
 %%============================================================
 
 %%------------------------------------------------------------
-\begin{document}        % Beginning of document
+\begin{document} % Beginning of document
 \typeout{TIME class loading=\the\pdfelapsedtime}%
 \benchmarktoc
 \benchmarktic
@@ -225,8 +226,10 @@
 \typeout{TIME process covers=\the\pdfelapsedtime}%
 \benchmarktoc
 \benchmarktic
+%##------------------------------------------------------------
 %\ntprint{frontmatter}     % The default order is listed below, but can be changed
 %\typeout{TIME process frontmatter=\the\pdfelapsedtime}%
+%##------------------------------------------------------------
 \benchmarktoc
 \benchmarktic
 %                         % at the School's “defaults.ldf” with
