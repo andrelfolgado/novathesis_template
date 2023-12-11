@@ -1,0 +1,139 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% my-chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with the template manual
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE my-chapter2.tex}%
+
+\chapter{Weather Derivatives}
+\label{ch:weather_derivatives}
+
+\glsresetall
+
+\section{Introduction}
+\label{sec:weather_intro}
+
+    Weather plays a crucial role in the economy, affecting various industries such as energy producers,
+    distributors, retailers, agriculture, and transportation.
+    Extreme weather events and temperature volatility at high latitudes are increasingly impacting supply and demand
+    in businesses, making hedging strategies and weather derivatives essential for managing weather-related risks.
+    The first weather transaction was made in 1997 by Enron,
+    which sold a weather swap to a natural gas company, Koch Industries.
+    After a long thinking process,
+    they found a way to transfer the weather risk to a willing counterparty\cite{barrieu_primer_2010}.\\
+
+    In the field of risk management, two main types of weather risk could be defined\cite{leggio_using_2007}.
+    The term ``Non-catastrophic weather risk'' pertains to weather events with a high likelihood
+    of occurring and resulting in limited losses.
+    On the other hand, ``Catastrophic weather risk'' is defined as the risk associated with weather-related catastrophes
+    characterised by low probability but substantial losses.
+    Hereinafter, this thesis will focus on the non-catastrophic weather risk,
+    which is what concerns most energy market application.
+
+
+\section{Weather Risk}
+\label{sec:weather_risk}
+
+    Weather risks, particularly temperature and wind fluctuations, have significant impacts on operational and financial
+    decisions, as well as revenues in various industries.
+    Some industries, such as energy, agriculture, retailing, travel, and transportation,
+    are more vulnerable to weather risks, which can affect both revenues and costs or both.
+    In the table~\ref{tab:weather_risks_tab}, it is possible to see the main weather risks for some important industries.
+    As for the focal point of this thesis, the energy producers can be affected by temperature,
+    wind, and solar irradiance and precipitation\cite{cui_applications_2015}.
+    Weather risks can also affect the financial markets, as they can lead to increased volatility in commodity prices.
+
+\bgroup
+    \rowcolors{1}{}{GhostWhite}
+%    \begin{xltabular}{\textwidth}{>{\ttfamily}lX>{\ttfamily}l}
+    \begin{xltabular}{\textwidth}
+        {   % This is the column specification for the table
+            >{\ttfamily\centering\arraybackslash}m{0.33\textwidth}
+            >{\ttfamily\centering\arraybackslash}m{0.33\textwidth}
+            >{\ttfamily\centering\arraybackslash}m{0.33\textwidth}
+        }
+        \toprule
+        \rowcolor{Gainsboro}% % bold font
+            \texttt{Industry} & \texttt{Weather Type} & \texttt{Risk}  \\
+        \midrule
+            Energy Consumer & Temperature & Excessive or reduced demand\\
+            Energy Producer & Temperature, Wind, Solar irradiance, Precipitation & Excessive or reduced demand\\
+            Agriculture     & Temperature, Precipitation & Crop yield, handling, storage, pests\\
+            Retailing       & Temperature, Precipitation & Reduced demand\\
+            Travel          & Temperature, Precipitation, Snowfall & Cancellations or lower revenue\\
+%            Transportation  & Temperature, Precipitation, Wind, Frost day, Snowfall &
+%                Delays, Cancellations, Higher operational costs, Lower consumption\\
+%            Government      & Temperature, Precipitation, Snowfall & Higher budget costs\\
+            Construction    & Temperature, Precipitation, Snowfall & Delays, Higher budget costs\\
+        \bottomrule
+        \caption{Weather Risks}
+        \label{tab:weather_risks_tab}
+    \end{xltabular}
+\egroup
+
+\section{Weather Derivatives}
+\label{sec:weather_derivatives}
+
+    Weather derivatives present various advantages over alternative weather risk management tools
+    by efficiently transferring weather-related risks to parties capable of managing or utilising them effectively.
+    These instruments have underlying variables like rainfall, temperature, humidity, wind speed,
+    snowfall and are similar to conventional contingent claims that depend on the price of some fundamental.
+    In the energy market, particularly taking into account the focus of this work,
+    they can be used as a significant alternative to insurance contracts.
+    The main advantages of weather derivatives are~\cite{cui_applications_2015}:
+    \begin{enumerate}
+        \item Transfer weather related risks to the party which could manage or use them more eficiently;
+        \item Lower contracting costs due to reduced moral hazard and adverse counterparty risks in trading
+        \item Provide compensation for losses occurred;
+        \item Offer a payment simply based on weather index value (the field inspection is not needed any more);
+        \item Eliminate the insurable interest in the subject of insurance;
+        \item More convenient means to safeguard against limited losses associated with high-probability events
+        \item Be relatively easier hedged since weather risk is primarily volume risk and not price/market risk.
+    \end{enumerate}
+
+    These benefits make it natural for industries to employ weather derivatives to stabilize revenues,
+    cover over-budget costs, and reimburse losses~\cite{matsumoto_simultaneous_2021}.
+    Moreover, the limited correlation of underlying indices in weather derivatives with other financial indices
+    positions them as an alternative asset class, contributing to portfolio diversification.
+    The ability of weather derivatives to serve as both risk management tools and alternative assets underscores their
+    versatility and relevance in diverse financial contexts.\\
+
+    The market for weather derivatives is expanding, where the energy sector has been a primary driver of the growth,
+    with temperature-dependent derivatives being the most prevalent~\cite{ali_pricing_2023}.
+    With the increasing penetration of renewable energy sources in the energy mix becoming the main source of energy,
+    the role of weather derivatives in hedging against weather-related risks will become increasingly important.
+
+%\section{Applications in Solar and Wind Generation}
+%\label{sec:weather_solar_wind}
+%
+%    Weather derivatives have been increasingly used in solar and wind energy production to hedge against
+%    fluctuations in temperature and wind speed,
+%    which can significantly impact energy production and revenues\cite{hain_managing_2018}.
+%    By using weather derivatives, renewable energy producers can manage the financial risks associated
+%    with variable weather conditions, ensuring more stable revenues and reducing the overall risk of their businesses.
+%    The use of weather derivatives in solar and wind energy production has been growing,
+%    with the aim of stabilising revenues, covering over-budget costs, and reimburseing losses\cite{hain_managing_2018}.
+%    As the use of renewable energy sources continues to grow, the role of weather derivatives in hedging against
+%    weather-related risks will become increasingly important.
+%    As the underlying indices of weather derivatives have limited correlation with other financial indices.
+%    In addition, they can also be used as an alternative asset class and diversify investment portfolios.
+%    In the energy market, temperature futures can be used to hedge the volume risks, providing a dynamic
+%    hedging strategy for energy futures using temperature futures
+
+\section{Conclusion}
+\label{sec:weather_conclusion}
+
+    In conclusion, weather related derivatives are being employed more frequently in alternative risk portfolios with
+    multiple asset classes, particularly in the energy sector.
+    By using weather derivatives, renewable energy producers can better manage weather-related risks,
+    ensuring more stable revenues and reducing the overall risk of their businesses.
+    As the use of renewable energy sources continues to grow,
+    the role of weather derivatives in hedging against weather-related risks will become increasingly important.
+
+
+
+
+
