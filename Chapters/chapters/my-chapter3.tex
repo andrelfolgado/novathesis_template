@@ -170,26 +170,39 @@ Determine appropriate pricing mechanisms for weather derivatives.
             \usetikzlibrary{positioning}
             % Nodes
             \node[rectangle, draw, fill=green!30] (spotprices) {Spot Prices};
-            \node[rectangle, draw, above=of spotprices, fill=green!30] (wind) {Wind Speed};
+            \node[rectangle, draw, above=of spotprices, fill=purple!80!blue!20] (wind) {Wind Speed};
             \node[rectangle, draw, right=of wind] (load) {Load};
             \node[rectangle, draw, below=of load] (d_cash_flows) {Discounted Cash Flows};
             \node[rectangle, draw, right=of load] (t_prop) {Asset properties};
             \node[rectangle, draw, right=of d_cash_flows, fill=tz_myblue] (hedging) {Hedging Payoff};
-            \node[rectangle, draw, below=1cm of t_prop, above=0.4cm of hedging, fill=tz_myblue] (pricing) {Pricing Options};
-            \node[rectangle, draw, below=1cm of wind, above=1cm of spotprices, fill=green!30] (i_rate) {Interest Rate};
+            \node[rectangle, draw, below=1cm of t_prop, above=0.6cm of hedging, fill=tz_myblue] (pricing) {Pricing Options};
+            \node[rectangle, draw, below=1cm of wind, above=0.6cm of spotprices, fill=green!30] (i_rate) {Interest Rate};
             % Box
             \node [
                 draw,
-                fit= (wind) (i_rate) (spotprices),
+                fit= (wind),
                 inner sep=5pt,
-                label=above:{Stochastic Processes\\Monte Carlo}
+                label={[label distance=-2mm]above:{BSTS}}
+            ] {};
+            \node [
+                draw,
+                fit= (i_rate) (spotprices),
+                inner sep=5pt,
+                label={[label distance=-2mm]above:{Stochastic Processes}}
             ] {};
             \node [
                 draw,
                 fit= (pricing) (hedging),
                 inner sep=5pt,
-                label=above:{\\Hedging Strategies}
+                label={[label distance=-2mm]above:{Hedging Strategies}}
             ] {};
+            \node [
+                draw,
+                fit= (d_cash_flows),
+                inner sep=5pt,
+                label={[label distance=-2mm]below:{Monte Carlo}}
+            ] {};
+
 
             % Arrows
             \draw [->] (spotprices) -- node[midway, above] {} (d_cash_flows);
@@ -306,7 +319,7 @@ Determine appropriate pricing mechanisms for weather derivatives.
 
 
 In conclusion, this Ph.D.\ thesis endeavours to advance knowledge in renewable energy finance and risk management,
-offering valuable tools and strategies for stakeholders in the evolving energy landscape
+offering valuable tools and strategies for stakeholders in the evolving energy landscape.
 to support energy management in this challenging path to a secure and sustainable energy transition.
 
 
