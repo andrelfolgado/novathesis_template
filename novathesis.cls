@@ -8,7 +8,7 @@
 %% To view a copy of this license, visit
 %% https://www.latex-project.org/lppl/lppl-1-3c/
 %%
-%% Version 2023-11-18 [7.1.11]
+%% Version 2024-01-16 [7.1.18]
 %% Departamento de Informática (www.di.fct.unl.pt)
 %% Faculdade de Ciências e Tecnologia (www.fct.unl.pt)
 %% Universidade NOVA de Lisboa (www.unl.pt)
@@ -21,6 +21,8 @@
 %%          https://github.com/joaomlourenco/novathesis/discussions
 %%      or at the NOVAthesis facebook group at
 %%          https://www.facebook.com/groups/novathesis
+%%      or in the subreddit r/novathesis
+%%          https://www.reddit.com/r/novathesis/
 %%
 %% AUTHOR @github:
 %%      - joaomlourenco
@@ -37,19 +39,9 @@
 %%             themselves in the “Add special instructions to the seller:” box.
 %%
 %% CITATION:
-%%      If you use this template, please be kind and cite it in your bibliography:
-%%           “João M. Lourenço, The NOVAthesis \LaTeX\ Template User’s Manual,
-%%            NOVA University Lisbon, 2021,
-%%            https://github.com/joaomlourenco/novathesis/raw/main/template.pdf.”
-%%      The BibTeX entry is already in the exxample “bibliography.bib” file:
-%%           @Manual{novathesis-manual,
-%%              title       ={{The NOVAthesis \LaTeX\ Template User's Manual}},
-%%              author      ={João M. Lourenço},
-%%              organization={NOVA University Lisbon},
-%%              year        ={2021},
-%%              url         ={https://github.com/joaomlourenco/novathesis/raw/main/template.pdf},
-%%           }
+%%      If you use this template, please be kind and \cite{novathesis-manual} somethwew in your document.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
@@ -61,7 +53,8 @@
 %%% WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ProvidesClass{novathesis}[2023-11-18 novathesis template]
+
+\ProvidesClass{novathesis}[2024-01-16 novathesis template]
 \NeedsTeXFormat{LaTeX2e}[2020-02-02]
 
 
@@ -232,6 +225,7 @@
   color/links/.new cmd          = {\@ifpackageloaded{hyperref}%
                                             {\hypersetup{allcolors=#1}}%
                                             {\PassOptionsToPackage{allcolors=#1}{hyperref}}},
+  color/gls/.new cmd             = {\AtEndPreamble{\renewcommand*{\glstextformat}[1]{\textcolor{#1}{##1}}}},
   % LANGUAGES
   lang/extra/.new list           = {},
   lang/main/.new choice         = {en, pt, fr, it, de, es, gr},
@@ -724,6 +718,7 @@
 \options{/novathesis/lang/cover = \option{/novathesis/lang/main},
          /novathesis/lang/copyright = \option{/novathesis/lang/main},
          /novathesis/color/links = DarkBlue,
+         /novathesis/color/gls = Black,
 }
 
 
@@ -1564,7 +1559,7 @@
 }
 
 \gdef\@COVERNUM{}%
-\newcommand{\ifcovernum}[3]{\IfStrEq{\@COVERNUM}{#1}{#2}{#3}}
+\newcommand{\ifcovernum}[2]{\IfStrEq{\@COVERNUM}{#1}{#2}}
 
 \newcommand{\ntprintcoversingle}[1]{%
   % #1 = cover ID “major-minor”
@@ -1592,7 +1587,7 @@
     \NTRunHook{cover/#1/post}%
     \NTRunHook{cover/post}%
   \endgroup%
-  \clearpage%
+  \ifoptionequal{/novathesis/media}{paper}{\newpage ~\thispagestyle{empty}\newpage}{\clearforchapter}
 }
 
 \newcommand{\@covertikzlist}{}
@@ -2143,17 +2138,8 @@
   \ifoptiondefined{/@nt/#3/#4/full}{%
     % \typeout{NTPRINTPERSONGROUP 1=[#1] 2=[#2] 3=[#3] 4=[#4]}\NTPRINTPERSONGROUP
     \@nt@printgrouptitle{#3}{#4}%
-    % \@nt@reducegender{/@nt/#3/#4/gender}{\@nt@advgender}%
-    % \@nt@reducenumber{/@nt/#3/#4/full}{\@nt@advnumber}%
-    % \datadefault{#3stringpre}(#4)%
-    % \bgroup%
-    %   \datadefault{#3stringfont}(#4)%
-    %   \datadefault{#3string}(#4,\@nt@advnumber,\@nt@advgender,\@LANG@COVER)%
-    % \egroup%
-    % \datadefault{#3stringpost}(#4)%
     \begin{varwidth}[t]{\linewidth-\maxlen}%
       \raggedright%
-      % \rule{\linewidth}{5pt}\par
       \IfStrEq{#1}{list}{%
         \@ntprintpersonsaslist{#3}{#4}%
       }{%
@@ -2161,7 +2147,7 @@
       }%
     \end{varwidth}%
     \thepersongrouppost()%
-  }{}%\ClassError{novathesis}{ntprintpersongroup: undefined [/@nt/#3/#4/full]}{}}%
+  }{}%
 }
 
 
@@ -2180,15 +2166,17 @@
   \raggedright%
   \datadefault{#2namepre}(#3)%
   \StrCut{#4}{,}\@nt@name\@nt@remainder% split name from remainder
-  \ignorespaces\parbox[b]{\linewidth}%
-                         {\raggedright\datadefault{#2namefont}(#3)\@nt@name}%
+  % \ignorespaces\parbox[b]{\linewidth}%
+  %                        {\raggedright\datadefault{#2namefont}(#3)\@nt@name}%
+  \datadefault{#2namefont}(#3)\@nt@name%
   \IfStrEq{#1}{full}{%
     \IfStrEq{\@nt@remainder}{}{}{%
       \datadefault{#2remainderpre}(#3)%
       \bgroup%
         \datadefault{#2remainderfont}(#3)%
-        \ignorespaces{\parbox[t]{\linewidth}%
-                                   {\raggedright\@nt@remainder}}%
+        % \ignorespaces{\parbox[t]{\linewidth}%
+        %                            {\raggedright\@nt@remainder}}%
+        \@nt@remainder%
       \egroup%
       \datadefault{#2remainderpost}(#3)%
     }%
