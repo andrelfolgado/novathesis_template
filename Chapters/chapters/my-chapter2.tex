@@ -108,7 +108,19 @@
     With the increasing penetration of renewable energy sources in the energy mix becoming the main source of energy,
     the role of weather derivatives in hedging against weather-related risks will become increasingly important.
 
+\section{Renewable Generation Costs}
+\label{sec:wind_solar_lcoe}
 
+    The analysis of the levelized cost of electricity (LCOE) for various power generation technologies in Europe in 2023
+    indicates that onshore wind and utility-scale solar are the cheapest technologies to deploy.
+    In 2023, onshore wind and PV have average LCOEs of €63/MWh and €51/MWh, respectively.
+    These values are projected to more than halve in real terms by 2050 to €28/MWh and €24/MWh,
+    making them the most cost-competitive options in the long term~\cite{abdullah_europe_2023}.
+    The report also suggests that carbon-capture thermal generation,
+    specifically CCGT with Carbon Capture and Storage (CCS), is the cheapest non-nuclear, zero-carbon thermal generation.
+    However, onshore wind is the most appealing technology in terms of wholesale revenue and LCOE in all 15 markets analysed.
+    Therefore, based on the analysis, onshore wind and utility-scale solar appear to be the best
+    long-term cheapest technologies for power generation in Europe.
 
 
 %\section{Applications in Solar and Wind Generation}
@@ -128,6 +140,35 @@
 %    In the energy market, temperature futures can be used to hedge the volume risks, providing a dynamic
 %    hedging strategy for energy futures using temperature futures
 
+
+
+\section{Wind Futures}
+\label{sec:wind_futures}
+
+    Although are still an emerging market, wind futures already exist in the energy market.
+    The US Futures Exchange index was used up to 2008 to settle wind derivatives using the Nordix Wind Speed index~\cite{benth_dynamic_2009}.
+    This index was measuring the daily wind speed deviations from the 20 years mean.
+    It had a benchmark at 100, and the deviations are aggregated over a measurement period,
+    which typically is a month.
+    More specifically, let the 20 years mean wind speed on day $s$ be denoted by $\omega_{20}(s)$.
+    The Nordix Index over a measurement period from $\tau_1$ to $\tau_2$ is then defined as
+
+    \begin{equation}
+        N (\tau_1, \tau_2) = 100 + \sum_{s=\tau_1}^{\tau_2} W(s) - \omega_{20}(s)
+    \label{eq:nordix_wind_speed}
+    \end{equation}
+
+    In recent developments, future contracts associated with wind power have been introduced by NASDAQ and the~\gls{eex}.
+    The tracking of these wind indices differs from the Nordix Index approach in that they are founded upon the
+    total production of wind power.
+    These particular contracts are often referred to as the wind utilisation index.
+    They are designed to remunerate the contract holder in the event the value of the index surpasses or falls below a
+    predetermined level of production, corresponding to the futures market price.
+    The \gls{eex} futures contracts, in particular, utilise an underlying index predicated on the average yield
+    of wind energy produced by German or Austrian power plants during predetermined time intervals~\cite{thomaidis_handling_2023}.
+    Meanwhile, NASDAQ employs the NAREX WIDE index which is the NASDAQ Renewable Index Wind for Germany (DE)
+    that relies on reanalyzed weather data for all the \gls{ecmwf} grid points within Germany.
+
 \section{Conclusion}
 \label{sec:weather_conclusion}
 
@@ -137,8 +178,5 @@
     ensuring more stable revenues and reducing the overall risk of their businesses.
     As the use of renewable energy sources continues to grow,
     the role of weather derivatives in hedging against weather-related risks will become increasingly important.
-
-
-
 
 
