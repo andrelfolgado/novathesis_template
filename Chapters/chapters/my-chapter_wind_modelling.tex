@@ -1,0 +1,320 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% my-chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with the template manual
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{amsmath}
+%\usepackage[table]{xcolor}
+%\usepackage{xltabular}
+%%\usepackage{colortbl} % Added this line
+%\usepackage{booktabs}
+%\usepackage{enumitem}
+%\usepackage{tikz}
+%\usetikzlibrary{shapes, arrows, positioning, fit}
+
+
+\typeout{NT FILE my-chapter_wind_modelling.tex}%
+
+\chapter{Wind Power Generation}
+\label{ch:wind_power_generation}
+
+    This thesis aims to study the volumetric risk effect induced by the intermittent nature of wind power generation,
+    required to satisfy at a given time.
+    Using whether derivatives is possible to develop hedging strategies to mitigate the volumetric risk,
+    allowing to reduce the uncertainty and stabilise revenues from \gls{res}.
+
+
+%\section{Wind Speed}
+%    \label{sec:wind_speed}
+%
+%    > wind speed data using \\
+%        1) MERRA-2 (https://disc.gsfc.nasa.gov/) or \\
+%        2) ERA5 (https://cds.climate.copernicus.eu)\\
+%    > Calibrate model using BSTS \\
+%        > Use model to simulate wind speed data and create multiple scenarios \\
+
+\section{Wind Power}
+    \label{sec:wind_power}
+
+    The generation of wind power is intrinsically dependent on the velocity of wind.
+    The symbiotic relationship between wind speed and the consequent energy production can be represented through the
+    utilisation of turbine power curves.
+    These curves provide a quantitative method
+    to determine the power output of a wind turbine corresponding to a particular wind speed.
+
+    Crucially, the power curve is associated with two significant thresholds of wind speed.
+    The thresholds are defined using the Betz law, which indicates the maximum power that can be extracted from the wind,
+    independent of the design of a wind turbine in open flow.
+    The first one is identified as the cut-in value, below which the turbine blades fail to generate power.
+    This is due to the insufficient kinetic energy present in the wind to instigate their motion.
+    Conversely, exceeding the second threshold, known as the cut-out value,
+    leads to the safeguarding mechanism activating to prevent any potential structural damage to the system.
+
+    In practice, turbine manufactors provide a table of values for the power output at discrete wind speeds.
+    Within the range of these two critical thresholds,
+    the relationship between wind speed and the generated energy can be represented by a polynomial relationship
+    interpolating manufactor data for each turbine model.
+    See below~\ref{eq:power_curve}, example for a 2MW turbine.
+
+    \begin{equation}
+        PC(x) =
+        \begin{cases}
+            0                             & \text{if } 0 <  x < 4 \\
+            21.78 x^2 - 147.96 x + 243.42 & \text{if } 4 \leq x \leq 13 \\
+            2000                          & \text{if } 13 < x \leq 25 \\
+            0                             & \text{if } x > 25
+        \end{cases}
+    \label{eq:power_curve}
+    \end{equation}
+
+    To properly model power generation, the wind speed data, usually taken at reference height,
+    must be adjusted to the given hub operation level of the turbine.
+    The physical law that permits the conversion of wind intensity with respect to the altitude is:
+
+    \begin{equation}
+        v_h= v_{h_0}  \cdot \left(\frac{h}{h_0}\right)^\theta \text { with } \theta=\left(\ln \frac{h}{z_0}\right)^{-1}
+    \label{eq:wind_speed_height}
+    \end{equation}
+
+    Where $v_{h}$ represents the wind speed measured at the height $h$ of the wind turbine hub
+    and $v_{h_0}$ is the known value of the wind speed at the specified height data is recorded.
+    Additionally, the parameter $z0$ is intimately connected to the site's morphological aspects wherein our
+    postulated wind turbine is positioned.
+    For instance, in the absence of any physical structures like buildings or trees,
+    the value of this parameter typically falls within the range of 0.01 to 0.001.
+    For situations involving offshore installations, the parameter is fixed at 0.0001, whereas
+    an average value of $z0 = 0.005$ is employed for an onshore implementation.
+
+    As described, seven parameters are required to fully define the power curve of a wind turbine.
+
+    \enumerate{
+        \item The cut-in wind speed, $v_{cut-in}$, below which the turbine is unable to generate power.
+        \item The cut-out wind speed, $v_{cut-out}$, above which the turbine is unable to generate power.
+        \item The rated wind speed, $v_{rated}$, at which the turbine is able to generate its maximum power.
+        \item The rated power, $P_{rated}$, which is the maximum power output of the turbine.
+        \item The power curve provided by the manufactor, which will determine the production between the threshold.
+        \item The hub height, $h$, at which the wind power is generated.
+        \item The spacial factor to diferentiate turbine surroundings.
+    }
+
+
+\section{Wind Generation Modelling}
+    \label{sec:wind_generation_modelling}
+
+    The focus of this section is to model wind power generation based on historical real and forecasted data.
+    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
+    data streams influenced by multifaceted predictors or features.
+    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+
+    One interest of this thesis is to explore recent techniques that work well for feature selection problems in time series
+    applications. A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
+    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
+    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+
+    Structural time series models are a class of state space models that decompose a time series into several components of interest.
+    They have a considerable intuitive appeal, particularly for economic and social times.
+    Furthermore, they provide a clear link with regressions models, both in their technical formulation and in the model selection
+    methodology that they employ~\cite{harvey_forecasting_1990}. \\
+
+    The key to handling structural time series models is the state space representation, with the state of the system
+    representing the unobserved components of the time series, such as trends and seasonal effects.
+    Once in the state space, the Kalman filter plays a fundamental role as it recursively computes the predictive distribution
+    of the state variables, given the observations up to that point in time.
+
+    Initially introduced by Jammalamadaka et al.~\cite{qiu_multivariate_2018}, the~\gls{bsts} can be extended to a multivariate
+    time series model, which is particularly useful for the analysis of multiple time series that are related to each other.
+    The~\gls{mbsts} can be used to explicitly model the correlations between different asset returns in a portfolio through
+    the covariance structure specified by $\Sigma_{t}$, see equation~\ref{eq:mbsts_obs}.
+
+\subsection{The \gls{mbsts} model}
+    \label{sec:mbsts}
+
+    Models of structural time series, exemplified by the~\gls{mbsts},
+    are categorized under state space models tailored for time series data. They are represented by the ensuing equations:
+
+    \begin{align}
+        y_{t} &= Z_{t} \alpha_{t} + \varepsilon_{t}, \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{t})
+        \label{eq:mbsts_obs}\\
+        \notag \\
+        \alpha_{t+1} &= T_{t} \alpha_{t} + R_{t} \eta_{t}, \qquad \eta_{t} \sim N_{q}(0, Q_{t})
+        \label{eq:mbsts_trans}
+    \end{align}
+
+
+    Equation~\ref{eq:mbsts_obs} is the observation equation, which relates the $m \times 1$
+    vector of observations at time $t$ $y_{t}$ to the $d \times 1$ unobserved latent states $\alpha_{t}$,
+    where $d$ is the total number of latent states.
+    The $m \times p$ matrix of coefficients $Z_{t}$ links the unobserved factors and regressions effects
+    with the observations vector $y_{t}$.
+    The $m \times 1$ vector of observation disturbances $\varepsilon_{t}$ are assumed to have zero means and
+    represented by a variance-covariance matrix $\Sigma_{t}$ of the order $m \times m$.\\
+
+    The second equation~\ref{eq:mbsts_trans} is the transition equation, which describes the evolution of the state vector
+    $\alpha_{t}$ over time, characterised by the $d \times d$ transition matrix $T_{t}$.
+    The $d \times q$ matrix of coefficients $R_{t}$ is often referred to as the control matrix.
+    The matrix $\eta_{t}$ is an $q \times 1$ error vector,
+    with a state diffusion matrix $Q_{t}$ of the order $q \times q$, where $q \leq d$.
+    In many standard cases, $q = d$ and $Q_{t}$ is the identity matrix $I_{d}$.
+    Although matrix $Q_{t}$ can be specified freely,
+    it is often composed of a selection from the $q$ columns of the identity matrix $I_{d}$~\cite{commandeur_introduction_2007}.\\
+
+    In summary, the~\gls{mbsts} model is defined by the following set of parameters:
+
+    \begin{itemize}
+        \item $y_{t}$ ($m \times 1$): Observations at time $t$
+        \item $\alpha_{t}$ ($d \times 1$): Unobserved latent states $d$
+        \item $Z_{t}$ ($m \times p$): Coefficients linking the unobserved factors and regression effects
+            with the observations vector $y_{t}$
+        \item $\varepsilon_{t}$ ($m \times 1$): Observation disturbances, assumed to have zero means,
+            represented by the variance-covariance matrix $\Sigma_{t}$
+        \item $T_{t}$ ($d \times d$): Transition matrix characterizing the evolution of the state vector $\alpha_{t}$
+        \item $R_{t}$ ($d \times q$): Control matrix of coefficients
+        \item $\eta_{t}$ ($q \times 1$): Error vector with a state diffusion matrix $Q_{t}$ of the order $q \times q$ where $q \leq d$
+        \item $\Sigma_{t}$ ($m \times m$): Covariance matrix of the order $m \times m$ representing the observation disturbances
+        \item $Q_{t}$ ($q \times q$): State diffusion matrix
+    \end{itemize}
+
+
+    As per developed by Harvey~\cite{harvey_forecasting_1990}, a basic structural time series model can be represented
+    by a direct interpretation of its underlying components.
+    In a general, the model can be expressed as:
+
+    \begin{equation}
+        y_{t} = \mu_{t} + \theta{t} + \omega_{t} + \xi_{t} + \varepsilon_{t} ,
+        \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{\varepsilon}), \quad t = 1, 2, ..., n
+    \label{eq:sts}
+    \end{equation}
+
+
+    where $y_{t}$, $\mu_{t}$, $\theta{t}$, $\omega_{t}$, $\xi_{t}$ and $\varepsilon_{t}$ are m-dimension vectors,
+    representing targeted time series, linear trend, seasonal, cyclical and regression components
+    with the observation disturbances respectively.
+    For simplicity, $\Sigma_{\varepsilon}$ is a $m \times m$, positive definite matrix and assumed to be constant over time.
+
+    Elucidating further on the state space form, $\alpha_{t}$ aggregates these multifaceted components,
+    depicting the concealed and unobserved latent states, such that:
+
+   \begin{equation}
+        \alpha_{t} = [\mu_{t}, \theta_{t}, \omega_{t}, \xi_{t}]^T
+    \label{eq:sts_latent}
+    \end{equation}
+
+
+    In the prevailing model, each component of the state is compiled individually,
+    where every component produces an incremental influence on $y_{t}$.
+    The adaptability of this model facilitates the incorporation of various model elements specific to each target series.
+
+    % Develope the different components states
+
+\subsection{Generatate Wind Series Forecast Scenarios}
+    \label{sec:wind_forecast_scenarios}
+
+    As conventional in Bayesian data analysis, predictions are derived from our model's posterior predictive distribution.
+    This is achieved by drawing samples of model parameters and unseen or hidden states from their respective posterior distribution.
+    Therefore, the posterior predictive distribution of $\hat{Y}$, representing the collection of forecasted values, can be described as:
+
+    \begin{equation}
+        p(\hat{Y} | Y) = \int p(\hat{Y} | \psi) p(\psi | Y) d\psi
+    \label{eq:posterior_predictive}
+    \end{equation}
+
+    Where $Y$ is the observed data and $\psi$ is the set of all the model parameters and latent states randomly drawn from
+    $p(\psi | Y)$.
+
+    The posterior distribution of the model parameters can be trained by using \gls{mcmc} algorithms.
+    Taking advantage of working in the state space methods, forecast can be obtained continuing the Kalman filter after
+    the last observation in the time series.
+    This is known as the one-step-ahead forecast~\cite{durbin_time_2012}. \\
+
+    It is important to note that in this model, the predictive probability density is not contingent on parameter estimates,
+    nor on the inclusion or exclusion of predictors with stationary regression coefficients these have all been fully integrated.
+    The Bayesian model averaging ensures that we do not unduly commit to any specific set of covariates,
+    thus helping us avoid an arbitrary selection, and neither do we settle for point estimates of their coefficients,
+    thereby preventing overfitting.
+
+    The correlations amongst multiple target series are naturally accounted for when sampling for prediction values.
+    The posterior predictive density is designed as a joint distribution over all predicted target series rather than a
+    mere collection of univariate distributions.
+    This methodology enables to project multiple target series in a comprehensive manner rather than examining each individually,
+    as disjoint segments~\cite{qiu_multivariate_2018}.
+
+    This can be particularly beneficial when generating summary statistics, such as the mean and variance-covariance,
+    derived from the joint empirical distribution of forecast values.
+
+\section{Capacity Factor}
+    \label{sec:capacity_factor}
+
+    Within the scope of this thesis, the capacity utilisation factor, also known as the capacity factor, we be employed
+    as an indicator of a power production asset's performance capabilities.
+    This factor represents an asset's actual output over a determined period compared to its potential output
+    if it were possible for it to operate at full capacity continuously over the same timeframe.
+    A higher capacity factor effectively signifies a more efficient energy production.
+    When the mechanisms of energy trading are articulated, this factor can be converted directly into projected revenue,
+    thus providing a tangible correlation between an asset’s performance and its financial implications.
+
+    As previously mentioned, in chapter~\ref{sec:wind_futures},
+    the capacity factor is the metric that indexes, such as NASDAQ WIDE, adopted to model future wind contracts.
+    Therefore, the portfolio capacity factor will be considered to model futures contracts and evaluate the
+    performance of the hedging strategies.
+
+    The capacity factor is calculated using the following equation:
+
+    \begin{equation}
+        cf_t =
+%        \frac{\text{Energy generated at period t}}{\text{Nominal Capacity Production at time t}} =
+        \frac{g_{t}}{C \cdot h_{t}}
+    \label{eq:capacity_factor}
+    \end{equation}
+
+    Where $g_{t}$ is the actual energy production, $C$ is the nominal capacity production and $h_{t}$ is the
+    number of hours in the period $t$.
+    The nominal capacity production refers to the maximum possible energy output under ideal conditions.
+    The capacity factor is a dimensionless value, usually expressed as a percentage.
+
+    For $T$ periods defined as ($t=1,....,T$), the revenue $R$ generated by a wind farm can be calculated as:
+
+    \begin{equation}
+        R = C \left( \sum_{t=1}^{T} h_{t} cf_{t} p_{t} \right)
+    \label{eq:revenue_wf}
+    \end{equation}
+
+    Where $p_{t}$ is the price of energy at time $t$.
+    Energy agents typically have a multiple wind generators, where can be organised in different portfolios.
+    Extending the previous definition, the revenue $R$ generated by a wind portfolio composed by N assets, indexed by
+    $i= 1,2, ..., N$, where $i$ can be a generation project or location.
+    Let $C_{p}$ be the portfolio's nominal production capacity,
+    the revenue $R_{p}$ generated by a wind portfolio can be calculated as:
+
+    \begin{align}
+        R_{p} &= \sum_{i=1}^{N} R_{i} \\
+        \Rightarrow C_{p} \left( \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} \right) &=
+        \sum_{i=1}^{N} C_{i} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right)
+    \label{eq:revenue_pf}
+    \end{align}
+
+    where $cf_{tp}$ is the portfolio's (weighted average) capacity factor at time $t$, $R_{i}$ is the revenue generated by
+    the asset $i$ and $cf_{it}$ is the $i$th-asset's capacity factor at time $t$.
+    Dividing both sides by the portfolio's total capacity $C_{p}$:
+
+    \begin{align}
+        \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} &=
+        \sum_{i=1}^{N} \frac{C_{i}}{C_{p}} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right) \\
+        \Rightarrow \overline{R}_{p} &= \sum_{i=1}^{N} x_{i} R_{i}
+    \label{eq:revenue_std}
+    \end{align}
+
+    In this context, $\overline{R}_{p}$ denotes the revenue per megawatt (MW) of installed capacity and $x_{i}$
+    elucidates the proportion of the total capacity of the portfolio denoted by asset $i$,
+    which is also indicative of the weight of asset $i$ in the portfolio.
+    It is essential to note that, assuming the equivalence of prices for all assets integrated within the portfolio,
+    equation~\ref{eq:revenue_std} retains its validity across any given price $p_{tp}$.
+
+
+
+
+
+
+
