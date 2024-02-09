@@ -41,12 +41,12 @@
   However, the increasing penetration of variable renewable energy can lead to more extreme spot prices and the need
   to increase the market's resilience. \\
 
-%\section{Renewable Generation Costs}
-%\label{sec:wind_solar_lcoe}
+\section{Renewable Generation Costs}
+\label{sec:wind_solar_lcoe}
 
   The analysis of the~\gls{lcoe} for various power generation technologies in Europe in 2023
   indicates that onshore wind and utility-scale solar are the cheapest technologies to deploy.
-  In 2023, onshore wind and PV have average \gls{lcoe} s of €63/MWh and €51/MWh, respectively.
+  In 2023, onshore wind and PV have average \gls{lcoe} of €63/MWh and €51/MWh, respectively.
   These values are projected to be more than halve in real terms by 2050 to €28/MWh and €24/MWh,
   making them the most cost-competitive options in the long term~\cite{abdullah_europe_2023}.
   The report also suggests that carbon-capture thermal generation,
@@ -56,12 +56,80 @@
   Therefore, based on the analysis, onshore wind and utility-scale solar appear to be the best
   long-term cheapest technologies for power generation in Europe.\\
 
-  In conclusion, the growing share of renewables in the energy mix, particularly for wind and solar generation,
+\section{Hedging RES Generation}
+\label{sec:hedging_res}
+
+
+
+    \begin{figure}[h]
+        \centering
+        \begin{tikzpicture}[
+            rectangle,
+            draw,
+            node distance=3cm,
+            every node/.style={align=center, minimum width=2cm, minimum height=1cm},
+            >=stealth
+        ]
+    %%        % Load library
+            \usetikzlibrary{positioning}
+            % Nodes
+            \node[rectangle, draw, fill=green!30] (spotprices) {Spot Prices};
+            \node[rectangle, draw, above=of spotprices, fill=purple!80!blue!20] (wind) {Wind Speed};
+            \node[rectangle, draw, right=of wind] (load) {Load};
+            \node[rectangle, draw, below=of load] (d_cash_flows) {Discounted Cash Flows};
+            \node[rectangle, draw, right=of load] (t_prop) {Asset properties};
+            \node[rectangle, draw, right=of d_cash_flows, fill=tz_myblue] (hedging) {Hedging Payoff};
+            \node[rectangle, draw, below=1cm of t_prop, above=0.6cm of hedging, fill=tz_myblue] (pricing) {Pricing Options};
+            \node[rectangle, draw, below=1cm of wind, above=0.6cm of spotprices, fill=green!30] (i_rate) {Interest Rate};
+            % Box
+            \node [
+                draw,
+                fit= (wind),
+                inner sep=5pt,
+                label={[label distance=-2mm]above:{BSTS}}
+            ] {};
+            \node [
+                draw,
+                fit= (i_rate) (spotprices),
+                inner sep=5pt,
+                label={[label distance=-2mm]above:{Stochastic Processes}}
+            ] {};
+            \node [
+                draw,
+                fit= (pricing) (hedging),
+                inner sep=5pt,
+                label={[label distance=-2mm]above:{Hedging Strategies}}
+            ] {};
+            \node [
+                draw,
+                fit= (d_cash_flows),
+                inner sep=5pt,
+                label={[label distance=-2mm]below:{Monte Carlo}}
+            ] {};
+
+
+            % Arrows
+            \draw [->] (spotprices) -- node[midway, above] {} (d_cash_flows);
+            \draw [->] (wind) -- node[midway, above] {} (load);
+            \draw [->] (t_prop) -- node[midway, above] {} (load);
+            \draw [->] (load) -- node[midway, left] {} (d_cash_flows);
+            \draw [->] (pricing) -- node[midway, right] {} (hedging);
+            \draw [->] (hedging) -- node[midway, above] {} (d_cash_flows);
+            \draw [->] (wind) -- node[midway, above] {} (hedging);
+            \draw [->] (i_rate) -- node[midway, above] {} (d_cash_flows);
+            \draw [->] (i_rate) -- node[midway, above] {} (pricing);
+
+        \end{tikzpicture}
+        \caption{Hedged Discounted Cash Flow Models.}
+        \label{fig:cash-flow-model}
+    \end{figure}
+
+\section{Conclusion}
+\label{sec:intro_conclusion}
+
+      In conclusion, the growing share of renewables in the energy mix, particularly for wind and solar generation,
   is transforming the landscape of power markets.
   Introducing new challenges for market participants and requiring innovative solutions to manage uncertainty and
   production risks and maintain certain revenue streams.
   This thesis aims to contribute to the understanding of these challenges and potential solutions
   to manage generation risk by hedging the financial outcome of a \gls{res} portfolio.
-
-
-
