@@ -109,14 +109,15 @@
     This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
     such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
 
-    One interest of this thesis is to explore recent techniques that work well for feature selection problems in time series
-    applications. A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
+    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
+    time series applications.
+    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
     Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
     the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
 
     Structural time series models are a class of state space models that decompose a time series into several components of interest.
     They have a considerable intuitive appeal, particularly for economic and social times.
-    Furthermore, they provide a clear link with regressions models, both in their technical formulation and in the model selection
+    Furthermore, they provide a clear link with regressions' models, both in their technical formulation and in the model selection
     methodology that they employ~\cite{harvey_forecasting_1990}. \\
 
     The key to handling structural time series models is the state space representation, with the state of the system
@@ -147,9 +148,9 @@
     Equation~\ref{eq:mbsts_obs} is the observation equation, which relates the $m \times 1$
     vector of observations at time $t$ $y_{t}$ to the $d \times 1$ unobserved latent states $\alpha_{t}$,
     where $d$ is the total number of latent states.
-    The $m \times p$ matrix of coefficients $Z_{t}$ links the unobserved factors and regressions effects
-    with the observations vector $y_{t}$.
-    The $m \times 1$ vector of observation disturbances $\varepsilon_{t}$ are assumed to have zero means and
+    The $m \times p$ matrix of coefficients $Z_{t}$ links the unobserved factors and regressions' effects
+    with the observations' vector $y_{t}$.
+    The $m \times 1$ is the vector of observation disturbances $\varepsilon_{t}$ and are assumed to have zero means and
     represented by a variance-covariance matrix $\Sigma_{t}$ of the order $m \times m$.\\
 
     The second equation~\ref{eq:mbsts_trans} is the transition equation, which describes the evolution of the state vector
@@ -177,7 +178,6 @@
         \item $Q_{t}$ ($q \times q$): State diffusion matrix
     \end{itemize}
 
-
     As per developed by Harvey~\cite{harvey_forecasting_1990}, a basic structural time series model can be represented
     by a direct interpretation of its underlying components.
     In a general, the model can be expressed as:
@@ -187,7 +187,6 @@
         \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{\varepsilon}), \quad t = 1, 2, ..., n
     \label{eq:sts}
     \end{equation}
-
 
     where $y_{t}$, $\mu_{t}$, $\theta{t}$, $\omega_{t}$, $\xi_{t}$ and $\varepsilon_{t}$ are m-dimension vectors,
     representing targeted time series, linear trend, seasonal, cyclical and regression components
@@ -208,6 +207,49 @@
     The adaptability of this model facilitates the incorporation of various model elements specific to each target series.
 
     % Develope the different components states
+\subsection{State Components}
+    \label{sec:state_components}
+
+    A structural time series model is composed of several components, each representing a distinct aspect of the time series,
+    allowing to add flexibility and contributing to the overall model's predictive capabilities.
+    The model components are typically divided into four main categories: trend, seasonal, cyclical and regression components.
+    In the current model formulation, components are modelled explicitly and are assembled independently,
+    with each yielding an additive contribution to $y_{t}$.
+
+\subsubsection{Trend Component}
+    \label{sec:trend_component}
+
+    The trend component is a fundamental element of the structural time series model.
+    It represents the long-term movement of the time series, capturing the underlying growth or decline over time.
+    The trend component is typically modelled as a linear or non-linear function of time.
+    The linear trend component is defined as:
+
+    \begin{gather}
+        \bm{\mu}_{t+1} = \bm{\mu}_{t} + \bm{\delta}_{t} + \bm{u}_{t},
+            \qquad \bm{u}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\mu}) \\
+        \notag \\
+        \bm{\delta}_{t+1} = \bm{d} + \bm{P}(\bm{\delta}_{t} - \bm{d}) + \bm{v}_{t},
+            \qquad \bm{v}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\delta})
+        \label{eq:group}
+    \end{gather}
+
+    where:
+    \begin{itemize}
+        \item $\bm{\mu}_{t}$ ($m \times 1$): trend component at time $t$
+        \item $\bm{\delta}_{t}$ ($m \times 1$): expected increase between time $t$ and $t+1$
+        \item $\bm{u}_{t}$ ($m \times 1$): trend disturbance at time $t$
+        \item $\bm{d}$ ($m \times 1$): can be considered and the long-term trend
+        \item $\bm{P}$ ($m \times m$): diagonal matrix representing learning rate at which local trend is updated
+        \item $\bm{v}_{t}$ ($m \times 1$): is the trend disturbance at time $t$
+        \item $\bm{\Sigma}_{\mu}$ ($m \times m$): variance of the trend disturbance
+        \item $\bm{\Sigma}_{\delta}$ ($m \times m$): variance of the trend increment
+    \end{itemize}
+
+    The model features a parameter, $\bm{P}$ a diagonal matrix comprised by $(0 < P_{ii} < 1)$ for $i = 1, 2, \ldots, m$.
+    It represents the learning rate that underlies the local trend update process providing the ability to balance
+    short-term and long-term information.
+    Specifically, when $P_{ii} = 1$, the model induces a random walk within the associated slope,
+    leading to a non-stationary trend component.
 
 \subsection{Generatate Wind Series Forecast Scenarios}
     \label{sec:wind_forecast_scenarios}
@@ -257,7 +299,7 @@
 
     As previously mentioned, in chapter~\ref{sec:wind_futures},
     the capacity factor is the metric that indexes, such as NASDAQ WIDE, adopted to model future wind contracts.
-    Therefore, the portfolio capacity factor will be considered to model futures contracts and evaluate the
+    Therefore, the portfolio capacity factor will be considered to model futures' contracts and evaluate the
     performance of the hedging strategies.
 
     The capacity factor is calculated using the following equation:
