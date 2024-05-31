@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Add seasonal component subsection in my-chapter_wind_modelling&#10;&#10;The update includes a new subsection named 'Seasonality' in 'my-chapter_wind_modelling'. The content elaborates on how the seasonal component plays a critical part in structural time series model with appropriate examples and equations. The unnecessary line in '5_packages.tex' was also removed.">
-      <change beforePath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/5_packages.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Config/5_packages.tex" afterDir="false" />
+    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment.">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +58,7 @@
     "Makeindex.main makeindex.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "seminar",
     "ignore.virus.scanning.warn.message": "true",
@@ -68,7 +68,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -204,7 +204,7 @@
       <workItem from="1716874770334" duration="122000" />
       <workItem from="1716875392767" duration="5512000" />
       <workItem from="1716992201010" duration="27000" />
-      <workItem from="1717171368091" duration="178000" />
+      <workItem from="1717171368091" duration="591000" />
     </task>
     <task id="LOCAL-00001" summary="Add bibliography entries for wind energy articles&#10;&#10;Two articles regarding wind energy, &quot;Dynamic pricing of wind futures&quot; and &quot;Handling the risk dimensions of wind energy generation&quot;, have been added to the bibliography. These entries include the articles' details, such as title, author, journal, and year of publication, facilitating their citation in future academic work.">
       <option name="closed" value="true" />
@@ -462,7 +462,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717171552330</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment.">
+      <option name="closed" value="true" />
+      <created>1717171860253</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1717171860253</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -491,7 +499,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rename template.tex to main.tex&#10;&#10;The file formerly known as 'template.tex' has been renamed to 'main.tex' for clarity. Additionally, a line was updated in the file to reflect this change and maintain correct citations in the LaTeX document." />
     <MESSAGE value="Add new acronyms to the acronyms.tex&#10;&#10;Several new acronyms have been incorporated into acronyms.tex file to enhance understanding of terms in the main text. This update aims to make the document more accessible and comprehensive." />
     <MESSAGE value="Add new chapters to 4_files.tex&#10;&#10;Three new chapter files have been added to the 4_files.tex and one existing chapter was commented out. This addition includes chapters on wind modelling, power price modelling, and hedging strategies." />
     <MESSAGE value="Update .gitignore exceptions&#10;&#10;The .gitignore file has been updated to no longer include template.tex in the ignore list, and instead, considers main.tex as an exception. This change supports the recent structuring of our LaTeX project files." />
@@ -516,6 +523,7 @@
     <MESSAGE value="Add bm package to LaTeX configuration&#10;&#10;This commit adds the &quot;bm&quot; package to the LaTeX configuration file. This package is used for rendering bold symbols, enhancing the flexibility of mathematical and scientific expression in the text." />
     <MESSAGE value="Updated thesis chapter on wind modelling&#10;&#10;In this commit, text revisions for clarity and grammar were implemented and a new subsection regarding state components was introduced into the wind modelling chapter of the thesis. This new content primarily comprises a detailed discussion on the trend component of a structural time series model, including its definition and mathematical formulation." />
     <MESSAGE value="Add seasonal component subsection in my-chapter_wind_modelling&#10;&#10;The update includes a new subsection named 'Seasonality' in 'my-chapter_wind_modelling'. The content elaborates on how the seasonal component plays a critical part in structural time series model with appropriate examples and equations. The unnecessary line in '5_packages.tex' was also removed." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add seasonal component subsection in my-chapter_wind_modelling&#10;&#10;The update includes a new subsection named 'Seasonality' in 'my-chapter_wind_modelling'. The content elaborates on how the seasonal component plays a critical part in structural time series model with appropriate examples and equations. The unnecessary line in '5_packages.tex' was also removed." />
+    <MESSAGE value="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment." />
   </component>
 </project>
