@@ -251,6 +251,25 @@
     Specifically, when $P_{ii} = 1$, the model induces a random walk within the associated slope,
     leading to a non-stationary trend component.
 
+\subsubsection{Sesonality}
+    \label{sec:seasonality_component}
+
+    The seasonal component is a crucial element of the structural time series model.
+    A frequent used model~\cite{qiu_multivariate_2018} is:
+
+    \begin{equation}
+        \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
+            \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
+            \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\tau})
+        \label{eq:seasonal}
+    \end{equation}
+
+    where:
+    \begin{itemize}
+        \item S_{i} represents the seasonal period, e.g. s = 7 for weekly pattern
+        \item $\bm{\tau}_{t}$ ($m \times 1$): seasonal component at time $t$
+    \end{itemize}
+
 \subsection{Generatate Wind Series Forecast Scenarios}
     \label{sec:wind_forecast_scenarios}
 
