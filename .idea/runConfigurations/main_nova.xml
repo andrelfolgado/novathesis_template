@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="main/nova" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" singleton="false">
+    <texify>
+      <compiler>XELATEX</compiler>
+      <compiler-path />
+      <sumatra-path />
+      <pdf-viewer>SUMATRA</pdf-viewer>
+      <viewer-command />
+      <compiler-arguments />
+      <envs />
+      <before-run-command />
+      <main-file>$PROJECT_DIR$/main.tex</main-file>
+      <output-path>$PROJECT_DIR$/out</output-path>
+      <auxil-path>$PROJECT_DIR$/auxil</auxil-path>
+      <compile-twice>true</compile-twice>
+      <output-format>PDF</output-format>
+      <latex-distribution>MIKTEX</latex-distribution>
+      <has-been-run>true</has-been-run>
+      <bib-run-config>[BibTeX.main/bib_nova]</bib-run-config>
+      <makeindex-run-config>[Makeindex.main makeglossaries, Makeindex.main makeindex]</makeindex-run-config>
+    </texify>
+    <method v="2" />
+  </configuration>
+</component>
