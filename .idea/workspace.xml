@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment.">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Comment out seasonal component descriptions in wind modelling chapter&#10;&#10;The seasonal component descriptions in the wind modelling chapter of the text have been commented out. This change was made in the 'my-chapter_wind_modelling.tex' file. Future improvements or alterations can be made easily as the information is preserved, just not visible in the presented text.">
+      <change afterPath="$PROJECT_DIR$/Chapters/seminar/abstract_2024_june.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/main_nova.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/main_nova.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bibliography/zotero.bib" beforeDir="false" afterPath="$PROJECT_DIR$/Bibliography/zotero.bib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/out/main.pdf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,37 +52,37 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "BibTeX.main bibliography.executor": "Run",
-    "BibTeX.main/bib_nova.executor": "Run",
-    "BibTeX.main_bibtex.executor": "Run",
-    "LaTeX.main.executor": "Run",
-    "LaTeX.main/nova.executor": "Run",
-    "Makeindex.main makeglossaries.executor": "Run",
-    "Makeindex.main makeindex.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "seminar",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Azure_Devops/Repos/gem_edp",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;BibTeX.main bibliography.executor&quot;: &quot;Run&quot;,
+    &quot;BibTeX.main/bib_nova.executor&quot;: &quot;Run&quot;,
+    &quot;BibTeX.main_bibtex.executor&quot;: &quot;Run&quot;,
+    &quot;LaTeX.main.executor&quot;: &quot;Run&quot;,
+    &quot;LaTeX.main/nova.executor&quot;: &quot;Run&quot;,
+    &quot;Makeindex.main makeglossaries.executor&quot;: &quot;Run&quot;,
+    &quot;Makeindex.main makeindex.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;seminar&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/E353682/OneDrive - FCT NOVA/Repos/novathesis_template&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="main/nova" />
     </option>
   </component>
-  <component name="RunManager" selected="BibTeX.main/bib_nova">
+  <component name="RunManager" selected="LaTeX.main/nova">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -94,7 +99,7 @@
         <compiler>PDFLATEX</compiler>
         <compiler-path />
         <sumatra-path />
-        <pdf-viewer>SUMATRA</pdf-viewer>
+        <pdf-viewer>NONE</pdf-viewer>
         <viewer-command />
         <compiler-arguments />
         <envs />
@@ -116,7 +121,7 @@
         <compiler>PDFLATEX</compiler>
         <compiler-path />
         <sumatra-path />
-        <pdf-viewer>SUMATRA</pdf-viewer>
+        <pdf-viewer>NONE</pdf-viewer>
         <viewer-command />
         <compiler-arguments />
         <envs />
@@ -150,17 +155,12 @@
       <item itemvalue="Makeindex.main makeglossaries" />
       <item itemvalue="Makeindex.main makeindex" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="LaTeX.main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-PY-241.15989.155" />
-        <option value="bundled-python-sdk-babbdf50b680-7c6932dee5e4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.15989.155" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17011.127" />
+        <option value="bundled-python-sdk-48aec45f0201-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17011.127" />
       </set>
     </attachedChunks>
   </component>
@@ -204,7 +204,15 @@
       <workItem from="1716874770334" duration="122000" />
       <workItem from="1716875392767" duration="5512000" />
       <workItem from="1716992201010" duration="27000" />
-      <workItem from="1717171368091" duration="591000" />
+      <workItem from="1717171368091" duration="2583000" />
+      <workItem from="1717175021586" duration="196000" />
+      <workItem from="1717175317679" duration="29000" />
+      <workItem from="1717200736427" duration="17700000" />
+      <workItem from="1717498481023" duration="1091000" />
+      <workItem from="1717513468539" duration="7007000" />
+      <workItem from="1717765215329" duration="45000" />
+      <workItem from="1717765270286" duration="105000" />
+      <workItem from="1717765384462" duration="224000" />
     </task>
     <task id="LOCAL-00001" summary="Add bibliography entries for wind energy articles&#10;&#10;Two articles regarding wind energy, &quot;Dynamic pricing of wind futures&quot; and &quot;Handling the risk dimensions of wind energy generation&quot;, have been added to the bibliography. These entries include the articles' details, such as title, author, journal, and year of publication, facilitating their citation in future academic work.">
       <option name="closed" value="true" />
@@ -470,7 +478,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717171860253</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Add new project configurations and update IDE settings&#10;&#10;Additional project configuration files have been added and existing ones have been updated in the .idea directory. Changes include a changed Python SDK specification, Git integration, new run configurations for LaTeX tasks, and various project IDE environment settings.">
+      <option name="closed" value="true" />
+      <created>1717171993109</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1717171993109</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -499,7 +515,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add new acronyms to the acronyms.tex&#10;&#10;Several new acronyms have been incorporated into acronyms.tex file to enhance understanding of terms in the main text. This update aims to make the document more accessible and comprehensive." />
     <MESSAGE value="Add new chapters to 4_files.tex&#10;&#10;Three new chapter files have been added to the 4_files.tex and one existing chapter was commented out. This addition includes chapters on wind modelling, power price modelling, and hedging strategies." />
     <MESSAGE value="Update .gitignore exceptions&#10;&#10;The .gitignore file has been updated to no longer include template.tex in the ignore list, and instead, considers main.tex as an exception. This change supports the recent structuring of our LaTeX project files." />
     <MESSAGE value="Add new acronyms to acronyms.tex&#10;&#10;The acronyms.tex file has been updated to include the abbreviations for European Energy Exchange (EEX) and European Centre for Medium-Range Weather Forecasts (ECMWF). This ensures we maintain a comprehensive list of abbreviations in our project." />
@@ -524,6 +539,7 @@
     <MESSAGE value="Updated thesis chapter on wind modelling&#10;&#10;In this commit, text revisions for clarity and grammar were implemented and a new subsection regarding state components was introduced into the wind modelling chapter of the thesis. This new content primarily comprises a detailed discussion on the trend component of a structural time series model, including its definition and mathematical formulation." />
     <MESSAGE value="Add seasonal component subsection in my-chapter_wind_modelling&#10;&#10;The update includes a new subsection named 'Seasonality' in 'my-chapter_wind_modelling'. The content elaborates on how the seasonal component plays a critical part in structural time series model with appropriate examples and equations. The unnecessary line in '5_packages.tex' was also removed." />
     <MESSAGE value="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment." />
+    <MESSAGE value="Add new project configurations and update IDE settings&#10;&#10;Additional project configuration files have been added and existing ones have been updated in the .idea directory. Changes include a changed Python SDK specification, Git integration, new run configurations for LaTeX tasks, and various project IDE environment settings." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add new project configurations and update IDE settings&#10;&#10;Additional project configuration files have been added and existing ones have been updated in the .idea directory. Changes include a changed Python SDK specification, Git integration, new run configurations for LaTeX tasks, and various project IDE environment settings." />
   </component>
 </project>
