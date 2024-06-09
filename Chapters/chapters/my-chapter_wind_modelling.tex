@@ -251,14 +251,23 @@
     Specifically, when $P_{ii} = 1$, the model induces a random walk within the associated slope,
     leading to a non-stationary trend component.
 
-\subsubsection{Sesonality}
+\subsubsection{Seasonality}
     \label{sec:seasonality_component}
 
-    The seasonal component is a crucial element of the structural time series model.
-    A frequent used model~\cite{qiu_multivariate_2018} is:
+    Whenever a time series consists of hourly, quarterly or yearly data, it is common to observe a seasonal pattern.
+    The seasonal component $\bm{\tau}_{t}$ at time $t$ can be modelled using various methods,
+    such as a trigonometric form using Fourier series, categorical proxies known as "dummy variables"
+    or methods involving seasonal splines~\cite{proietti_seasonality_2023}.
+    In prevalent usage exists a model that leverages deterministic means coupled with an error term,
+    thus permitting the accommodation of alterations across time.
+    This characteristic renders this model proficient in apprehending both,
+    patterns that appear with regularity and fluctuations that are more sporadic,
+    thereby establishing robustness when applied to disparate types of sequences of time that exhibit seasonality.
+
+    A seasonal effects modelled using a deterministic approach along with a white noise error term~\cite{qiu_multivariate_2018} is:
 
     \begin{equation}
-        \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
+        \bm{\tau}_{t+1} = - \sum_{k=1}^{S_{i}-1} \bm{\tau}_{t+1-k}^{(i)} + \bm{w}_{t}^{(i)},
             \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
             \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\tau})
         \label{eq:seasonal}
@@ -266,9 +275,105 @@
 
     where:
     \begin{itemize}
-        \item S_{i} represents the seasonal period, e.g. s = 7 for weekly pattern
-        \item $\bm{\tau}_{t}$ ($m \times 1$): seasonal component at time $t$
+        \item $S_{i}$ represents the seasonal period, e.g. weekly (s=7), monthly (s=12), hourly (s=24)
+        \item $\bm{\tau}_{t}^{i}$ ($m \times (s-1)$): seasonal effect for $i$-th time series and at time $t$
+        \item $\bm{w}_{t}^{i}$ ($(m \times (s-1)) \times 1$): white noise seasonal disturbance,
+            which is assumed to follow a multivariate normal distribution: $w_{t} \sim \mathcal{N}(\bm{\Sigma}_{\tau})$
     \end{itemize}
+
+    The transition matrix, in the univariate case, for the seasonal effects in the state space is a $(s-1) \times (s-1)$ matrix,
+    due to the sum-zero constraint over one seasonal cycle.\ The structure of the matrix is:
+
+    \begin{equation}
+        \mathbf{T}_s=
+            \left[
+                \begin{array}{cccc}
+                    -1             & \mathbf{0} & \cdots & \mathbf{0} \\
+                    1              & \mathbf{0} & \cdots & \mathbf{0} \\
+                    \mathbf{0}     & 1          & \cdots & \mathbf{0} \\
+                    \vdots         & \vdots     & \ddots & \vdots     \\
+                    \mathbf{0}     & \mathbf{0} & \cdots & 1
+                \end{array}
+            \right]
+    \label{eq:seasonal_transition_uni}
+    \end{equation}
+
+    In a multivariate scenario, when there are $m$ time series each with its own seasonal components,
+    the overall transition matrix $\mathbf{T}_s$ is a block-diagonal matrix, where each block of the diagonal matrix
+    is $(s-1) \times (s-1)$ for one time matrix.
+    The combined transition matrix $\mathbf{T}_{s}$ can be represented as:
+
+    \begin{equation}
+        \mathbf{T}_s=
+            \left[
+                \begin{array}{cccc}
+                    \mathbf{T}_{s, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
+                    \mathbf{0}        & \mathbf{T}_{s, 2} & \cdots & \mathbf{0} \\
+                    \vdots            & \vdots            & \ddots & \vdots     \\
+                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{s, m}
+                \end{array}
+            \right]
+    \label{eq:seasonal_transition_mv}
+    \end{equation}
+
+    where $\mathbf{T}_{s}$ has the size $(m \times (s-1)) \times (m \times (s-1))$ matrix.
+    Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ because
+    the seasonal transition for different time series is assumed to be independent in this model.
+
+    The white noise error term $\bm{w}_{t}$ plays a crucial role in the seasonal component model,
+    by allowing random variations around the deterministic seasonal pattern.
+    For $m$ time series, the combined white noise term $\bm{w}_{t}$ is:
+
+    \begin{equation}
+        w_t=
+            \left[
+                \begin{array}{c}
+                    w_{t}^{(1)} \\
+                    w_{t}^{(2)} \\
+                    \vdots \\
+                    w_{t)}^{(m)}
+                \end{array}
+            \right]
+           =
+            \left[
+                \begin{array}{c}
+                    w_{t, 1}^{(1)} \\
+                    w_{t, 2}^{(1)} \\
+                    \vdots \\
+                    w_{t, (s-1)}^{(1)} \\
+                    w_{t, 1}^{(2)} \\
+                    w_{t, 2}^{(2)} \\
+                    \vdots \\
+                    w_{t, (s-1}^{(2)} \\
+                    \vdots \\
+                    w_{t, 1}^{(m)} \\
+                    w_{t, 2}^{(m)} \\
+                    \vdots \\
+                    w_{t, (s-1)}^{(m)}
+                \end{array}
+            \right]
+    \label{eq:seasonal_error}
+    \end{equation}
+
+    When considering a multivariate time series model, the white noise error term $\bm{w}_{t}$ is assumed to follow
+    a multivariate normal distribution with a covariance matrix $\bm{\Sigma}_{\tau}$ of the order $(s-1) \times (s-1)$.
+    The covariance matrix $\bm{\Sigma}_{\tau}$ is a block-diagonal matrix, where each block of the diagonal matrix are
+    assumed to be uncorrelated between different time series.
+
+    The combined transition matrix $\mathbf{T}_{s}$ can be represented as:
+
+    \begin{equation}
+        \bm{\Sigma}_{\tau} =
+            \left[
+                \begin{array}{cccc}
+                    \mathbf{\Sigma}_{\tau, 1} & \mathbf{0}                 & \cdots & \mathbf{0} \\
+                    \mathbf{0}                & \mathbf{\Sigma}_{\tau, 2}  & \cdots & \mathbf{0} \\
+                    \vdots                    & \vdots                     & \ddots & \vdots     \\
+                    \mathbf{0}                & \mathbf{0}                 & \cdots & \mathbf{\Sigma}_{\tau, m}
+                \end{array}
+            \right]
+    \label{eq:seasonal_covariance}
+    \end{equation}
 
 \subsection{Generatate Wind Series Forecast Scenarios}
     \label{sec:wind_forecast_scenarios}
