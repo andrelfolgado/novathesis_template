@@ -99,7 +99,6 @@
         \item The spacial factor to diferentiate turbine surroundings.
     }
 
-
 \section{Wind Generation Modelling}
     \label{sec:wind_generation_modelling}
 
@@ -267,7 +266,7 @@
     A seasonal effects modelled using a deterministic approach along with a white noise error term~\cite{qiu_multivariate_2018} is:
 
     \begin{equation}
-        \bm{\tau}_{t+1} = - \sum_{k=1}^{S_{i}-1} \bm{\tau}_{t+1-k}^{(i)} + \bm{w}_{t}^{(i)},
+        \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
             \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
             \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\tau})
         \label{eq:seasonal}
@@ -313,12 +312,36 @@
                     \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{s, m}
                 \end{array}
             \right]
-    \label{eq:seasonal_transition_mv}
+        \label{eq:seasonal_transition_mv}
     \end{equation}
 
     where $\mathbf{T}_{s}$ has the size $(m \times (s-1)) \times (m \times (s-1))$ matrix.
     Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ because
     the seasonal transition for different time series is assumed to be independent in this model.
+
+    The state vector $\bm{\tau}_t$ contains the seasonal effects for all time series at time $t$.
+    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
+    individual time series. The state vector $\bm{\tau}_t$ representation is:
+
+    \begin{equation}
+        \tau_{t+1}=
+            \left[
+                \begin{array}{c}
+                    \tau_{t+1}^{(1)} \\
+                    \tau_{t+1}^{(2)} \\
+                    \hfill \vdots \hfill \\
+                    \tau_{t+1}^{(m)}
+                    \end{array}\right]
+            =\left[
+                \begin{array}{l}
+                    \tau_t^{(1)}, \tau_{t-1}^{(1)}, \ldots, \tau_{t-10}^{(1)} \\
+                    \tau_t^{(2)}, \tau_{t-1}^{(2)}, \ldots, \tau_{t-10}^{(2)} \\
+                    \hfill \vdots \hfill \\
+                    \tau_t^{(m)}, \tau_{t-1}^{(m)}, \ldots, \tau_{t-10}^{(m)}
+                \end{array}
+            \right]
+        \label{eq:seasonal_state}
+    \end{equation}
 
     The white noise error term $\bm{w}_{t}$ plays a crucial role in the seasonal component model,
     by allowing random variations around the deterministic seasonal pattern.
