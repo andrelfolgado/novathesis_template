@@ -153,7 +153,7 @@
     represented by a variance-covariance matrix $\Sigma_{t}$ of the order $m \times m$.\\
 
     The second equation~\ref{eq:mbsts_trans} is the transition equation, which describes the evolution of the state vector
-    $\alpha_{t}$ over time, characterised by the $d \times d$ transition matrix $T_{t}$.
+    $\alpha_{t}$ over time, characterized by the $d \times d$ transition matrix $T_{t}$.
     The $d \times q$ matrix of coefficients $R_{t}$ is often referred to as the control matrix.
     The matrix $\eta_{t}$ is an $q \times 1$ error vector,
     with a state diffusion matrix $Q_{t}$ of the order $q \times q$, where $q \leq d$.
@@ -221,33 +221,120 @@
     The trend component is a fundamental element of the structural time series model.
     It represents the long-term movement of the time series, capturing the underlying growth or decline over time.
     The trend component is typically modelled as a linear or non-linear function of time.
-    The linear trend component is defined as:
+    The linear trend component can be portrait as:
 
-    \begin{gather}
-        \bm{\mu}_{t+1} = \bm{\mu}_{t} + \bm{\delta}_{t} + \bm{u}_{t},
-            \qquad \bm{u}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\mu}) \\
-        \notag \\
-        \bm{\delta}_{t+1} = \bm{d} + \bm{P}(\bm{\delta}_{t} - \bm{d}) + \bm{v}_{t},
-            \qquad \bm{v}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\delta})
-        \label{eq:group}
-    \end{gather}
+%    \begin{gather}
+%        \bm{\mu}_{t+1} = \bm{\mu}_{t} + \bm{\delta}_{t} + \bm{u}_{t},
+%            \qquad \bm{u}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\mu}) \\
+%        \notag \\
+%        \bm{\delta}_{t+1} = \bm{d} + \bm{P}(\bm{\delta}_{t} - \bm{d}) + \bm{v}_{t},
+%            \qquad \bm{v}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\delta})
+%        \label{eq:group}
+%    \end{gather}
+
+    \begin{equation}
+        \bm{\eta}_{t+1}=
+            \bm{T}_{T} \bm{\eta}_{t} + \bm{G}_{T} \bm{\gamma}^{(i)} + \bm{\omega}_{t}^{(T,i)}
+        \label{eq:trend_state}
+    \end{equation}
 
     where:
     \begin{itemize}
-        \item $\bm{\mu}_{t}$ ($m \times 1$): trend component at time $t$
-        \item $\bm{\delta}_{t}$ ($m \times 1$): expected increase between time $t$ and $t+1$
-        \item $\bm{u}_{t}$ ($m \times 1$): trend disturbance at time $t$
-        \item $\bm{d}$ ($m \times 1$): can be considered and the long-term trend
-        \item $\bm{P}$ ($m \times m$): diagonal matrix representing learning rate at which local trend is updated
-        \item $\bm{v}_{t}$ ($m \times 1$): is the trend disturbance at time $t$
-        \item $\bm{\Sigma}_{\mu}$ ($m \times m$): variance of the trend disturbance
-        \item $\bm{\Sigma}_{\delta}$ ($m \times m$): variance of the trend increment
+        \item $\bm{T}_T^{(i)}$ $(2m \times 2m)$ transition matrix that applies the learning rate $\rho^{(i)}$
+        \item $\bm{G}_T^{(i)}$ $(2m \times 1)$ vector that applies the long-term slope $\bm{\gamma}^{(i)}$
+        \item $\bm{\gamma}^{(i)}$ $(2m \times 2m)$ is the long-term slope for the time series $i$
     \end{itemize}
 
-    The model features a parameter, $\bm{P}$ a diagonal matrix comprised by $(0 < P_{ii} < 1)$ for $i = 1, 2, \ldots, m$.
-    It represents the learning rate that underlies the local trend update process providing the ability to balance
-    short-term and long-term information.
-    Specifically, when $P_{ii} = 1$, the model induces a random walk within the associated slope,
+%     \begin{equation}
+%            \bm{T}_T^{(i)}=
+%                \left[
+%                    \begin{array}{cc}
+%                        1 & 1 \\
+%                        0 & \rho^{(i)}
+%                    \end{array}
+%                \right]
+%            \label{eq:state_transition}
+%     \end{equation}
+%
+%    \begin{equation}
+%        \bm{G}_T^{(i)}=
+%            \left[
+%                \begin{array}{c}
+%                    0 \\
+%                    1 - \rho^{(i)}
+%                \end{array}
+%            \right]
+%        \label{eq:state_vector_lts}
+%    \end{equation}
+
+    The updated state equation becomes, for times series $i$, can be represented as:
+
+    \begin{equation}
+        \left[
+            \begin{array}{c}
+                \mu_{t+1}^{(i)} \\
+                \delta_{t+1}^{(i)}
+            \end{array}
+        \right] =
+        \left[
+            \begin{array}{cc}
+                1 & 1 \\
+                0 & \rho^{(i)}
+            \end{array}
+        \right]
+        \left[
+            \begin{array}{c}
+                \mu_{t}^{(i)} \\
+                \delta_{t}^{(i)}
+            \end{array}
+        \right] +
+        \left[
+            \begin{array}{c}
+                0 \\
+                1 - \rho^{(i)}
+            \end{array}
+        \right]
+        \gamma^{(i)} +
+        \left[
+            \begin{array}{c}
+                \omega_{t}^{(\mu,i)} \\
+                \omega_{t}^{(\delta,i)}
+            \end{array}
+        \right]
+        \label{eq:state_update_state}
+    \end{equation}
+
+%    where:
+%    \begin{itemize}
+%        \item $\bm{\mu}_{t}$ ($m \times 1$): trend component at time $t$
+%        \item $\bm{\delta}_{t}$ ($m \times 1$): expected increase between time $t$ and $t+1$
+%        \item $\bm{u}_{t}$ ($m \times 1$): trend disturbance at time $t$
+%        \item $\bm{d}$ ($m \times 1$): can be considered and the long-term trend
+%        \item $\bm{P}$ ($m \times m$): diagonal matrix representing learning rate at which local trend is updated
+%        \item $\bm{v}_{t}$ ($m \times 1$): is the trend disturbance at time $t$
+%        \item $\bm{\Sigma}_{\mu}$ ($m \times m$): variance of the trend disturbance
+%        \item $\bm{\Sigma}_{\delta}$ ($m \times m$): variance of the trend increment
+%    \end{itemize}
+
+    The combined transition matrix $\bm{T}_T$ for $m$ time series is a block-diagonal matrix:
+
+    \begin{equation}
+        \mathbf{T}_T=
+            \left[
+                \begin{array}{cccc}
+                    \mathbf{T}_{T, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
+                    \mathbf{0}        & \mathbf{T}_{T, 2} & \cdots & \mathbf{0} \\
+                    \vdots            & \vdots            & \ddots & \vdots     \\
+                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{T, m}
+                \end{array}
+            \right]
+        \label{eq:state_transition_mv}
+    \end{equation}
+
+    where each block of the diagonal matrix is a $(2 \times 2)$ for one time series, represented in equation~\ref{eq:state_update_state}.
+    The model features a parameter $\bm{\rho}$ $(0 < \bm{\rho}^{(i)} < 1)$ which represents the learning rate that underlies the local trend
+    update process, providing the ability to balance short-term and long-term information.
+    Specifically, when $\bm{\rho}^{(i)} = 1$, the model induces a random walk within the associated slope,
     leading to a non-stationary trend component.
 
 \subsubsection{Seasonality}
@@ -316,12 +403,11 @@
     \end{equation}
 
     where $\mathbf{T}_{s}$ has the size $(m \times (s-1)) \times (m \times (s-1))$ matrix.
-    Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ because
-    the seasonal transition for different time series is assumed to be independent in this model.
-
+    Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ as it is assumed that the seasonal transition
+    for different time series is independent in this model.
     The state vector $\bm{\tau}_t$ contains the seasonal effects for all time series at time $t$.
     When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
-    individual time series. The state vector $\bm{\tau}_t$ representation is:
+    individual time series.\ The state vector $\bm{\tau}_t$ representation is:
 
     \begin{equation}
         \tau_{t+1}=
@@ -331,7 +417,7 @@
                     \tau_{t+1}^{(2)} \\
                     \hfill \vdots \hfill \\
                     \tau_{t+1}^{(m)}
-                    \end{array}\right]
+                \end{array}\right]
             =\left[
                 \begin{array}{l}
                     \tau_t^{(1)}, \tau_{t-1}^{(1)}, \ldots, \tau_{t-10}^{(1)} \\
@@ -383,7 +469,7 @@
     The covariance matrix $\bm{\Sigma}_{\tau}$ is a block-diagonal matrix, where each block of the diagonal matrix are
     assumed to be uncorrelated between different time series.
 
-    The combined transition matrix $\mathbf{T}_{s}$ can be represented as:
+    The combined covariance matrix $\bm{\Sigma}_{\tau}$ can be represented as:
 
     \begin{equation}
         \bm{\Sigma}_{\tau} =
@@ -397,6 +483,170 @@
             \right]
     \label{eq:seasonal_covariance}
     \end{equation}
+
+\subsubsection{Cyclical}
+    \label{sec:cyclical_component}
+
+    The cyclic part of the structural time series model signifies the medium-to-long term oscillations.
+    In the context of financial mathematics, the term `financial market cycles` generally indicates repeated fluctuations
+    that don't follow a strict periodic pattern around the data series' path.
+    A model incorporating a cyclic element can effectively emulate critical characteristics often recognized in statistical analyses.
+    These include evidence of major autocorrelation, the recurrence and alternation of phases within the data,
+    the damping or amplification of cycles and the absence of long-term persistence in the data series~\cite{qiu_multivariate_2018}.
+
+    Cyclical factors are often modelled using a deterministic approach, such as a trigonometric function or a polynomial.
+    In this case, a trigonometric function is used to model the cyclical component with dumping is postulated as:
+
+    \begin{equation}
+        \bm{\omega}_{t+1} = \bm{\rho}^{(i)} \bm{T}_c^{(i)} \bm{\omega}_{t}^{(i)} + \bm{\kappa}_{t},
+            \qquad \bm{\kappa}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\omega})
+        \label{eq:cyclical_state}
+    \end{equation}
+
+    where:
+    \begin{itemize}
+        \item $\bm{\omega}_{t}$ ($2m \times 1$): cyclical component at time $t$
+        \item $\bm{\rho}^{(i)}$ ($m \times 1$): damping factors vector per series $i$
+        \item $\bm{T}_c^{(i)}$ ($2m \times 2m$): transition matrix for the cyclical component
+        \item $\bm{\kappa}_{t}$ ($2m \times 1$): cyclical disturbance at time $t$
+        \item $\bm{\Sigma}_{\omega}$ ($2m \times 2m$): variance of the cyclical disturbance
+    \end{itemize}
+
+    For each time series $i$, the cyclical component state vector $\bm{\omega}_{t}$ can be represented as:
+
+    \begin{equation}
+        \bm{\omega}_{t}^{(i)}=
+            \left[
+                \begin{array}{c}
+                    \alpha_{t}^{(1)} \\
+                    \beta_{t}^{(1)} \\
+                    \alpha_{t}^{(2)} \\
+                    \beta_{t}^{(2)} \\
+                    \vdots \\
+                    \alpha_{t}^{(m)} \\
+                    \beta_{t}^{(m)}
+                \end{array}
+            \right]
+        \label{eq:cyclical_state_vector}
+    \end{equation}
+
+    where the transition matrix $\bm{T_c^{(i)}}$ for the time series $i$ is:
+
+    \begin{equation}
+        \bm{T}_c^{(i)}=
+            \left[
+                \begin{array}{cc}
+                    \cos \left(\lambda_i\right) & \sin \left(\lambda_i\right) \\
+                    -\sin \left(\lambda_i\right) & \cos \left(\lambda_i\right)
+                \end{array}
+            \right]
+        \label{eq:cyclical_transition_matrix}
+    \end{equation}
+
+    The combined transition matrix for an $m$ time series model is a block-diagonal matrix,
+    where each block of the diagonal matrix is affected by its respective dampening factor $\bm{\rho}^{(i)}$ is:
+
+    \begin{equation}
+        \bm{\rho}^{(i)} \bm{T}_c^{(i)} =
+        \left[
+            \begin{array}{ccccc}
+                \rho_1 \bm{T}_c^{(1)} & \mathbf{0} & \cdots & \mathbf{0} \\
+                \mathbf{0} & \rho_2 \bm{T}_c^{(2)} & \cdots & \mathbf{0} & \\
+                \vdots & \vdots & \ddots & \vdots & \\
+                \mathbf{0} & \mathbf{0} & \cdots & \rho_m \bm{T}_c^{(m)}
+            \end{array}
+        \right]
+        \label{eq:cyclical_transition_mv}
+    \end{equation}
+
+    For the factor $\bm{\rho}^{(i)}$ be in fact dampening, should be $ 0 < \rho < 1$.
+    The frequency $\lambda_i = 2\pi/q_i $, where $q_i$ is the period such that $0 < \lambda_i < \pi$.
+    When $\lambda_i$ is 0 or $\pi$, the model degenerates to the AR(1) process.
+    The dampening factor should be strictly less than one for stationary purpose.
+    If this damping factor surpasses unity, it induces an unrestricted cyclical motion,
+    which consequently leads to an increased magnitude of the cycle in the model.~\cite{qiu_multivariate_2018}.
+    A fundamental distinction that arises between the cyclical and seasonal constituents pertains exactly to this dampening factor.
+    In the context of the cyclical component, there is a characteristic decay in its amplitude as time progresses.
+    This phenomenon can be pragmatically utilized in the analysis of time series data,
+    particularly those impacted by exogenous shocks,
+    lending valuable insights to scholars operating outside the confines of a traditional mathematical or statistical framework.
+
+
+    The combined white noise vector for the cyclical component $\kappa^{(c)}$ for $m$ time series is a vector of dimension $2m \times 1$.
+    Each element $\bm{\kappa}_{t}^{(i)}$ in this vector corresponds to the white noise term for the state variables of the cyclical component of each time series.
+
+    \begin{equation}
+        \bm{\kappa}_{t}^{(i)}=
+            \left[
+                \begin{array}{c}
+                    \kappa_{t}^{(c,1)} \\
+                    \kappa_{t}^{(c,2)} \\
+                    \vdots \\
+                    \kappa_{t}^{(c,m)}
+                \end{array}
+            \right]
+        \label{eq:cyclical_error_mv}
+    \end{equation}
+
+    Each $\bm{\kappa}_{t}^{(i)}$ is a $2 \times 1$ vector:
+
+    \begin{equation}
+        \bm{\kappa}_{t}^{(i)}=
+            \left[
+                \begin{array}{c}
+                    \kappa_{t}^{(\alpha,i)} \\
+                    \kappa_{t}^{(\beta,i)}
+                \end{array}
+            \right]
+        \label{eq:cyclical_error}
+    \end{equation}
+
+    where $\kappa_{t}^{(\alpha,i)}$ and $\kappa_{t}^{(\beta,i)}$ are the white noise terms for the state variables
+    $\alpha^{(i)}$ and $\beta^{(i)}$ respectively.
+
+    The variance-covariance matrix $\bm{\Sigma}_{\omega}$ for the white noise term $\omega_t^{(c)}$ is a block diagonal
+    matrix of dimension $2m \times 2m$.\ Each block on the diagonal corresponds to the variance-covariance matrix of the
+    white noise term for the cyclical component of each time series.
+
+    \begin{equation}
+        \bm{\Sigma}_{\omega} =
+            \left[
+                \begin{array}{cccc}
+                    \bm{\Sigma}_{\omega, 1} & \mathbf{0} & \cdots & \mathbf{0} \\
+                    \mathbf{0} & \mathbf{\Sigma}_{\omega, 2} & \cdots & \mathbf{0} \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    \mathbf{0} & \mathbf{0} & \cdots & \mathbf{\Sigma}_{\omega, m}
+                \end{array}
+            \right]
+        \label{eq:cyclical_covariance}
+    \end{equation}
+
+    Each block on the diagonal of the matrix $\bm{\Sigma}_{\omega}$ is a $2 \times 2$ matrix representing the variance-covariance
+    white noise term $\omega_t^{(\alpha, i)}$ and $\omega_t^{(\beta, i)}$:
+
+    \begin{equation}
+        \bm{\Sigma}_{\omega, i} =
+            \left[
+                \begin{array}{cc}
+                    \sigma_{\alpha, i}^2    & \sigma_{\alpha\beta, i} \\
+                    \sigma_{\alpha\beta, i} & \sigma_{\beta, i}^2
+                \end{array}
+            \right]
+        \label{eq:cyclical_covariance_block}
+    \end{equation}
+
+    By structuring the white noise terms and their variance-covariance matrix this way,
+    clearly separate the noise affecting each time series while allowing for the noise terms of the cyclical
+    state variables within each series to be correlated.
+
+
+
+
+
+
+
+
+
 
 \subsection{Generatate Wind Series Forecast Scenarios}
     \label{sec:wind_forecast_scenarios}
