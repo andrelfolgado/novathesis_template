@@ -234,38 +234,19 @@
 
     \begin{equation}
         \bm{\eta}_{t+1}=
-            \bm{T}_{T} \bm{\eta}_{t} + \bm{G}_{T} \bm{\gamma}^{(i)} + \bm{\omega}_{t}^{(T,i)}
+            \bm{T}_{T} \bm{\eta}_{t} + \bm{G}_{T} \bm{\gamma} + \bm{\omega}_{T,t}
         \label{eq:trend_state}
     \end{equation}
 
     where:
     \begin{itemize}
-        \item $\bm{T}_T^{(i)}$ $(2m \times 2m)$ transition matrix that applies the learning rate $\rho^{(i)}$
-        \item $\bm{G}_T^{(i)}$ $(2m \times 1)$ vector that applies the long-term slope $\bm{\gamma}^{(i)}$
-        \item $\bm{\gamma}^{(i)}$ $(2m \times 2m)$ is the long-term slope for the time series $i$
+        \item $\bm{T}_T$ $(2m \times 2m)$ transition matrix that applies the learning rate $\rho$
+        \item $\bm{\eta}_{t}$ $(2m \times 1)$ state vector that contains the trend components for all time series at time $t$
+        \item $\bm{G}_T$ $(2m \times 1)$ transition vector that applies the long-term slope $\gamma$
+        \item $\bm{\gamma}$ $(m \times 1)$ is the long-term slope
+        \item $\bm{\omega}_{T,t}$ $(2m \times 2m)$ is the trend disturbance at time $t$,
+            where $w_{T,t} \sim \mathcal{N}(0, \bm{\Sigma}_{T})$
     \end{itemize}
-
-%     \begin{equation}
-%            \bm{T}_T^{(i)}=
-%                \left[
-%                    \begin{array}{cc}
-%                        1 & 1 \\
-%                        0 & \rho^{(i)}
-%                    \end{array}
-%                \right]
-%            \label{eq:state_transition}
-%     \end{equation}
-%
-%    \begin{equation}
-%        \bm{G}_T^{(i)}=
-%            \left[
-%                \begin{array}{c}
-%                    0 \\
-%                    1 - \rho^{(i)}
-%                \end{array}
-%            \right]
-%        \label{eq:state_vector_lts}
-%    \end{equation}
 
     The updated state equation becomes, for times series $i$, can be represented as:
 
@@ -301,20 +282,8 @@
                 \omega_{t}^{(\delta,i)}
             \end{array}
         \right]
-        \label{eq:state_update_state}
+        \label{eq:state_update}
     \end{equation}
-
-%    where:
-%    \begin{itemize}
-%        \item $\bm{\mu}_{t}$ ($m \times 1$): trend component at time $t$
-%        \item $\bm{\delta}_{t}$ ($m \times 1$): expected increase between time $t$ and $t+1$
-%        \item $\bm{u}_{t}$ ($m \times 1$): trend disturbance at time $t$
-%        \item $\bm{d}$ ($m \times 1$): can be considered and the long-term trend
-%        \item $\bm{P}$ ($m \times m$): diagonal matrix representing learning rate at which local trend is updated
-%        \item $\bm{v}_{t}$ ($m \times 1$): is the trend disturbance at time $t$
-%        \item $\bm{\Sigma}_{\mu}$ ($m \times m$): variance of the trend disturbance
-%        \item $\bm{\Sigma}_{\delta}$ ($m \times m$): variance of the trend increment
-%    \end{itemize}
 
     The combined transition matrix $\bm{T}_T$ for $m$ time series is a block-diagonal matrix:
 
@@ -331,11 +300,54 @@
         \label{eq:state_transition_mv}
     \end{equation}
 
-    where each block of the diagonal matrix is a $(2 \times 2)$ for one time series, represented in equation~\ref{eq:state_update_state}.
-    The model features a parameter $\bm{\rho}$ $(0 < \bm{\rho}^{(i)} < 1)$ which represents the learning rate that underlies the local trend
-    update process, providing the ability to balance short-term and long-term information.
+    where each block of the diagonal matrix is a $(2 \times 2)$ for one time series,
+    represented in equation~\ref{eq:state_update}.
+    The model features a parameter $\bm{\rho}$ $(0 < \bm{\rho}^{(i)} < 1)$ which represents the learning rate
+    that underlies the local trend update process, providing the ability to balance short-term and long-term information.
     Specifically, when $\bm{\rho}^{(i)} = 1$, the model induces a random walk within the associated slope,
     leading to a non-stationary trend component.
+
+    The state vector $\bm{\eta}_{t}$ contains the trend components for all time series at time $t$.
+    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
+    individual time series.
+
+    \begin{equation}
+        \bm{\eta}_{t}^{(i)}=
+            \left[
+                \begin{array}{c}
+                    \mu_{t}^{(1)} \\
+                    \delta_{t}^{(1)} \\
+                    \mu_{t}^{(2)} \\
+                    \delta_{t}^{(2)} \\
+                    \vdots \\
+                    \mu_{t}^{(m)} \\
+                    \delta_{t}^{(m)}
+                \end{array}
+            \right]
+        \label{eq:trend_state_vector}
+    \end{equation}
+
+    The aggregate disturbance term $\bm{\omega}_{T,t}$ is assumed to be a white noise variable with a multivariate normal distribution
+    with a covariance matrix $\bm{\Sigma}_{T}$ of the order $(2m \times 2m)$.\ The covariance matrix $\bm{\Sigma}_{T}$
+    is a block-diagonal matrix, where each block of the diagonal matrix are assumed to be independent.
+    The combined covariance matrix $\bm{\Sigma}_{T}$ can be represented as:
+
+    \begin{equation}
+        \bm{\Sigma}_{T} =
+            \left[
+                \begin{array}{cc}
+                    \mathbf{\Sigma}_{\mu} & \mathbf{0} \\
+                    \mathbf{0}            & \mathbf{\Sigma}_{\delta}
+                \end{array}
+            \right]
+        \label{eq:trend_covariance}
+    \end{equation}
+
+    Where:
+    \begin{itemize}
+        \item $\mathbf{\Sigma}_{\mu}$ covariance matrix of the trend disturbances  $\omega_{t}^{(\mu,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\mu})$
+        \item $\mathbf{\Sigma}_{\delta}$ covariance matrix of the trend increments  $\omega_{t}^{(\delta,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\delta})$
+    \end{itemize}
 
 \subsubsection{Seasonality}
     \label{sec:seasonality_component}
@@ -355,7 +367,7 @@
     \begin{equation}
         \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
             \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
-            \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\tau})
+            \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\tau})
         \label{eq:seasonal}
     \end{equation}
 
@@ -373,12 +385,12 @@
     \begin{equation}
         \mathbf{T}_s=
             \left[
-                \begin{array}{cccc}
-                    -1             & \mathbf{0} & \cdots & \mathbf{0} \\
-                    1              & \mathbf{0} & \cdots & \mathbf{0} \\
-                    \mathbf{0}     & 1          & \cdots & \mathbf{0} \\
-                    \vdots         & \vdots     & \ddots & \vdots     \\
-                    \mathbf{0}     & \mathbf{0} & \cdots & 1
+                \begin{array}{ccccc}
+                    -1             & -1         & \cdots &  -1        & -1 \\
+                    1              & \mathbf{0} & \cdots & \mathbf{0} & \mathbf{0} \\
+                    \mathbf{0}     & 1          & \cdots & \mathbf{0} & \mathbf{0} \\
+                    \vdots         & \vdots     & \ddots & \vdots     & \vdots \\
+                    \mathbf{0}     & \mathbf{0} & \cdots & 1          & \mathbf{0}
                 \end{array}
             \right]
     \label{eq:seasonal_transition_uni}
@@ -572,7 +584,7 @@
     lending valuable insights to scholars operating outside the confines of a traditional mathematical or statistical framework.
 
 
-    The combined white noise vector for the cyclical component $\kappa^{(c)}$ for $m$ time series is a vector of dimension $2m \times 1$.
+    The combined white noise vector for the cy clical component $\kappa^{(c)}$ for $m$ time series is a vector of dimension $2m \times 1$.
     Each element $\bm{\kappa}_{t}^{(i)}$ in this vector corresponds to the white noise term for the state variables of the cyclical component of each time series.
 
     \begin{equation}
@@ -639,13 +651,53 @@
     clearly separate the noise affecting each time series while allowing for the noise terms of the cyclical
     state variables within each series to be correlated.
 
+\subsubsection{Regression Component}
+    \label{sec:regression_component}
 
+    The regression component of the structural time series model is a flexible element that allows the incorporation of
+    exogenous variables that can influence the target time series.
+    The regression component is modelled as a linear combination of the exogenous variables.
+    The regression component of the~\gls{mbsts} can be expressed as:
 
+    \begin{equation}
+        \bm{\xi}_{t} = \bm{X}_t \bm{\beta} + \bm{\epsilon}_{t},
+            \qquad \bm{\epsilon}_{t} \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})
+        \label{eq:regression_state}
+    \end{equation}
 
+    Where:
 
+    \begin{itemize}
+        \item $\bm{\xi}_{t}$ ($m \times 1$): regression component at time $t$
+        \item $\bm{X}_t$ ($m \times p$): matrix of exogenous variables at time $t$
+        \item $\bm{\beta}$ ($p \times 1$): regression coefficients at time $t$
+        \item $\bm{\epsilon}_{t}$ ($m \times 1$): regression disturbance at time $t$,
+            where $\bm{\epsilon}_{t} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})$
+        \item $\bm{\Sigma}_{\epsilon}$ ($m \times m$): variance-covariance matrix of the regression disturbance
+    \end{itemize}
 
+    The covariates matrix $\bm{X}_t$ is a $m \times p$ matrix, where $m$ is the number of time series and $p$ is the number of predictors.
+    Each row of the matrix $\bm{X}_t$ corresponds to the exogenous variables for each time series at time $t$,
+    and each column corresponds to a covariate. The matrix $\bm{X}_t$ can be represented as:
 
+    \begin{equation}
+        \bm{X}_t =
+            \left[
+                \begin{array}{cccc}
+                    x_{t1,1} & x_{t1,2} & \cdots & x_{t1,p} \\
+                    x_{t2,1} & x_{t2,2} & \cdots & x_{t2,p} \\
+                    \vdots  & \vdots  & \ddots & \vdots  \\
+                    x_{tm,1} & x_{tm,2} & \cdots & x_{tm,p}
+                \end{array}
+            \right]
+        \label{eq:regression_covariates}
+    \end{equation}
 
+    In the overall~\gls{mbsts}, the regression component is combined with the trend, seasonality,
+    and cyclical intends to capture the full dynamics of the time series.
+    The regression component specifically supports to model the influence of known external factors on the time series.
+    By incorporating covariates, the model can explain parts of the variability in the time series that are attributable
+    to these external factors, thus improving the accuracy and interpretability of the model.
 
 
 \subsection{Generatate Wind Series Forecast Scenarios}
