@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Comment out seasonal component descriptions in wind modelling chapter&#10;&#10;The seasonal component descriptions in the wind modelling chapter of the text have been commented out. This change was made in the 'my-chapter_wind_modelling.tex' file. Future improvements or alterations can be made easily as the information is preserved, just not visible in the presented text.">
-      <change afterPath="$PROJECT_DIR$/Chapters/seminar/abstract_2024_june.tex" afterDir="false" />
+    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated.">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/notebooks/raw_tdmi_lov_edpr_facilities.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/novathesis_template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/novathesis_template.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/main_nova.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/main_nova.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bibliography/zotero.bib" beforeDir="false" afterPath="$PROJECT_DIR$/Bibliography/zotero.bib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/out/main.pdf" afterDir="false" />
     </list>
@@ -16,6 +21,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -41,6 +53,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
@@ -52,31 +67,47 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;BibTeX.main bibliography.executor&quot;: &quot;Run&quot;,
-    &quot;BibTeX.main/bib_nova.executor&quot;: &quot;Run&quot;,
-    &quot;BibTeX.main_bibtex.executor&quot;: &quot;Run&quot;,
-    &quot;LaTeX.main.executor&quot;: &quot;Run&quot;,
-    &quot;LaTeX.main/nova.executor&quot;: &quot;Run&quot;,
-    &quot;Makeindex.main makeglossaries.executor&quot;: &quot;Run&quot;,
-    &quot;Makeindex.main makeindex.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;seminar&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/E353682/OneDrive - FCT NOVA/Repos/novathesis_template&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "BibTeX.main bibliography.executor": "Run",
+    "BibTeX.main/bib_nova.executor": "Run",
+    "BibTeX.main_bibtex.executor": "Run",
+    "LaTeX.main.executor": "Run",
+    "LaTeX.main/nova.executor": "Run",
+    "Makeindex.main makeglossaries.executor": "Run",
+    "Makeindex.main makeindex.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "seminar",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/E353682/OneDrive - FCT NOVA/Repos/novathesis_template/src/notebooks",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "oracle",
+      "synapse",
+      "sqlserver",
+      "azure"
+    ],
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "OracleSqlPlus"
+    ]
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\E353682\OneDrive - FCT NOVA\Repos\novathesis_template\src\notebooks" />
+    </key>
+  </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="main/nova" />
@@ -155,12 +186,17 @@
       <item itemvalue="Makeindex.main makeglossaries" />
       <item itemvalue="Makeindex.main makeindex" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="LaTeX.main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17011.127" />
-        <option value="bundled-python-sdk-48aec45f0201-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17011.127" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17890.14" />
+        <option value="bundled-python-sdk-5b207ade9991-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17890.14" />
       </set>
     </attachedChunks>
   </component>
@@ -213,6 +249,18 @@
       <workItem from="1717765215329" duration="45000" />
       <workItem from="1717765270286" duration="105000" />
       <workItem from="1717765384462" duration="224000" />
+      <workItem from="1717914936810" duration="352000" />
+      <workItem from="1718042411744" duration="599000" />
+      <workItem from="1718043044829" duration="280000" />
+      <workItem from="1718050373825" duration="878000" />
+      <workItem from="1718095258061" duration="1346000" />
+      <workItem from="1718097243535" duration="2678000" />
+      <workItem from="1718120274662" duration="3497000" />
+      <workItem from="1718147108905" duration="37995000" />
+      <workItem from="1718293907867" duration="5291000" />
+      <workItem from="1718344163559" duration="10321000" />
+      <workItem from="1718360875702" duration="8452000" />
+      <workItem from="1718377778921" duration="6897000" />
     </task>
     <task id="LOCAL-00001" summary="Add bibliography entries for wind energy articles&#10;&#10;Two articles regarding wind energy, &quot;Dynamic pricing of wind futures&quot; and &quot;Handling the risk dimensions of wind energy generation&quot;, have been added to the bibliography. These entries include the articles' details, such as title, author, journal, and year of publication, facilitating their citation in future academic work.">
       <option name="closed" value="true" />
@@ -486,7 +534,55 @@
       <option name="project" value="LOCAL" />
       <updated>1717171993109</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Add seminar abstract for June 2024&#10;&#10;A new LaTeX document has been created to represent the seminar abstract scheduled for June 2024. The document contains the preliminary setup, the main abstract text discussing a Monte Carlo Simulation Study using Bayesian time series for energy hedging strategies, relevant keywords, and a short biography of the author.">
+      <option name="closed" value="true" />
+      <created>1717913583841</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1717913583841</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Commented out the &quot;mathastext&quot; package in the LaTeX configuration&#10;&#10;In the document configuration file, the line adding the &quot;mathastext&quot; package for upright Greek letters was commented out. This change does not remove the package but disables its usage within the document.">
+      <option name="closed" value="true" />
+      <created>1717913596754</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1717913596754</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Updated workspace settings and run configurations&#10;&#10;Significant updates have been made to the workspace.xml and runConfigurations/main_nova.xml files. These include changing some IDE settings, the selection of a different compiler, and specifying a path for SumatraPDF.">
+      <option name="closed" value="true" />
+      <created>1717913611880</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1717913611880</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Add new reference to Zotero bibliography&#10;&#10;This commit includes a new entry added to the Zotero bibliography file zotero.bib. The addition is an article titled &quot;Seasonality in High Frequency Time Series&quot; authored by Proietti, Tommaso and Pedregal, Diego J., published in 2023.">
+      <option name="closed" value="true" />
+      <created>1717913625096</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1717913625096</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Expand and enhance section on seasonal component modelling&#10;&#10;In the documentation, the section about seasonal component modelling in time series has been significantly expanded and enhanced. It now includes more detailed explanations, mathematical models, and examples. The update also improves the handling of multivariate time series and elaborates on the role of the white noise error term.">
+      <option name="closed" value="true" />
+      <created>1717913636539</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1717913636539</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated.">
+      <option name="closed" value="true" />
+      <created>1718188010581</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1718188010581</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -515,15 +611,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add new chapters to 4_files.tex&#10;&#10;Three new chapter files have been added to the 4_files.tex and one existing chapter was commented out. This addition includes chapters on wind modelling, power price modelling, and hedging strategies." />
-    <MESSAGE value="Update .gitignore exceptions&#10;&#10;The .gitignore file has been updated to no longer include template.tex in the ignore list, and instead, considers main.tex as an exception. This change supports the recent structuring of our LaTeX project files." />
-    <MESSAGE value="Add new acronyms to acronyms.tex&#10;&#10;The acronyms.tex file has been updated to include the abbreviations for European Energy Exchange (EEX) and European Centre for Medium-Range Weather Forecasts (ECMWF). This ensures we maintain a comprehensive list of abbreviations in our project." />
-    <MESSAGE value="Add new sections to my-chapter2.tex&#10;&#10;Extended my-chapter2.tex by adding two new sections: &quot;Renewable Generation Costs&quot; and &quot;Wind Futures&quot;. The first analyzes the levelized cost of electricity for power generation technologies in Europe, emphasizing onshore wind and utility-scale solar. The second section discusses the emerging market of wind futures and introduces related indexes." />
-    <MESSAGE value="Correct commit message:&#10;Fix citation and spacing in my-chapter1.tex&#10;&#10;Updated citation format throughout my-chapter1.tex to ensure cohesive format. Also, added missing spaces for words that were joined together and refined a concluding sentence for clarity." />
-    <MESSAGE value="Fix incorrect filename in typeout command&#10;&#10;The typeout command previously was referencing the incorrect filename my-chapter2.tex, hence it was updated to the correct filename my-chapter3.tex. The fix ensures that the actual filename being worked on corresponds with the filename stated in the typeout command." />
-    <MESSAGE value="Update Python version in novathesis_template&#10;&#10;Changed the order entry in novathesis_template from inheritedJDK to Python 3.12 SDK. This ensures that the project will use the correct and uniform Python SDK across all involved modules and files." />
-    <MESSAGE value="Add new research articles to bibliography file&#10;&#10;Updated the 'zotero.bib' bibliography file with two new research articles. The added articles focus on dynamic pricing of wind futures and strategies for managing the risk associated with wind energy production." />
-    <MESSAGE value="Update submission and exam dates in cover file&#10;&#10;The submission and exam dates in the cover file '3_cover.tex' have been updated. The previous dates were set to 2023-12-13 and are now updated to 2024-02-28." />
     <MESSAGE value="The provided commit message does not correspond to the changes shown in the diff. The diff shows changes in `4_files.tex` and not in `3_cover.tex`. Besides, it includes changes to chapters included, not dates. Based on the given diff, a correct commit message could be:&#10;&#10;Modify included chapters in '4_files.tex'&#10;&#10;The file references for included chapters in '4_files.tex' have been updated. 'my-chapter3' has been commented out, while 'my-chapter_wind_modelling' has been added. Three additional chapters have been listed but commented out for later inclusion if necessary." />
     <MESSAGE value="Add new acronyms to 'acronyms.tex'&#10;&#10;Two new acronyms have been added to the `acronyms.tex` file. The added acronyms are &quot;Multivariate Bayesian Structural Time Series (MBSTS)&quot; and &quot;Markov chain Monte Carlo (MCMC)&quot;." />
     <MESSAGE value="Uncomment Renewable Generation section and add Hedging section&#10;&#10;The 'Renewable Generation Costs' section has been uncommented for inclusion in the final text. Additionally, a new 'Hedging RES Generation' section has been created, including a figure showing hedged discounted cash flow models. Some minor text edits have also been made to enhance clarity." />
@@ -540,6 +627,15 @@
     <MESSAGE value="Add seasonal component subsection in my-chapter_wind_modelling&#10;&#10;The update includes a new subsection named 'Seasonality' in 'my-chapter_wind_modelling'. The content elaborates on how the seasonal component plays a critical part in structural time series model with appropriate examples and equations. The unnecessary line in '5_packages.tex' was also removed." />
     <MESSAGE value="Add new project configurations and update IDE settings&#10;&#10;Added several new project configuration files and updated existing ones in the .idea directory. Changes include Python SDK specification to 3.12, Git integration, new run configurations for different LaTeX tasks, and various settings related to the project's IDE environment." />
     <MESSAGE value="Add new project configurations and update IDE settings&#10;&#10;Additional project configuration files have been added and existing ones have been updated in the .idea directory. Changes include a changed Python SDK specification, Git integration, new run configurations for LaTeX tasks, and various project IDE environment settings." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add new project configurations and update IDE settings&#10;&#10;Additional project configuration files have been added and existing ones have been updated in the .idea directory. Changes include a changed Python SDK specification, Git integration, new run configurations for LaTeX tasks, and various project IDE environment settings." />
+    <MESSAGE value="Comment out seasonal component descriptions in wind modelling chapter&#10;&#10;The seasonal component descriptions in the wind modelling chapter of the text have been commented out. This change was made in the 'my-chapter_wind_modelling.tex' file. Future improvements or alterations can be made easily as the information is preserved, just not visible in the presented text." />
+    <MESSAGE value="Add seminar abstract and improve seasonal component description&#10;&#10;A new seminar abstract has been added and the description of the seasonal component in the wind modelling chapter has been refined with a more detailed explanation. The run configurations and packages in the project settings have also been updated." />
+    <MESSAGE value="Add seminar abstract for June 2024&#10;&#10;A new LaTeX document has been created to represent the seminar abstract scheduled for June 2024. The document contains the preliminary setup, the main abstract text discussing a Monte Carlo Simulation Study using Bayesian time series for energy hedging strategies, relevant keywords, and a short biography of the author." />
+    <MESSAGE value="Commented out the &quot;mathastext&quot; package in the LaTeX configuration&#10;&#10;In the document configuration file, the line adding the &quot;mathastext&quot; package for upright Greek letters was commented out. This change does not remove the package but disables its usage within the document." />
+    <MESSAGE value="Updated workspace settings and run configurations&#10;&#10;Significant updates have been made to the workspace.xml and runConfigurations/main_nova.xml files. These include changing some IDE settings, the selection of a different compiler, and specifying a path for SumatraPDF." />
+    <MESSAGE value="Add new reference to Zotero bibliography&#10;&#10;This commit includes a new entry added to the Zotero bibliography file zotero.bib. The addition is an article titled &quot;Seasonality in High Frequency Time Series&quot; authored by Proietti, Tommaso and Pedregal, Diego J., published in 2023." />
+    <MESSAGE value="Expand and enhance section on seasonal component modelling&#10;&#10;In the documentation, the section about seasonal component modelling in time series has been significantly expanded and enhanced. It now includes more detailed explanations, mathematical models, and examples. The update also improves the handling of multivariate time series and elaborates on the role of the white noise error term." />
+    <MESSAGE value="Include main.pdf in version control&#10;&#10;The .gitignore file has been updated to stop ignoring the main.pdf file. This file is now included in the version control, allowing it to be shared and versioned along with the rest of the project." />
+    <MESSAGE value="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated." />
   </component>
 </project>
