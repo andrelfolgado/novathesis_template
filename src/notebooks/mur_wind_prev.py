@@ -5,12 +5,9 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-ZONES = (
-    "22Bolo", "24Ama1", "26Fanh", "27Arr1", "29Sob2", "44Milagre", "48Vale_de", "60Maravil", "61MaraviII", "68Jogui"
-)
 
+def get_wind_prev_pivot(zones_names: tuple, hist_num_year: int):
 
-def get_wind_prev_pivot(zones_names, hist_num_year):
     df_zones_props = get_facilities_props(zones_names)
 
     df_index = get_wind_prev_hist(zones_names)
@@ -52,6 +49,9 @@ def get_wind_prev_pivot(zones_names, hist_num_year):
     df_silver.drop(columns=['installed_capacity', 'valor'], inplace=True)
 
     df_silver_pivot = df_silver.pivot(columns='nome_modelo', values='capacity_factor')
+
+    # substitute nan values with 0, to fill projects that started later than historical data retrieval
+    df_silver_pivot.fillna(0, inplace=True)
 
     return df_silver_pivot
 
