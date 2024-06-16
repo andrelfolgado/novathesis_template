@@ -4,18 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated.">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/notebooks/raw_tdmi_lov_edpr_facilities.ipynb" afterDir="false" />
+    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates.">
+      <change afterPath="$PROJECT_DIR$/.idea/rAvailablePackageCache.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rGraphicsSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rpackages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow2.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/novathesis_template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/novathesis_template.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/main_nova.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/main_nova.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/out/main.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +53,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -88,7 +87,8 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "org.jetbrains.r.configuration.RSettingsProjectConfigurable",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -106,6 +106,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\E353682\OneDrive - FCT NOVA\Repos\novathesis_template\src\notebooks" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\E353682\OneDrive - FCT NOVA\Repos\novathesis_template\src\r_mbsts" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -260,7 +263,8 @@
       <workItem from="1718293907867" duration="5291000" />
       <workItem from="1718344163559" duration="10321000" />
       <workItem from="1718360875702" duration="8452000" />
-      <workItem from="1718377778921" duration="6897000" />
+      <workItem from="1718377778921" duration="33915000" />
+      <workItem from="1718537231934" duration="6447000" />
     </task>
     <task id="LOCAL-00001" summary="Add bibliography entries for wind energy articles&#10;&#10;Two articles regarding wind energy, &quot;Dynamic pricing of wind futures&quot; and &quot;Handling the risk dimensions of wind energy generation&quot;, have been added to the bibliography. These entries include the articles' details, such as title, author, journal, and year of publication, facilitating their citation in future academic work.">
       <option name="closed" value="true" />
@@ -582,7 +586,39 @@
       <option name="project" value="LOCAL" />
       <updated>1718188010581</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Add wind prediction functionality in mur_wind_prev notebooks&#10;&#10;This commit creates new Python and Jupyter notebook files in the src/notebooks directory. The main function get_wind_prev_pivot, which takes historical wind data and performs a pivot operation to calculate the mean wind speed, has been implemented in the mur_wind_prev.py file. An additional helper function get_facilities_props is included which retrieves properties of various wind zones. The notebooks mur_wind_prev.ipynb and raw_tdmi_lov_edpr_facilities.ipynb illustrate use-cases with each function in an interactive manner.">
+      <option name="closed" value="true" />
+      <created>1718417741433</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1718417741433</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Update dependencies and refactor wind modelling chapter&#10;&#10;Updated project dependencies to use Python 3.12 SDK named hedging_renewables. Refactored the wind modelling chapter for improved clarity and added a new section that discusses the cyclical component. The refactoring process included the expansion of the linear trend component explanation, making minor spelling corrections, and removing or consolidating redundant information. The project's .idea configuration files were also updated accordingly.">
+      <option name="closed" value="true" />
+      <created>1718417784037</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1718417784037</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Update and expand wind modelling equations in documentation&#10;&#10;The wind modelling chapter's mathematical description was significantly updated and expanded. Equations related to the trend, seasonality, and cyclical disturbance components were modified for clarity and consistency. A new subsection was added detailing the regression component of the time series model, which explains the influence of known external factors on the time series.">
+      <option name="closed" value="true" />
+      <created>1718417829838</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1718417829838</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates.">
+      <option name="closed" value="true" />
+      <created>1718445695854</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1718445695854</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -611,11 +647,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="The provided commit message does not correspond to the changes shown in the diff. The diff shows changes in `4_files.tex` and not in `3_cover.tex`. Besides, it includes changes to chapters included, not dates. Based on the given diff, a correct commit message could be:&#10;&#10;Modify included chapters in '4_files.tex'&#10;&#10;The file references for included chapters in '4_files.tex' have been updated. 'my-chapter3' has been commented out, while 'my-chapter_wind_modelling' has been added. Three additional chapters have been listed but commented out for later inclusion if necessary." />
-    <MESSAGE value="Add new acronyms to 'acronyms.tex'&#10;&#10;Two new acronyms have been added to the `acronyms.tex` file. The added acronyms are &quot;Multivariate Bayesian Structural Time Series (MBSTS)&quot; and &quot;Markov chain Monte Carlo (MCMC)&quot;." />
-    <MESSAGE value="Uncomment Renewable Generation section and add Hedging section&#10;&#10;The 'Renewable Generation Costs' section has been uncommented for inclusion in the final text. Additionally, a new 'Hedging RES Generation' section has been created, including a figure showing hedged discounted cash flow models. Some minor text edits have also been made to enhance clarity." />
-    <MESSAGE value="Revise sections and improve clarity in chapter 2&#10;&#10;Removed the &quot;Renewable Generation Costs&quot; section and made textual revisions to improve the clarity of the 'Wind Futures' section. Added relevant citation to give proper credit and enhance the validity of the presented information." />
-    <MESSAGE value="Revise and remove sections in Chapter 2&#10;&#10;The &quot;Renewable Generation Costs&quot; section in Chapter 2 was removed. Meanwhile, the text in the 'Wind Futures' section was revised to improve clarity and understanding. Now, a new citation gives additional credibility and support to the presented information." />
     <MESSAGE value="Add new chapters to the thesis&#10;&#10;Two new chapters, &quot;Power Price Modelling&quot; and &quot;Hedging Volume Risk&quot;, have been added to the thesis. Both chapters contain basic structure with predefined packages and a starting statement about their essential role in the thesis." />
     <MESSAGE value="Add new chapters to the thesis&#10;&#10;Two new chapters on &quot;Power Price Modelling&quot; and &quot;Hedging Volume Risk&quot; have been introduced to the thesis. Currently, they include preliminary structure with essential LaTeX packages and a brief introductory statement outlining their significance in the context of the thesis." />
     <MESSAGE value="Add new chapters on Wind Power Generation and Capacity Factor&#10;&#10;Introduced a detailed chapter on &quot;Wind Power Generation&quot; detailing the methodology to model wind power based on historical and forecast data. Also added a chapter on 'Capacity Factor' with an in depth explanation of the metric's significance in assessing a power production asset's performance and financial implications. This forms the foundational work for future expansions or modifications." />
@@ -636,6 +667,11 @@
     <MESSAGE value="Expand and enhance section on seasonal component modelling&#10;&#10;In the documentation, the section about seasonal component modelling in time series has been significantly expanded and enhanced. It now includes more detailed explanations, mathematical models, and examples. The update also improves the handling of multivariate time series and elaborates on the role of the white noise error term." />
     <MESSAGE value="Include main.pdf in version control&#10;&#10;The .gitignore file has been updated to stop ignoring the main.pdf file. This file is now included in the version control, allowing it to be shared and versioned along with the rest of the project." />
     <MESSAGE value="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor wind modelling chapter and add cyclical component&#10;&#10;The wind modelling chapter was thoroughly refactored for improved clarity and readability. Notably, the linear trend component explanation was expanded with better mathematical representation. A new section discussing the cyclical component was included, offering a detailed insight into how medium-to-long term oscillations are modeled in the data series. Lastly, minor spelling corrections were made and redundant pieces of information were removed or consolidated." />
+    <MESSAGE value="Add wind prediction functionality in mur_wind_prev notebooks&#10;&#10;This commit creates new Python and Jupyter notebook files in the src/notebooks directory. The main function get_wind_prev_pivot, which takes historical wind data and performs a pivot operation to calculate the mean wind speed, has been implemented in the mur_wind_prev.py file. An additional helper function get_facilities_props is included which retrieves properties of various wind zones. The notebooks mur_wind_prev.ipynb and raw_tdmi_lov_edpr_facilities.ipynb illustrate use-cases with each function in an interactive manner." />
+    <MESSAGE value="Update dependencies and refactor wind modelling chapter&#10;&#10;Updated project dependencies to use Python 3.12 SDK named hedging_renewables. Refactored the wind modelling chapter for improved clarity and added a new section that discusses the cyclical component. The refactoring process included the expansion of the linear trend component explanation, making minor spelling corrections, and removing or consolidating redundant information. The project's .idea configuration files were also updated accordingly." />
+    <MESSAGE value="Update mathematical formulae and explanations in wind modeling chapter&#10;&#10;This commit revises various mathematical expressions and related explanations throughout the &quot;Wind Modelling&quot; chapter to clarify and improve their coherence. The adjustments include changes in trend, seasonality and cyclical components, as well as introducing a new regression component. This will ensure the readability and comprehension of the equations used in the modeling process." />
+    <MESSAGE value="Update and expand wind modelling equations in documentation&#10;&#10;The wind modelling chapter's mathematical description was significantly updated and expanded. Equations related to the trend, seasonality, and cyclical disturbance components were modified for clarity and consistency. A new subsection was added detailing the regression component of the time series model, which explains the influence of known external factors on the time series." />
+    <MESSAGE value="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates." />
   </component>
 </project>
