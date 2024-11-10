@@ -6,14 +6,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import tensorflow_probability.python.distributions as tfd
 import tensorflow_probability.python.bijectors as tfb
+from statsmodels.tsa.stattools import adfuller
 
-ZONES = (
-"22Bolo", "24Ama1", "26Fanh", "27Arr1", "29Sob2", "44Milagre", "48Vale_de", "60Maravil", "61MaraviII", "68Jogui")
+ZONES = ("22Bolo", "24Ama1", "26Fanh", "27Arr1", "29Sob2", "44Milagre", "48Vale_de", "60Maravil", "61MaraviII", "68Jogui")
+
 HIST_NUM_YEARS = 4
 
 # # # Hourly Wind generation data with multiple time series as columns
 # df = get_wind_prev_pivot(ZONES, HIST_NUM_YEARS)
-# #save df to pkl
+#save df to pkl
 # df.to_pickle('wind_generation_data.pkl')
 
 #load df from pkl
@@ -22,6 +23,9 @@ df = pd.read_pickle('wind_generation_data.pkl')
 #df contains hourly wind generation data including historical data and forecasted for each time series. I want to split the data into historical and forecasted data based now time filtering the datetimeindex. getting df_hist and df_forecast
 df_hist = df.loc[df.index < pd.Timestamp.now()]
 df_forecast = df.loc[df.index >= pd.Timestamp.now()]
+
+# keep only the last year of df_hist
+# df_hist = df_hist.loc[df_hist.index >= pd.Timestamp.now() - pd.DateOffset(years=1), ["22Bolo", "24Ama1"]]
 
 # Model parameters
 num_timesteps, num_series = df_hist.shape
@@ -42,8 +46,9 @@ trend = tfp.sts.LocalLinearTrend(observed_time_series=observed_time_series, name
 seasonal = tfp.sts.Seasonal(num_seasons=24, observed_time_series=observed_time_series, name='seasonal')
 
 # Weekly cycle for hourly data (24*7 hours)
-cycle = tfp.sts.SmoothSeasonal(period=24 * 7, frequency_multipliers=[1., 2., 3.],
-                               observed_time_series=observed_time_series, name='cycle')  # Weekly cycle
+cycle = tfp.sts.SmoothSeasonal(
+    period=24 * 7, frequency_multipliers=[1., 2., 3.], observed_time_series=observed_time_series, name='cycle'
+)
 
 regression = tfp.sts.LinearRegression(design_matrix=predictors, name='predictors')
 
@@ -61,13 +66,17 @@ def get_param_prior_values(parameters):
     return [param.prior for param in parameters]
 
 
-def sts_model_joint_distribution(observed_time_series, sts_model, num_timesteps, num_series):
-    param_vals = get_param_prior_values(sts_model.parameters)
+param_priors = get_param_prior_values(sts_model.parameters)
+
+
+def sts_model_joint_distribution(observed_time_series, sts_model, num_timesteps, param_vals):
+    # param_vals = get_param_prior_values(sts_model.parameters)
 
     def sts_model_fn():
         param_list = []
         for param in param_vals:
             param_list.append((yield param))
+            # param_list.append((param))
 
         # Vectorized state space model
         def vectorized_model_fn(time_series):
@@ -78,20 +87,27 @@ def sts_model_joint_distribution(observed_time_series, sts_model, num_timesteps,
             )
 
             return state_space_model.log_prob(tf.expand_dims(time_series, axis=-1))
-            # return state_space_model.log_prob(time_series)
 
-        # log_probs = tf.vectorized_map(vectorized_model_fn, tf.range(num_series))
+        # Apply vectorized_map to transpose of observed_time_series
         log_probs = tf.vectorized_map(vectorized_model_fn, tf.transpose(observed_time_series))
         yield tf.reduce_sum(log_probs)
+        # return tf.reduce_sum(log_probs)
 
     return tfd.JointDistributionCoroutineAutoBatched(sts_model_fn)
 
 
-# Define the joint distribution and conditioning
-joint_dist = sts_model_joint_distribution(observed_time_series, sts_model, num_timesteps, num_series)
-# Pin the observed time series to the joint distribution
+# # Define the joint distribution and conditioning
+joint_dist = sts_model_joint_distribution(observed_time_series, sts_model, num_timesteps, param_priors)
+# Pin the parameters to their values (not the observed data itself)
+# pinned_joint_dist = joint_dist.experimental_pin(observed_time_series=observed_time_series)
+# Manually sample parameter values
 
-pinned_joint_dist = joint_dist.experimental_pin(observed_time_series=observed_time_series)
+
+# param_means = {param.name: param.prior.mean() for param in sts_model.parameters}
+# pinned_joint_dist = joint_dist.experimental_pin(**param_means)
+# Pin the observed time series to the joint distribution
+# pinned_joint_dist = joint_dist.experimental_pin(observed_time_series=observed_time_series)
+
 # Inference using MCMC
 num_results = 500
 num_burnin_steps = 300
@@ -101,7 +117,8 @@ num_burnin_steps = 300
 @tf.function
 def run_chain():
     hmc_kernel = tfp.mcmc.HamiltonianMonteCarlo(
-        target_log_prob_fn=pinned_joint_dist.unnormalized_log_prob,
+        target_log_prob_fn=joint_dist.unnormalized_log_prob,
+        # target_log_prob_fn=pinned_joint_dist.unnormalized_log_prob,
         step_size=0.1,
         num_leapfrog_steps=3
     )
@@ -110,7 +127,8 @@ def run_chain():
         num_adaptation_steps=int(num_burnin_steps * 0.8),
         target_accept_prob=0.75
     )
-    initial_chain_state = [tf.zeros_like(param.initial_value()) for param in sts_model.parameters]
+    # initial_chain_state = [tf.zeros_like(param.initial_value()) for param in sts_model.parameters]
+    initial_chain_state = [tf.zeros_like(param.prior.batch_shape) for param in sts_model.parameters]
     return tfp.mcmc.sample_chain(
         num_results=num_results,
         num_burnin_steps=num_burnin_steps,
