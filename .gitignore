@@ -61,7 +61,6 @@ _minted-template
 ## Build tool directories for auxiliary files
 # latexrun
 latex.out/
-.out/
 
 ## Auxiliary and intermediate files from other packages:
 # algorithms
@@ -396,3 +395,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/latex,windows,linux,macos
 #/.idea/
+/out/
