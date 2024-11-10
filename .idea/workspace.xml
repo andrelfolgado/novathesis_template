@@ -4,17 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates.">
-      <change afterPath="$PROJECT_DIR$/.idea/rAvailablePackageCache.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/rGraphicsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/rpackages.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow2.ipynb" afterDir="false" />
+    <list default="true" id="a26d189c-4094-4f28-92dc-a686028bc5c6" name="Changes" comment="Add TensorFlow implementation for wind forecast model&#10;&#10;This new file handles a Structured Time Series (STS) model for wind forecast based on historical data. It utilizes TensorFlow and TensorFlow Probability to generate predictions of wind generation behavior and draw samples from the future distribution.">
+      <change afterPath="$PROJECT_DIR$/src/mbsts/notebooks/mbsts_tensorflow2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/mbsts/notebooks/test_tf.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/novathesis_template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/novathesis_template.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Chapters/chapters/my-chapter_wind_modelling.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/out/main.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/mbsts/notebooks/mbsts_tensorflow.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow2.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow2_to.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mbsts/notebooks/mbsts_tensorflow2_to.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/mbsts/notebooks/mur_wind_prev.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/mur_wind_prev.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mbsts/notebooks/mur_wind_prev.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/notebooks/raw_tdmi_lov_edpr_facilities.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/mbsts/notebooks/raw_tdmi_lov_edpr_facilities.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +30,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -75,20 +81,22 @@
     "LaTeX.main/nova.executor": "Run",
     "Makeindex.main makeglossaries.executor": "Run",
     "Makeindex.main makeindex.executor": "Run",
+    "Python.mbsts_tensorflow2_to.executor": "Debug",
+    "Python.test_tf.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "seminar",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/E353682/OneDrive - FCT NOVA/Repos/novathesis_template/src/notebooks",
+    "last_opened_file_path": "C:/Users/E353682/OneDrive - FCT NOVA/Repos/novathesis_template/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "org.jetbrains.r.configuration.RSettingsProjectConfigurable",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -108,6 +116,7 @@
       <recent name="C:\Users\E353682\OneDrive - FCT NOVA\Repos\novathesis_template\src\notebooks" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\E353682\OneDrive - FCT NOVA\Repos\novathesis_template\src\mbsts" />
       <recent name="C:\Users\E353682\OneDrive - FCT NOVA\Repos\novathesis_template\src\r_mbsts" />
     </key>
   </component>
@@ -116,7 +125,7 @@
       <command value="main/nova" />
     </option>
   </component>
-  <component name="RunManager" selected="LaTeX.main/nova">
+  <component name="RunManager" selected="Python.mbsts_tensorflow2_to">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -181,6 +190,53 @@
       </texify-makeindex>
       <method v="2" />
     </configuration>
+    <configuration name="mbsts_tensorflow2_to" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="novathesis_template" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="TF_ENABLE_ONEDNN_OPTS" value="0" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/notebooks" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/notebooks/mbsts_tensorflow2_to.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_tf" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="novathesis_template" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/notebooks" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/notebooks/test_tf.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="BibTeX.main/bib_nova" />
       <item itemvalue="BibTeX.main bibliography" />
@@ -188,9 +244,13 @@
       <item itemvalue="LaTeX.main" />
       <item itemvalue="Makeindex.main makeglossaries" />
       <item itemvalue="Makeindex.main makeindex" />
+      <item itemvalue="Python.test_tf" />
+      <item itemvalue="Python.mbsts_tensorflow2_to" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test_tf" />
+        <item itemvalue="Python.mbsts_tensorflow2_to" />
         <item itemvalue="LaTeX.main" />
       </list>
     </recent_temporary>
@@ -198,8 +258,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17890.14" />
-        <option value="bundled-python-sdk-5b207ade9991-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17890.14" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23726.102" />
+        <option value="bundled-python-sdk-5e1850174b45-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -264,7 +324,13 @@
       <workItem from="1718344163559" duration="10321000" />
       <workItem from="1718360875702" duration="8452000" />
       <workItem from="1718377778921" duration="33915000" />
-      <workItem from="1718537231934" duration="6447000" />
+      <workItem from="1718537231934" duration="46300000" />
+      <workItem from="1718646201005" duration="19438000" />
+      <workItem from="1718787225927" duration="156000" />
+      <workItem from="1718790052834" duration="734000" />
+      <workItem from="1718880871482" duration="329000" />
+      <workItem from="1731230652784" duration="1129000" />
+      <workItem from="1731231841195" duration="3169000" />
     </task>
     <task id="LOCAL-00001" summary="Add bibliography entries for wind energy articles&#10;&#10;Two articles regarding wind energy, &quot;Dynamic pricing of wind futures&quot; and &quot;Handling the risk dimensions of wind energy generation&quot;, have been added to the bibliography. These entries include the articles' details, such as title, author, journal, and year of publication, facilitating their citation in future academic work.">
       <option name="closed" value="true" />
@@ -618,7 +684,47 @@
       <option name="project" value="LOCAL" />
       <updated>1718445695854</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Add new Jupyter notebook for TensorFlow2 implementation&#10;&#10;This commit introduces a new Jupyter notebook titled 'mbsts_tensorflow2', under the 'src/notebooks' directory. The notebook implements a TensorFlow2 model for handling time series data. It includes importing necessary modules, defining model parameters, creating the model and defining the joint distribution.">
+      <option name="closed" value="true" />
+      <created>1718562979340</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1718562979341</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Update MBSTS model and split data into historical and forecast&#10;&#10;The MBSTS model in the Tensorflow notebook has been updated with added libraries and modifications in its structure. Also, the wind generation data is now split into historical and forecasted data based on the current timestamp. Certain outputs have also been changed to ensure they lie between 0 and 1 using the sigmoid activation.">
+      <option name="closed" value="true" />
+      <created>1718563040146</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1718563040146</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Refactor wind prediction function and handle NaN values&#10;&#10;The function `get_wind_prev_pivot` has been refactored to now accept a tuple of zone names and a history number of years as input. It also now includes a handling line for NaN values within the dataset, substituting them with 0 - a necessity for projects that started later than the historical data retrieval timeframe.">
+      <option name="closed" value="true" />
+      <created>1718563190324</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1718563190324</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Add R graphics settings and package cache files&#10;&#10;This commit introduces two new .xml files related to the settings of the R environment. The rGraphicsSettings.xml defines the graphics settings, such as the height, resolution, version, and width. The rAvailablePackageCache.xml stores the cache of available R packages from a specified repository, aiding in quicker package retrieval and installation.">
+      <option name="closed" value="true" />
+      <created>1718563213520</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1718563213520</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Add TensorFlow implementation for wind forecast model&#10;&#10;This new file handles a Structured Time Series (STS) model for wind forecast based on historical data. It utilizes TensorFlow and TensorFlow Probability to generate predictions of wind generation behavior and draw samples from the future distribution.">
+      <option name="closed" value="true" />
+      <created>1718632754310</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1718632754310</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -647,11 +753,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add new chapters to the thesis&#10;&#10;Two new chapters, &quot;Power Price Modelling&quot; and &quot;Hedging Volume Risk&quot;, have been added to the thesis. Both chapters contain basic structure with predefined packages and a starting statement about their essential role in the thesis." />
-    <MESSAGE value="Add new chapters to the thesis&#10;&#10;Two new chapters on &quot;Power Price Modelling&quot; and &quot;Hedging Volume Risk&quot; have been introduced to the thesis. Currently, they include preliminary structure with essential LaTeX packages and a brief introductory statement outlining their significance in the context of the thesis." />
-    <MESSAGE value="Add new chapters on Wind Power Generation and Capacity Factor&#10;&#10;Introduced a detailed chapter on &quot;Wind Power Generation&quot; detailing the methodology to model wind power based on historical and forecast data. Also added a chapter on 'Capacity Factor' with an in depth explanation of the metric's significance in assessing a power production asset's performance and financial implications. This forms the foundational work for future expansions or modifications." />
-    <MESSAGE value="Add new references to bibliography&#10;&#10;Updated the bibliography file (`zotero.bib`) with new references covering various topics such as Bayesian Structural Time Series, state space time series analysis, and multivariate Bayesian models. These references will support new insights into time series forecasting and present advanced statistical methods for the future studies." />
-    <MESSAGE value="Add PPA acronym to the acronyms section&#10;&#10;An acronym for power purchase agreement (PPA) was added to the acronyms section in the acronyms.tex file. This ensures that the term is properly defined and can be used consistently throughout the document." />
     <MESSAGE value="Add detailed description in chapter 1 about hedging RES generation&#10;&#10;This commit adds a comprehensive description about the hedging of renewable energy source (RES) generation in the first chapter of the thesis. Major topics covered include renewables' impact on power markets, potential hedging strategies and their evaluation, and the use of various derivatives as hedges." />
     <MESSAGE value="Add bm package to LaTeX configuration&#10;&#10;This commit adds the &quot;bm&quot; package to the LaTeX configuration file. This package is used for rendering bold symbols, enhancing the flexibility of mathematical and scientific expression in the text." />
     <MESSAGE value="Updated thesis chapter on wind modelling&#10;&#10;In this commit, text revisions for clarity and grammar were implemented and a new subsection regarding state components was introduced into the wind modelling chapter of the thesis. This new content primarily comprises a detailed discussion on the trend component of a structural time series model, including its definition and mathematical formulation." />
@@ -672,6 +773,41 @@
     <MESSAGE value="Update mathematical formulae and explanations in wind modeling chapter&#10;&#10;This commit revises various mathematical expressions and related explanations throughout the &quot;Wind Modelling&quot; chapter to clarify and improve their coherence. The adjustments include changes in trend, seasonality and cyclical components, as well as introducing a new regression component. This will ensure the readability and comprehension of the equations used in the modeling process." />
     <MESSAGE value="Update and expand wind modelling equations in documentation&#10;&#10;The wind modelling chapter's mathematical description was significantly updated and expanded. Equations related to the trend, seasonality, and cyclical disturbance components were modified for clarity and consistency. A new subsection was added detailing the regression component of the time series model, which explains the influence of known external factors on the time series." />
     <MESSAGE value="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add TensorFlow MBSTS Notebook&#10;&#10;A Jupyter notebook `mbsts_tensorflow.ipynb` is added under the `src/notebooks` directory. It includes a detailed step-by-step implementation of a Multivariate Bayesian structural time series (MBSTS) model using TensorFlow and TensorFlow Probability. The notebook further shows how to fit the model with Markov chain Monte Carlo (MCMC) sampling and visualize posterior estimates." />
+    <MESSAGE value="Add new Jupyter notebook for TensorFlow2 implementation&#10;&#10;This commit introduces a new Jupyter notebook titled 'mbsts_tensorflow2', under the 'src/notebooks' directory. The notebook implements a TensorFlow2 model for handling time series data. It includes importing necessary modules, defining model parameters, creating the model and defining the joint distribution." />
+    <MESSAGE value="Update MBSTS model and split data into historical and forecast&#10;&#10;The MBSTS model in the Tensorflow notebook has been updated with added libraries and modifications in its structure. Also, the wind generation data is now split into historical and forecasted data based on the current timestamp. Certain outputs have also been changed to ensure they lie between 0 and 1 using the sigmoid activation." />
+    <MESSAGE value="Refactor wind prediction function and handle NaN values&#10;&#10;The function `get_wind_prev_pivot` has been refactored to now accept a tuple of zone names and a history number of years as input. It also now includes a handling line for NaN values within the dataset, substituting them with 0 - a necessity for projects that started later than the historical data retrieval timeframe." />
+    <MESSAGE value="Add R graphics settings and package cache files&#10;&#10;This commit introduces two new .xml files related to the settings of the R environment. The rGraphicsSettings.xml defines the graphics settings, such as the height, resolution, version, and width. The rAvailablePackageCache.xml stores the cache of available R packages from a specified repository, aiding in quicker package retrieval and installation." />
+    <MESSAGE value="Add TensorFlow implementation for wind forecast model&#10;&#10;This new file handles a Structured Time Series (STS) model for wind forecast based on historical data. It utilizes TensorFlow and TensorFlow Probability to generate predictions of wind generation behavior and draw samples from the future distribution." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add TensorFlow implementation for wind forecast model&#10;&#10;This new file handles a Structured Time Series (STS) model for wind forecast based on historical data. It utilizes TensorFlow and TensorFlow Probability to generate predictions of wind generation behavior and draw samples from the future distribution." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/E353682/OneDrive - FCT NOVA/Repos/novathesis_template/src/notebooks/mbsts_tensorflow2.ipynb</url>
+          <line>192</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/mbsts/notebooks/test_tf.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/mbsts/notebooks/mbsts_tensorflow2_to.py</url>
+          <line>141</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="jupyter-exception">
+          <properties exception="BaseException" />
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/hedging_renewables$test_tf.coverage" NAME="test_tf Coverage Results" MODIFIED="1718648501275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/notebooks" />
+    <SUITE FILE_PATH="coverage/hedging_renewables$mbsts_tensorflow2_to.coverage" NAME="mbsts_tensorflow2_to Coverage Results" MODIFIED="1718663906298" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/notebooks" />
   </component>
 </project>
