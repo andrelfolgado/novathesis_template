@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="main/nova" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" singleton="false">
     <texify>
-      <compiler>XELATEX</compiler>
+      <compiler>PDFLATEX</compiler>
       <compiler-path />
       <sumatra-path />
       <pdf-viewer>SUMATRA</pdf-viewer>
