@@ -20,5 +20,19 @@
       <jdbc-url>jdbc:sqlserver://dhgem-prd-syna-01-ondemand.sql.azuresynapse.net:1433;database=dhgem-prd-synasqldb-01</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="MUR AA Prod" uuid="0e083024-1e47-4fd1-b8c7-3628064b6b31">
+      <driver-ref>azure.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://a4gem-prd-sql-01.database.windows.net:1433</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="MUR GEMEDP PROD" uuid="32c94a18-8da2-4cba-bc98-d3348d5c11ed">
+      <driver-ref>azure.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://a4gem-prd-sql-01.database.windows.net:1433;database=a4gem-prd-sqldb-01</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
