@@ -15,28 +15,25 @@
 %\usetikzlibrary{shapes, arrows, positioning, fit}
 
 
-\typeout{NT FILE my-chapter_wind_modelling.tex}%
+\typeout{NT FILE mfc.tex}%
 
-\chapter{Wind Power Generation}
-\label{ch:wind_power_generation}
+\chapter{Computational Financial Mathematics}
+\label{ch:comp_fin_math}
 
-    This thesis aims to study the volumetric risk effect induced by the intermittent nature of wind power generation,
-    required to satisfy at a given time.
-    Using whether derivatives is possible to develop hedging strategies to mitigate the volumetric risk,
-    allowing to reduce the uncertainty and stabilise revenues from \gls{res}.
+    This assignment for the Computational Financial Mathematics course explores and applies various financial
+    modelling and computational techniques.
+    The project encompasses key topics such as financial mathematics, discrete-time and continuous-time modelling,
+    partial differential equations, Monte Carlo simulation and sensitivity analysis.
+    The Binomial model for option pricing will be examined, and the Black-Scholes model will be derived and implemented.
+    Option pricing problems will be solved using PDEs,
+    and Monte Carlo simulations will be used to model asset price evolution.
+    The Greeks for European options will be computed.
+    Practical examples and computational implementations will be demonstrated using Python,
+    ensuring a comprehensive understanding of the concepts covered.
 
 
-%\section{Wind Speed}
-%    \label{sec:wind_speed}
-%
-%    > wind speed data using \\
-%        1) MERRA-2 (https://disc.gsfc.nasa.gov/) or \\
-%        2) ERA5 (https://cds.climate.copernicus.eu)\\
-%    > Calibrate model using BSTS \\
-%        > Use model to simulate wind speed data and create multiple scenarios \\
-
-\section{Wind Power}
-    \label{sec:wind_power}
+\section{Financial Mathematics}
+    \label{sec:fin_math}
 
     The generation of wind power is intrinsically dependent on the velocity of wind.
     The symbiotic relationship between wind speed and the consequent energy production can be represented through the
@@ -52,55 +49,55 @@
     Conversely, exceeding the second threshold, known as the cut-out value,
     leads to the safeguarding mechanism activating to prevent any potential structural damage to the system.
 
-    In practice, turbine manufactors provide a table of values for the power output at discrete wind speeds.
-    Within the range of these two critical thresholds,
-    the relationship between wind speed and the generated energy can be represented by a polynomial relationship
-    interpolating manufactor data for each turbine model.
-    See below~\ref{eq:power_curve}, example for a 2MW turbine.
+%    In practice, turbine manufactors provide a table of values for the power output at discrete wind speeds.
+%    Within the range of these two critical thresholds,
+%    the relationship between wind speed and the generated energy can be represented by a polynomial relationship
+%    interpolating manufactor data for each turbine model.
+%    See below~\ref{eq:power_curve}, example for a 2MW turbine.
+%
+%    \begin{equation}
+%        PC(x) =
+%        \begin{cases}
+%            0                             & \text{if } 0 <  x < 4 \\
+%            21.78 x^2 - 147.96 x + 243.42 & \text{if } 4 \leq x \leq 13 \\
+%            2000                          & \text{if } 13 < x \leq 25 \\
+%            0                             & \text{if } x > 25
+%        \end{cases}
+%    \label{eq:power_curve}
+%    \end{equation}
+%
+%    To properly model power generation, the wind speed data, usually taken at reference height,
+%    must be adjusted to the given hub operation level of the turbine.
+%    The physical law that permits the conversion of wind intensity with respect to the altitude is:
+%
+%    \begin{equation}
+%        v_h= v_{h_0}  \cdot \left(\frac{h}{h_0}\right)^\theta \text { with } \theta=\left(\ln \frac{h}{z_0}\right)^{-1}
+%    \label{eq:wind_speed_height}
+%    \end{equation}
+%
+%    Where $v_{h}$ represents the wind speed measured at the height $h$ of the wind turbine hub
+%    and $v_{h_0}$ is the known value of the wind speed at the specified height data is recorded.
+%    Additionally, the parameter $z0$ is intimately connected to the site's morphological aspects wherein our
+%    postulated wind turbine is positioned.
+%    For instance, in the absence of any physical structures like buildings or trees,
+%    the value of this parameter typically falls within the range of 0.01 to 0.001.
+%    For situations involving offshore installations, the parameter is fixed at 0.0001, whereas
+%    an average value of $z0 = 0.005$ is employed for an onshore implementation.
+%
+%    As described, seven parameters are required to fully define the power curve of a wind turbine.
+%
+%    \enumerate{
+%        \item The cut-in wind speed, $v_{cut-in}$, below which the turbine is unable to generate power.
+%        \item The cut-out wind speed, $v_{cut-out}$, above which the turbine is unable to generate power.
+%        \item The rated wind speed, $v_{rated}$, at which the turbine is able to generate its maximum power.
+%        \item The rated power, $P_{rated}$, which is the maximum power output of the turbine.
+%        \item The power curve provided by the manufactor, which will determine the production between the threshold.
+%        \item The hub height, $h$, at which the wind power is generated.
+%        \item The spacial factor to diferentiate turbine surroundings.
+%    }
 
-    \begin{equation}
-        PC(x) =
-        \begin{cases}
-            0                             & \text{if } 0 <  x < 4 \\
-            21.78 x^2 - 147.96 x + 243.42 & \text{if } 4 \leq x \leq 13 \\
-            2000                          & \text{if } 13 < x \leq 25 \\
-            0                             & \text{if } x > 25
-        \end{cases}
-    \label{eq:power_curve}
-    \end{equation}
-
-    To properly model power generation, the wind speed data, usually taken at reference height,
-    must be adjusted to the given hub operation level of the turbine.
-    The physical law that permits the conversion of wind intensity with respect to the altitude is:
-
-    \begin{equation}
-        v_h= v_{h_0}  \cdot \left(\frac{h}{h_0}\right)^\theta \text { with } \theta=\left(\ln \frac{h}{z_0}\right)^{-1}
-    \label{eq:wind_speed_height}
-    \end{equation}
-
-    Where $v_{h}$ represents the wind speed measured at the height $h$ of the wind turbine hub
-    and $v_{h_0}$ is the known value of the wind speed at the specified height data is recorded.
-    Additionally, the parameter $z0$ is intimately connected to the site's morphological aspects wherein our
-    postulated wind turbine is positioned.
-    For instance, in the absence of any physical structures like buildings or trees,
-    the value of this parameter typically falls within the range of 0.01 to 0.001.
-    For situations involving offshore installations, the parameter is fixed at 0.0001, whereas
-    an average value of $z0 = 0.005$ is employed for an onshore implementation.
-
-    As described, seven parameters are required to fully define the power curve of a wind turbine.
-
-    \enumerate{
-        \item The cut-in wind speed, $v_{cut-in}$, below which the turbine is unable to generate power.
-        \item The cut-out wind speed, $v_{cut-out}$, above which the turbine is unable to generate power.
-        \item The rated wind speed, $v_{rated}$, at which the turbine is able to generate its maximum power.
-        \item The rated power, $P_{rated}$, which is the maximum power output of the turbine.
-        \item The power curve provided by the manufactor, which will determine the production between the threshold.
-        \item The hub height, $h$, at which the wind power is generated.
-        \item The spacial factor to diferentiate turbine surroundings.
-    }
-
-\section{Wind Generation Modelling}
-    \label{sec:wind_generation_modelling}
+\section{Descrite-Time Modelling}
+    \label{sec:desc_time}
 
     The focus of this section is to model wind power generation based on historical real and forecasted data.
     Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
@@ -114,698 +111,764 @@
     Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
     the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
 
-    Structural time series models are a class of state space models that decompose a time series into several components of interest.
-    They have a considerable intuitive appeal, particularly for economic and social times.
-    Furthermore, they provide a clear link with regressions' models, both in their technical formulation and in the model selection
-    methodology that they employ~\cite{harvey_forecasting_1990}. \\
 
-    The key to handling structural time series models is the state space representation, with the state of the system
-    representing the unobserved components of the time series, such as trends and seasonal effects.
-    Once in the state space, the Kalman filter plays a fundamental role as it recursively computes the predictive distribution
-    of the state variables, given the observations up to that point in time.
+\section{Continuous-Time Modelling}
+    \label{sec:cont_time}
 
-    Initially introduced by Jammalamadaka et al.~\cite{qiu_multivariate_2018}, the~\gls{bsts} can be extended to a multivariate
-    time series model, which is particularly useful for the analysis of multiple time series that are related to each other.
-    The~\gls{mbsts} can be used to explicitly model the correlations between different asset returns in a portfolio through
-    the covariance structure specified by $\Sigma_{t}$, see equation~\ref{eq:mbsts_obs}.
+    The focus of this section is to model wind power generation based on historical real and forecasted data.
+    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
+    data streams influenced by multifaceted predictors or features.
+    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
 
-\subsection{The \gls{mbsts} model}
-    \label{sec:mbsts}
-
-    Models of structural time series, exemplified by the~\gls{mbsts},
-    are categorized under state space models tailored for time series data. They are represented by the ensuing equations:
-
-    \begin{align}
-        y_{t} &= Z_{t} \alpha_{t} + \varepsilon_{t}, \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{t})
-        \label{eq:mbsts_obs}\\
-        \notag \\
-        \alpha_{t+1} &= T_{t} \alpha_{t} + R_{t} \eta_{t}, \qquad \eta_{t} \sim N_{q}(0, Q_{t})
-        \label{eq:mbsts_trans}
-    \end{align}
+    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
+    time series applications.
+    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
+    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
+    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
 
 
-    Equation~\ref{eq:mbsts_obs} is the observation equation, which relates the $m \times 1$
-    vector of observations at time $t$ $y_{t}$ to the $d \times 1$ unobserved latent states $\alpha_{t}$,
-    where $d$ is the total number of latent states.
-    The $m \times p$ matrix of coefficients $Z_{t}$ links the unobserved factors and regressions' effects
-    with the observations' vector $y_{t}$.
-    The $m \times 1$ is the vector of observation disturbances $\varepsilon_{t}$ and are assumed to have zero means and
-    represented by a variance-covariance matrix $\Sigma_{t}$ of the order $m \times m$.\\
+\section{Partial Differential Equations}
+    \label{sec:pde}
 
-    The second equation~\ref{eq:mbsts_trans} is the transition equation, which describes the evolution of the state vector
-    $\alpha_{t}$ over time, characterized by the $d \times d$ transition matrix $T_{t}$.
-    The $d \times q$ matrix of coefficients $R_{t}$ is often referred to as the control matrix.
-    The matrix $\eta_{t}$ is an $q \times 1$ error vector,
-    with a state diffusion matrix $Q_{t}$ of the order $q \times q$, where $q \leq d$.
-    In many standard cases, $q = d$ and $Q_{t}$ is the identity matrix $I_{d}$.
-    Although matrix $Q_{t}$ can be specified freely,
-    it is often composed of a selection from the $q$ columns of the identity matrix $I_{d}$~\cite{commandeur_introduction_2007}.\\
+    The focus of this section is to model wind power generation based on historical real and forecasted data.
+    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
+    data streams influenced by multifaceted predictors or features.
+    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
 
-    In summary, the~\gls{mbsts} model is defined by the following set of parameters:
-
-    \begin{itemize}
-        \item $y_{t}$ ($m \times 1$): Observations at time $t$
-        \item $\alpha_{t}$ ($d \times 1$): Unobserved latent states $d$
-        \item $Z_{t}$ ($m \times p$): Coefficients linking the unobserved factors and regression effects
-            with the observations vector $y_{t}$
-        \item $\varepsilon_{t}$ ($m \times 1$): Observation disturbances, assumed to have zero means,
-            represented by the variance-covariance matrix $\Sigma_{t}$
-        \item $T_{t}$ ($d \times d$): Transition matrix characterizing the evolution of the state vector $\alpha_{t}$
-        \item $R_{t}$ ($d \times q$): Control matrix of coefficients
-        \item $\eta_{t}$ ($q \times 1$): Error vector with a state diffusion matrix $Q_{t}$ of the order $q \times q$ where $q \leq d$
-        \item $\Sigma_{t}$ ($m \times m$): Covariance matrix of the order $m \times m$ representing the observation disturbances
-        \item $Q_{t}$ ($q \times q$): State diffusion matrix
-    \end{itemize}
-
-    As per developed by Harvey~\cite{harvey_forecasting_1990}, a basic structural time series model can be represented
-    by a direct interpretation of its underlying components.
-    In a general, the model can be expressed as:
-
-    \begin{equation}
-        y_{t} = \mu_{t} + \theta{t} + \omega_{t} + \xi_{t} + \varepsilon_{t} ,
-        \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{\varepsilon}), \quad t = 1, 2, ..., n
-    \label{eq:sts}
-    \end{equation}
-
-    where $y_{t}$, $\mu_{t}$, $\theta{t}$, $\omega_{t}$, $\xi_{t}$ and $\varepsilon_{t}$ are m-dimension vectors,
-    representing targeted time series, linear trend, seasonal, cyclical and regression components
-    with the observation disturbances respectively.
-    For simplicity, $\Sigma_{\varepsilon}$ is a $m \times m$, positive definite matrix and assumed to be constant over time.
-
-    Elucidating further on the state space form, $\alpha_{t}$ aggregates these multifaceted components,
-    depicting the concealed and unobserved latent states, such that:
-
-   \begin{equation}
-        \alpha_{t} = [\mu_{t}, \theta_{t}, \omega_{t}, \xi_{t}]^T
-    \label{eq:sts_latent}
-    \end{equation}
+    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
+    time series applications.
+    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
+    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
+    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
 
 
-    In the prevailing model, each component of the state is compiled individually,
-    where every component produces an incremental influence on $y_{t}$.
-    The adaptability of this model facilitates the incorporation of various model elements specific to each target series.
+\section{Monte Carlo Simulation}
+    \label{sec:mc_sim}
 
-    % Develope the different components states
-\subsection{State Components}
-    \label{sec:state_components}
+    The focus of this section is to model wind power generation based on historical real and forecasted data.
+    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
+    data streams influenced by multifaceted predictors or features.
+    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
 
-    A structural time series model is composed of several components, each representing a distinct aspect of the time series,
-    allowing to add flexibility and contributing to the overall model's predictive capabilities.
-    The model components are typically divided into four main categories: trend, seasonal, cyclical and regression components.
-    In the current model formulation, components are modelled explicitly and are assembled independently,
-    with each yielding an additive contribution to $y_{t}$.
+    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
+    time series applications.
+    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
+    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
+    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
 
-\subsubsection{Trend Component}
-    \label{sec:trend_component}
 
-    The trend component is a fundamental element of the structural time series model.
-    It represents the long-term movement of the time series, capturing the underlying growth or decline over time.
-    The trend component is typically modelled as a linear or non-linear function of time.
-    The linear trend component can be portrait as:
+\section{Sensitity Analysis}
+    \label{sec:sens_analysis}
 
-%    \begin{gather}
-%        \bm{\mu}_{t+1} = \bm{\mu}_{t} + \bm{\delta}_{t} + \bm{u}_{t},
-%            \qquad \bm{u}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\mu}) \\
+    The focus of this section is to model wind power generation based on historical real and forecasted data.
+    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
+    data streams influenced by multifaceted predictors or features.
+    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+
+    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
+    time series applications.
+    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
+    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
+    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+
+
+
+%    Structural time series models are a class of state space models that decompose a time series into several components of interest.
+%    They have a considerable intuitive appeal, particularly for economic and social times.
+%    Furthermore, they provide a clear link with regressions' models, both in their technical formulation and in the model selection
+%    methodology that they employ~\cite{harvey_forecasting_1990}. \\
+%
+%    The key to handling structural time series models is the state space representation, with the state of the system
+%    representing the unobserved components of the time series, such as trends and seasonal effects.
+%    Once in the state space, the Kalman filter plays a fundamental role as it recursively computes the predictive distribution
+%    of the state variables, given the observations up to that point in time.
+%
+%    Initially introduced by Jammalamadaka et al.~\cite{qiu_multivariate_2018}, the~\gls{bsts} can be extended to a multivariate
+%    time series model, which is particularly useful for the analysis of multiple time series that are related to each other.
+%    The~\gls{mbsts} can be used to explicitly model the correlations between different asset returns in a portfolio through
+%    the covariance structure specified by $\Sigma_{t}$, see equation~\ref{eq:mbsts_obs}.
+%
+%\subsection{The \gls{mbsts} model}
+%    \label{sec:mbsts}
+%
+%    Models of structural time series, exemplified by the~\gls{mbsts},
+%    are categorized under state space models tailored for time series data. They are represented by the ensuing equations:
+%
+%    \begin{align}
+%        y_{t} &= Z_{t} \alpha_{t} + \varepsilon_{t}, \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{t})
+%        \label{eq:mbsts_obs}\\
 %        \notag \\
-%        \bm{\delta}_{t+1} = \bm{d} + \bm{P}(\bm{\delta}_{t} - \bm{d}) + \bm{v}_{t},
-%            \qquad \bm{v}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\delta})
-%        \label{eq:group}
-%    \end{gather}
-
-    \begin{equation}
-        \bm{\eta}_{t+1}=
-            \bm{T}_{T} \bm{\eta}_{t} + \bm{G}_{T} \bm{\gamma} + \bm{\omega}_{T,t}
-        \label{eq:trend_state}
-    \end{equation}
-
-    where:
-    \begin{itemize}
-        \item $\bm{T}_T$ $(2m \times 2m)$ transition matrix that applies the learning rate $\rho$
-        \item $\bm{\eta}_{t}$ $(2m \times 1)$ state vector that contains the trend components for all time series at time $t$
-        \item $\bm{G}_T$ $(2m \times 1)$ transition vector that applies the long-term slope $\gamma$
-        \item $\bm{\gamma}$ $(m \times 1)$ is the long-term slope
-        \item $\bm{\omega}_{T,t}$ $(2m \times 2m)$ is the trend disturbance at time $t$,
-            where $w_{T,t} \sim \mathcal{N}(0, \bm{\Sigma}_{T})$
-    \end{itemize}
-
-    The updated state equation becomes, for times series $i$, can be represented as:
-
-    \begin{equation}
-        \left[
-            \begin{array}{c}
-                \mu_{t+1}^{(i)} \\
-                \delta_{t+1}^{(i)}
-            \end{array}
-        \right] =
-        \left[
-            \begin{array}{cc}
-                1 & 1 \\
-                0 & \rho^{(i)}
-            \end{array}
-        \right]
-        \left[
-            \begin{array}{c}
-                \mu_{t}^{(i)} \\
-                \delta_{t}^{(i)}
-            \end{array}
-        \right] +
-        \left[
-            \begin{array}{c}
-                0 \\
-                1 - \rho^{(i)}
-            \end{array}
-        \right]
-        \gamma^{(i)} +
-        \left[
-            \begin{array}{c}
-                \omega_{t}^{(\mu,i)} \\
-                \omega_{t}^{(\delta,i)}
-            \end{array}
-        \right]
-        \label{eq:state_update}
-    \end{equation}
-
-    The combined transition matrix $\bm{T}_T$ for $m$ time series is a block-diagonal matrix:
-
-    \begin{equation}
-        \mathbf{T}_T=
-            \left[
-                \begin{array}{cccc}
-                    \mathbf{T}_{T, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
-                    \mathbf{0}        & \mathbf{T}_{T, 2} & \cdots & \mathbf{0} \\
-                    \vdots            & \vdots            & \ddots & \vdots     \\
-                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{T, m}
-                \end{array}
-            \right]
-        \label{eq:state_transition_mv}
-    \end{equation}
-
-    where each block of the diagonal matrix is a $(2 \times 2)$ for one time series,
-    represented in equation~\ref{eq:state_update}.
-    The model features a parameter $\bm{\rho}$ $(0 < \bm{\rho}^{(i)} < 1)$ which represents the learning rate
-    that underlies the local trend update process, providing the ability to balance short-term and long-term information.
-    Specifically, when $\bm{\rho}^{(i)} = 1$, the model induces a random walk within the associated slope,
-    leading to a non-stationary trend component.
-
-    The state vector $\bm{\eta}_{t}$ contains the trend components for all time series at time $t$.
-    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
-    individual time series.
-
-    \begin{equation}
-        \bm{\eta}_{t}^{(i)}=
-            \left[
-                \begin{array}{c}
-                    \mu_{t}^{(1)} \\
-                    \delta_{t}^{(1)} \\
-                    \mu_{t}^{(2)} \\
-                    \delta_{t}^{(2)} \\
-                    \vdots \\
-                    \mu_{t}^{(m)} \\
-                    \delta_{t}^{(m)}
-                \end{array}
-            \right]
-        \label{eq:trend_state_vector}
-    \end{equation}
-
-    The aggregate disturbance term $\bm{\omega}_{T,t}$ is assumed to be a white noise variable with a multivariate normal distribution
-    with a covariance matrix $\bm{\Sigma}_{T}$ of the order $(2m \times 2m)$.\ The covariance matrix $\bm{\Sigma}_{T}$
-    is a block-diagonal matrix, where each block of the diagonal matrix are assumed to be independent.
-    The combined covariance matrix $\bm{\Sigma}_{T}$ can be represented as:
-
-    \begin{equation}
-        \bm{\Sigma}_{T} =
-            \left[
-                \begin{array}{cc}
-                    \mathbf{\Sigma}_{\mu} & \mathbf{0} \\
-                    \mathbf{0}            & \mathbf{\Sigma}_{\delta}
-                \end{array}
-            \right]
-        \label{eq:trend_covariance}
-    \end{equation}
-
-    Where:
-    \begin{itemize}
-        \item $\mathbf{\Sigma}_{\mu}$ covariance matrix of the trend disturbances $\omega_{t}^{(\mu,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\mu})$
-        \item $\mathbf{\Sigma}_{\delta}$ covariance matrix of the trend increments $\omega_{t}^{(\delta,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\delta})$
-    \end{itemize}
-
-\subsubsection{Seasonality}
-    \label{sec:seasonality_component}
-
-    Whenever a time series consists of hourly, quarterly or yearly data, it is common to observe a seasonal pattern.
-    The seasonal component $\bm{\tau}_{t}$ at time $t$ can be modelled using various methods,
-    such as a trigonometric form using Fourier series, categorical proxies known as "dummy variables"
-    or methods involving seasonal splines~\cite{proietti_seasonality_2023}.
-    In prevalent usage exists a model that leverages deterministic means coupled with an error term,
-    thus permitting the accommodation of alterations across time.
-    This characteristic renders this model proficient in apprehending both,
-    patterns that appear with regularity and fluctuations that are more sporadic,
-    thereby establishing robustness when applied to disparate types of sequences of time that exhibit seasonality.
-
-    A seasonal effects modelled using a deterministic approach along with a white noise error term~\cite{qiu_multivariate_2018} is:
-
-    \begin{equation}
-        \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
-            \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
-            \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\tau})
-        \label{eq:seasonal}
-    \end{equation}
-
-    where:
-    \begin{itemize}
-        \item $S_{i}$ represents the seasonal period, e.g. weekly (s=7), monthly (s=12), hourly (s=24)
-        \item $\bm{\tau}_{t}^{i}$ ($m \times (s-1)$): seasonal effect for $i$-th time series and at time $t$
-        \item $\bm{w}_{t}^{i}$ ($(m \times (s-1)) \times 1$): white noise seasonal disturbance,
-            which is assumed to follow a multivariate normal distribution: $w_{t} \sim \mathcal{N}(\bm{\Sigma}_{\tau})$
-    \end{itemize}
-
-    The transition matrix, in the univariate case, for the seasonal effects in the state space is a $(s-1) \times (s-1)$ matrix,
-    due to the sum-zero constraint over one seasonal cycle.\ The structure of the matrix is:
-
-    \begin{equation}
-        \mathbf{T}_s^{(i)}=
-            \left[
-                \begin{array}{ccccc}
-                    -1             & -1         & \cdots &  -1        & -1 \\
-                    1              & \mathbf{0} & \cdots & \mathbf{0} & \mathbf{0} \\
-                    \mathbf{0}     & 1          & \cdots & \mathbf{0} & \mathbf{0} \\
-                    \vdots         & \vdots     & \ddots & \vdots     & \vdots \\
-                    \mathbf{0}     & \mathbf{0} & \cdots & 1          & \mathbf{0}
-                \end{array}
-            \right]
-    \label{eq:seasonal_transition_uni}
-    \end{equation}
-
-    In a multivariate scenario, when there are $m$ time series each with its own seasonal components,
-    the overall transition matrix $\mathbf{T}_s$ is a block-diagonal matrix, where each block of the diagonal matrix
-    is $(s-1) \times (s-1)$ for one time matrix.
-    The combined transition matrix $\mathbf{T}_{s}$ can be represented as:
-
-    \begin{equation}
-        \mathbf{T}_s=
-            \left[
-                \begin{array}{cccc}
-                    \mathbf{T}_{s, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
-                    \mathbf{0}        & \mathbf{T}_{s, 2} & \cdots & \mathbf{0} \\
-                    \vdots            & \vdots            & \ddots & \vdots     \\
-                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{s, m}
-                \end{array}
-            \right]
-        \label{eq:seasonal_transition_mv}
-    \end{equation}
-
-    where $\mathbf{T}_{s}$ has the size $(m \times (s-1)) \times (m \times (s-1))$ matrix.
-    Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ as it is assumed that the seasonal transition
-    for different time series is independent in this model.
-    The state vector $\bm{\tau}_t$ contains the seasonal effects for all time series at time $t$.
-    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
-    individual time series.\ The state vector $\bm{\tau}_t$ representation is:
-
-    \begin{equation}
-        \tau_{t+1}=
-            \left[
-                \begin{array}{c}
-                    \tau_{t+1}^{(1)} \\
-                    \tau_{t+1}^{(2)} \\
-                    \hfill \vdots \hfill \\
-                    \tau_{t+1}^{(m)}
-                \end{array}\right]
-            =\left[
-                \begin{array}{l}
-                    \tau_t^{(1)}, \tau_{t-1}^{(1)}, \ldots, \tau_{t-10}^{(1)} \\
-                    \tau_t^{(2)}, \tau_{t-1}^{(2)}, \ldots, \tau_{t-10}^{(2)} \\
-                    \hfill \vdots \hfill \\
-                    \tau_t^{(m)}, \tau_{t-1}^{(m)}, \ldots, \tau_{t-10}^{(m)}
-                \end{array}
-            \right]
-        \label{eq:seasonal_state}
-    \end{equation}
-
-    The white noise error term $\bm{w}_{t}$ plays a crucial role in the seasonal component model,
-    by allowing random variations around the deterministic seasonal pattern.
-    For $m$ time series, the combined white noise term $\bm{w}_{t}$ is:
-
-    \begin{equation}
-        w_t=
-            \left[
-                \begin{array}{c}
-                    w_{t}^{(1)} \\
-                    w_{t}^{(2)} \\
-                    \vdots \\
-                    w_{t)}^{(m)}
-                \end{array}
-            \right]
-           =
-            \left[
-                \begin{array}{c}
-                    w_{t, 1}^{(1)} \\
-                    w_{t, 2}^{(1)} \\
-                    \vdots \\
-                    w_{t, (s-1)}^{(1)} \\
-                    w_{t, 1}^{(2)} \\
-                    w_{t, 2}^{(2)} \\
-                    \vdots \\
-                    w_{t, (s-1}^{(2)} \\
-                    \vdots \\
-                    w_{t, 1}^{(m)} \\
-                    w_{t, 2}^{(m)} \\
-                    \vdots \\
-                    w_{t, (s-1)}^{(m)}
-                \end{array}
-            \right]
-    \label{eq:seasonal_error}
-    \end{equation}
-
-    When considering a multivariate time series model, the white noise error term $\bm{w}_{t}$ is assumed to follow
-    a multivariate normal distribution with a covariance matrix $\bm{\Sigma}_{\tau}$ of the order $(s-1) \times (s-1)$.
-    The covariance matrix $\bm{\Sigma}_{\tau}$ is a block-diagonal matrix, where each block of the diagonal matrix are
-    assumed to be uncorrelated between different time series.
-
-    The combined covariance matrix $\bm{\Sigma}_{\tau}$ can be represented as:
-
-    \begin{equation}
-        \bm{\Sigma}_{\tau} =
-            \left[
-                \begin{array}{cccc}
-                    \mathbf{\Sigma}_{\tau, 1} & \mathbf{0}                 & \cdots & \mathbf{0} \\
-                    \mathbf{0}                & \mathbf{\Sigma}_{\tau, 2}  & \cdots & \mathbf{0} \\
-                    \vdots                    & \vdots                     & \ddots & \vdots     \\
-                    \mathbf{0}                & \mathbf{0}                 & \cdots & \mathbf{\Sigma}_{\tau, m}
-                \end{array}
-            \right]
-    \label{eq:seasonal_covariance}
-    \end{equation}
-
-\subsubsection{Cyclical}
-    \label{sec:cyclical_component}
-
-    The cyclic part of the structural time series model signifies the medium-to-long term oscillations.
-    In the context of financial mathematics, the term `financial market cycles` generally indicates repeated fluctuations
-    that don't follow a strict periodic pattern around the data series' path.
-    A model incorporating a cyclic element can effectively emulate critical characteristics often recognized in statistical analyses.
-    These include evidence of major autocorrelation, the recurrence and alternation of phases within the data,
-    the damping or amplification of cycles and the absence of long-term persistence in the data series~\cite{qiu_multivariate_2018}.
-
-    Cyclical factors are often modelled using a deterministic approach, such as a trigonometric function or a polynomial.
-    In this case, a trigonometric function is used to model the cyclical component with dumping is postulated as:
-
-    \begin{equation}
-        \bm{\omega}_{t+1} = \bm{\rho}^{(i)} \bm{T}_c^{(i)} \bm{\omega}_{t}^{(i)} + \bm{\kappa}_{t},
-            \qquad \bm{\kappa}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\omega})
-        \label{eq:cyclical_state}
-    \end{equation}
-
-    where:
-    \begin{itemize}
-        \item $\bm{\omega}_{t}$ ($2m \times 1$): cyclical component at time $t$
-        \item $\bm{\rho}^{(i)}$ ($m \times 1$): damping factors vector per series $i$
-        \item $\bm{T}_c^{(i)}$ ($2m \times 2m$): transition matrix for the cyclical component
-        \item $\bm{\kappa}_{t}$ ($2m \times 1$): cyclical disturbance at time $t$
-        \item $\bm{\Sigma}_{\omega}$ ($2m \times 2m$): variance of the cyclical disturbance
-    \end{itemize}
-
-    For each time series $i$, the cyclical component state vector $\bm{\omega}_{t}$ can be represented as:
-
-    \begin{equation}
-        \bm{\omega}_{t}^{(i)}=
-            \left[
-                \begin{array}{c}
-                    \alpha_{t}^{(1)} \\
-                    \beta_{t}^{(1)} \\
-                    \alpha_{t}^{(2)} \\
-                    \beta_{t}^{(2)} \\
-                    \vdots \\
-                    \alpha_{t}^{(m)} \\
-                    \beta_{t}^{(m)}
-                \end{array}
-            \right]
-        \label{eq:cyclical_state_vector}
-    \end{equation}
-
-    where the transition matrix $\bm{T_c^{(i)}}$ for the time series $i$ is:
-
-    \begin{equation}
-        \bm{T}_c^{(i)}=
-            \left[
-                \begin{array}{cc}
-                    \cos \left(\lambda_i\right) & \sin \left(\lambda_i\right) \\
-                    -\sin \left(\lambda_i\right) & \cos \left(\lambda_i\right)
-                \end{array}
-            \right]
-        \label{eq:cyclical_transition_matrix}
-    \end{equation}
-
-    The combined transition matrix for an $m$ time series model is a block-diagonal matrix,
-    where each block of the diagonal matrix is affected by its respective dampening factor $\bm{\rho}^{(i)}$ is:
-
-    \begin{equation}
-        \bm{\rho}^{(i)} \bm{T}_c^{(i)} =
-        \left[
-            \begin{array}{ccccc}
-                \rho_1 \bm{T}_c^{(1)} & \mathbf{0} & \cdots & \mathbf{0} \\
-                \mathbf{0} & \rho_2 \bm{T}_c^{(2)} & \cdots & \mathbf{0} & \\
-                \vdots & \vdots & \ddots & \vdots & \\
-                \mathbf{0} & \mathbf{0} & \cdots & \rho_m \bm{T}_c^{(m)}
-            \end{array}
-        \right]
-        \label{eq:cyclical_transition_mv}
-    \end{equation}
-
-    For the factor $\bm{\rho}^{(i)}$ be in fact dampening, should be $ 0 < \rho < 1$.
-    The frequency $\lambda_i = 2\pi/q_i $, where $q_i$ is the period such that $0 < \lambda_i < \pi$.
-    When $\lambda_i$ is 0 or $\pi$, the model degenerates to the AR(1) process.
-    The dampening factor should be strictly less than one for stationary purpose.
-    If this damping factor surpasses unity, it induces an unrestricted cyclical motion,
-    which consequently leads to an increased magnitude of the cycle in the model.~\cite{qiu_multivariate_2018}.
-    A fundamental distinction that arises between the cyclical and seasonal constituents pertains exactly to this dampening factor.
-    In the context of the cyclical component, there is a characteristic decay in its amplitude as time progresses.
-    This phenomenon can be pragmatically utilized in the analysis of time series data,
-    particularly those impacted by exogenous shocks,
-    lending valuable insights to scholars operating outside the confines of a traditional mathematical or statistical framework.
-
-
-    The combined white noise vector for the cyclical component $\kappa^{(c)}$ for $m$ time series is a vector of dimension $2m \times 1$.
-    Each element $\bm{\kappa}_{t}^{(i)}$ in this vector corresponds to the white noise term for the state variables of the cyclical component of each time series.
-
-    \begin{equation}
-        \bm{\kappa}_{t}^{(i)}=
-            \left[
-                \begin{array}{c}
-                    \kappa_{t}^{(c,1)} \\
-                    \kappa_{t}^{(c,2)} \\
-                    \vdots \\
-                    \kappa_{t}^{(c,m)}
-                \end{array}
-            \right]
-        \label{eq:cyclical_error_mv}
-    \end{equation}
-
-    Each $\bm{\kappa}_{t}^{(i)}$ is a $2 \times 1$ vector:
-
-    \begin{equation}
-        \bm{\kappa}_{t}^{(i)}=
-            \left[
-                \begin{array}{c}
-                    \kappa_{t}^{(\alpha,i)} \\
-                    \kappa_{t}^{(\beta,i)}
-                \end{array}
-            \right]
-        \label{eq:cyclical_error}
-    \end{equation}
-
-    where $\kappa_{t}^{(\alpha,i)}$ and $\kappa_{t}^{(\beta,i)}$ are the white noise terms for the state variables
-    $\alpha^{(i)}$ and $\beta^{(i)}$ respectively.
-
-    The variance-covariance matrix $\bm{\Sigma}_{\omega}$ for the white noise term $\omega_t^{(c)}$ is a block diagonal
-    matrix of dimension $2m \times 2m$.\ Each block on the diagonal corresponds to the variance-covariance matrix of the
-    white noise term for the cyclical component of each time series.
-
-    \begin{equation}
-        \bm{\Sigma}_{\omega} =
-            \left[
-                \begin{array}{cccc}
-                    \bm{\Sigma}_{\omega, 1} & \mathbf{0} & \cdots & \mathbf{0} \\
-                    \mathbf{0} & \mathbf{\Sigma}_{\omega, 2} & \cdots & \mathbf{0} \\
-                    \vdots & \vdots & \ddots & \vdots \\
-                    \mathbf{0} & \mathbf{0} & \cdots & \mathbf{\Sigma}_{\omega, m}
-                \end{array}
-            \right]
-        \label{eq:cyclical_covariance}
-    \end{equation}
-
-    Each block on the diagonal of the matrix $\bm{\Sigma}_{\omega}$ is a $2 \times 2$ matrix representing the variance-covariance
-    white noise term $\omega_t^{(\alpha, i)}$ and $\omega_t^{(\beta, i)}$:
-
-    \begin{equation}
-        \bm{\Sigma}_{\omega, i} =
-            \left[
-                \begin{array}{cc}
-                    \sigma_{\alpha, i}^2    & \sigma_{\alpha\beta, i} \\
-                    \sigma_{\alpha\beta, i} & \sigma_{\beta, i}^2
-                \end{array}
-            \right]
-        \label{eq:cyclical_covariance_block}
-    \end{equation}
-
-    By structuring the white noise terms and their variance-covariance matrix this way,
-    clearly separate the noise affecting each time series while allowing for the noise terms of the cyclical
-    state variables within each series to be correlated.
-
-\subsubsection{Regression Component}
-    \label{sec:regression_component}
-
-    The regression component of the structural time series model is a flexible element that allows the incorporation of
-    exogenous variables that can influence the target time series.
-    The regression component is modelled as a linear combination of the exogenous variables.
-    The regression component of the~\gls{mbsts} can be expressed as:
-
-    \begin{equation}
-        \bm{\xi}_{t} = \bm{X}_t \bm{\beta} + \bm{\epsilon}_{t},
-            \qquad \bm{\epsilon}_{t} \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})
-        \label{eq:regression_state}
-    \end{equation}
-
-    Where:
-
-    \begin{itemize}
-        \item $\bm{\xi}_{t}$ ($m \times 1$): regression component at time $t$
-        \item $\bm{X}_t$ ($m \times p$): matrix of exogenous variables at time $t$
-        \item $\bm{\beta}$ ($p \times 1$): regression coefficients at time $t$
-        \item $\bm{\epsilon}_{t}$ ($m \times 1$): regression disturbance at time $t$,
-            where $\bm{\epsilon}_{t} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})$
-        \item $\bm{\Sigma}_{\epsilon}$ ($m \times m$): variance-covariance matrix of the regression disturbance
-    \end{itemize}
-
-    The covariates matrix $\bm{X}_t$ is a $m \times p$ matrix, where $m$ is the number of time series and $p$ is the number of predictors.
-    Each row of the matrix $\bm{X}_t$ corresponds to the exogenous variables for each time series at time $t$,
-    and each column corresponds to a covariate. The matrix $\bm{X}_t$ can be represented as:
-
-    \begin{equation}
-        \bm{X}_t =
-            \left[
-                \begin{array}{cccc}
-                    x_{t1,1} & x_{t1,2} & \cdots & x_{t1,p} \\
-                    x_{t2,1} & x_{t2,2} & \cdots & x_{t2,p} \\
-                    \vdots  & \vdots  & \ddots & \vdots  \\
-                    x_{tm,1} & x_{tm,2} & \cdots & x_{tm,p}
-                \end{array}
-            \right]
-        \label{eq:regression_covariates}
-    \end{equation}
-
-    In the overall~\gls{mbsts}, the regression component is combined with the trend, seasonality,
-    and cyclical intends to capture the full dynamics of the time series.
-    The regression component specifically supports to model the influence of known external factors on the time series.
-    By incorporating covariates, the model can explain parts of the variability in the time series that are attributable
-    to these external factors, thus improving the accuracy and interpretability of the model.
-
-
-\subsection{Generatate Wind Series Forecast Scenarios}
-    \label{sec:wind_forecast_scenarios}
-
-    As conventional in Bayesian data analysis, predictions are derived from our model's posterior predictive distribution.
-    This is achieved by drawing samples of model parameters and unseen or hidden states from their respective posterior distribution.
-    Therefore, the posterior predictive distribution of $\hat{Y}$, representing the collection of forecasted values, can be described as:
-
-    \begin{equation}
-        p(\hat{Y} | Y) = \int p(\hat{Y} | \psi) p(\psi | Y) d\psi
-    \label{eq:posterior_predictive}
-    \end{equation}
-
-    Where $Y$ is the observed data and $\psi$ is the set of all the model parameters and latent states randomly drawn from
-    $p(\psi | Y)$.
-
-    The posterior distribution of the model parameters can be trained by using \gls{mcmc} algorithms.
-    Taking advantage of working in the state space methods, forecast can be obtained continuing the Kalman filter after
-    the last observation in the time series.
-    This is known as the one-step-ahead forecast~\cite{durbin_time_2012}. \\
-
-    It is important to note that in this model, the predictive probability density is not contingent on parameter estimates,
-    nor on the inclusion or exclusion of predictors with stationary regression coefficients these have all been fully integrated.
-    The Bayesian model averaging ensures that we do not unduly commit to any specific set of covariates,
-    thus helping us avoid an arbitrary selection, and neither do we settle for point estimates of their coefficients,
-    thereby preventing overfitting.
-
-    The correlations amongst multiple target series are naturally accounted for when sampling for prediction values.
-    The posterior predictive density is designed as a joint distribution over all predicted target series rather than a
-    mere collection of univariate distributions.
-    This methodology enables to project multiple target series in a comprehensive manner rather than examining each individually,
-    as disjoint segments~\cite{qiu_multivariate_2018}.
-
-    This can be particularly beneficial when generating summary statistics, such as the mean and variance-covariance,
-    derived from the joint empirical distribution of forecast values.
-
-\section{Capacity Factor}
-    \label{sec:capacity_factor}
-
-    Within the scope of this thesis, the capacity utilisation factor, also known as the capacity factor, we be employed
-    as an indicator of a power production asset's performance capabilities.
-    This factor represents an asset's actual output over a determined period compared to its potential output
-    if it were possible for it to operate at full capacity continuously over the same timeframe.
-    A higher capacity factor effectively signifies a more efficient energy production.
-    When the mechanisms of energy trading are articulated, this factor can be converted directly into projected revenue,
-    thus providing a tangible correlation between an asset’s performance and its financial implications.
-
-    As previously mentioned, in chapter~\ref{sec:wind_futures},
-    the capacity factor is the metric that indexes, such as NASDAQ WIDE, adopted to model future wind contracts.
-    Therefore, the portfolio capacity factor will be considered to model futures' contracts and evaluate the
-    performance of the hedging strategies.
-
-    The capacity factor is calculated using the following equation:
-
-    \begin{equation}
-        cf_t =
-%        \frac{\text{Energy generated at period t}}{\text{Nominal Capacity Production at time t}} =
-        \frac{g_{t}}{C \cdot h_{t}}
-    \label{eq:capacity_factor}
-    \end{equation}
-
-    Where $g_{t}$ is the actual energy production, $C$ is the nominal capacity production and $h_{t}$ is the
-    number of hours in the period $t$.
-    The nominal capacity production refers to the maximum possible energy output under ideal conditions.
-    The capacity factor is a dimensionless value, usually expressed as a percentage.
-
-    For $T$ periods defined as ($t=1,....,T$), the revenue $R$ generated by a wind farm can be calculated as:
-
-    \begin{equation}
-        R = C \left( \sum_{t=1}^{T} h_{t} cf_{t} p_{t} \right)
-    \label{eq:revenue_wf}
-    \end{equation}
-
-    Where $p_{t}$ is the price of energy at time $t$.
-    Energy agents typically have a multiple wind generators, where can be organised in different portfolios.
-    Extending the previous definition, the revenue $R$ generated by a wind portfolio composed by N assets, indexed by
-    $i= 1,2, ..., N$, where $i$ can be a generation project or location.
-    Let $C_{p}$ be the portfolio's nominal production capacity,
-    the revenue $R_{p}$ generated by a wind portfolio can be calculated as:
-
-    \begin{align}
-        R_{p} &= \sum_{i=1}^{N} R_{i} \\
-        \Rightarrow C_{p} \left( \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} \right) &=
-        \sum_{i=1}^{N} C_{i} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right)
-    \label{eq:revenue_pf}
-    \end{align}
-
-    where $cf_{tp}$ is the portfolio's (weighted average) capacity factor at time $t$, $R_{i}$ is the revenue generated by
-    the asset $i$ and $cf_{it}$ is the $i$th-asset's capacity factor at time $t$.
-    Dividing both sides by the portfolio's total capacity $C_{p}$:
-
-    \begin{align}
-        \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} &=
-        \sum_{i=1}^{N} \frac{C_{i}}{C_{p}} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right) \\
-        \Rightarrow \overline{R}_{p} &= \sum_{i=1}^{N} x_{i} R_{i}
-    \label{eq:revenue_std}
-    \end{align}
-
-    In this context, $\overline{R}_{p}$ denotes the revenue per megawatt (MW) of installed capacity and $x_{i}$
-    elucidates the proportion of the total capacity of the portfolio denoted by asset $i$,
-    which is also indicative of the weight of asset $i$ in the portfolio.
-    It is essential to note that, assuming the equivalence of prices for all assets integrated within the portfolio,
-    equation~\ref{eq:revenue_std} retains its validity across any given price $p_{tp}$.
-
-
-
-
-
-
-
+%        \alpha_{t+1} &= T_{t} \alpha_{t} + R_{t} \eta_{t}, \qquad \eta_{t} \sim N_{q}(0, Q_{t})
+%        \label{eq:mbsts_trans}
+%    \end{align}
+%
+%
+%    Equation~\ref{eq:mbsts_obs} is the observation equation, which relates the $m \times 1$
+%    vector of observations at time $t$ $y_{t}$ to the $d \times 1$ unobserved latent states $\alpha_{t}$,
+%    where $d$ is the total number of latent states.
+%    The $m \times p$ matrix of coefficients $Z_{t}$ links the unobserved factors and regressions' effects
+%    with the observations' vector $y_{t}$.
+%    The $m \times 1$ is the vector of observation disturbances $\varepsilon_{t}$ and are assumed to have zero means and
+%    represented by a variance-covariance matrix $\Sigma_{t}$ of the order $m \times m$.\\
+%
+%    The second equation~\ref{eq:mbsts_trans} is the transition equation, which describes the evolution of the state vector
+%    $\alpha_{t}$ over time, characterized by the $d \times d$ transition matrix $T_{t}$.
+%    The $d \times q$ matrix of coefficients $R_{t}$ is often referred to as the control matrix.
+%    The matrix $\eta_{t}$ is an $q \times 1$ error vector,
+%    with a state diffusion matrix $Q_{t}$ of the order $q \times q$, where $q \leq d$.
+%    In many standard cases, $q = d$ and $Q_{t}$ is the identity matrix $I_{d}$.
+%    Although matrix $Q_{t}$ can be specified freely,
+%    it is often composed of a selection from the $q$ columns of the identity matrix $I_{d}$~\cite{commandeur_introduction_2007}.\\
+%
+%    In summary, the~\gls{mbsts} model is defined by the following set of parameters:
+%
+%    \begin{itemize}
+%        \item $y_{t}$ ($m \times 1$): Observations at time $t$
+%        \item $\alpha_{t}$ ($d \times 1$): Unobserved latent states $d$
+%        \item $Z_{t}$ ($m \times p$): Coefficients linking the unobserved factors and regression effects
+%            with the observations vector $y_{t}$
+%        \item $\varepsilon_{t}$ ($m \times 1$): Observation disturbances, assumed to have zero means,
+%            represented by the variance-covariance matrix $\Sigma_{t}$
+%        \item $T_{t}$ ($d \times d$): Transition matrix characterizing the evolution of the state vector $\alpha_{t}$
+%        \item $R_{t}$ ($d \times q$): Control matrix of coefficients
+%        \item $\eta_{t}$ ($q \times 1$): Error vector with a state diffusion matrix $Q_{t}$ of the order $q \times q$ where $q \leq d$
+%        \item $\Sigma_{t}$ ($m \times m$): Covariance matrix of the order $m \times m$ representing the observation disturbances
+%        \item $Q_{t}$ ($q \times q$): State diffusion matrix
+%    \end{itemize}
+%
+%    As per developed by Harvey~\cite{harvey_forecasting_1990}, a basic structural time series model can be represented
+%    by a direct interpretation of its underlying components.
+%    In a general, the model can be expressed as:
+%
+%    \begin{equation}
+%        y_{t} = \mu_{t} + \theta{t} + \omega_{t} + \xi_{t} + \varepsilon_{t} ,
+%        \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{\varepsilon}), \quad t = 1, 2, ..., n
+%    \label{eq:sts}
+%    \end{equation}
+%
+%    where $y_{t}$, $\mu_{t}$, $\theta{t}$, $\omega_{t}$, $\xi_{t}$ and $\varepsilon_{t}$ are m-dimension vectors,
+%    representing targeted time series, linear trend, seasonal, cyclical and regression components
+%    with the observation disturbances respectively.
+%    For simplicity, $\Sigma_{\varepsilon}$ is a $m \times m$, positive definite matrix and assumed to be constant over time.
+%
+%    Elucidating further on the state space form, $\alpha_{t}$ aggregates these multifaceted components,
+%    depicting the concealed and unobserved latent states, such that:
+%
+%   \begin{equation}
+%        \alpha_{t} = [\mu_{t}, \theta_{t}, \omega_{t}, \xi_{t}]^T
+%    \label{eq:sts_latent}
+%    \end{equation}
+%
+%
+%    In the prevailing model, each component of the state is compiled individually,
+%    where every component produces an incremental influence on $y_{t}$.
+%    The adaptability of this model facilitates the incorporation of various model elements specific to each target series.
+%
+%    % Develope the different components states
+%\subsection{State Components}
+%    \label{sec:state_components}
+%
+%    A structural time series model is composed of several components, each representing a distinct aspect of the time series,
+%    allowing to add flexibility and contributing to the overall model's predictive capabilities.
+%    The model components are typically divided into four main categories: trend, seasonal, cyclical and regression components.
+%    In the current model formulation, components are modelled explicitly and are assembled independently,
+%    with each yielding an additive contribution to $y_{t}$.
+%
+%\subsubsection{Trend Component}
+%    \label{sec:trend_component}
+%
+%    The trend component is a fundamental element of the structural time series model.
+%    It represents the long-term movement of the time series, capturing the underlying growth or decline over time.
+%    The trend component is typically modelled as a linear or non-linear function of time.
+%    The linear trend component can be portrait as:
+%
+%%    \begin{gather}
+%%        \bm{\mu}_{t+1} = \bm{\mu}_{t} + \bm{\delta}_{t} + \bm{u}_{t},
+%%            \qquad \bm{u}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\mu}) \\
+%%        \notag \\
+%%        \bm{\delta}_{t+1} = \bm{d} + \bm{P}(\bm{\delta}_{t} - \bm{d}) + \bm{v}_{t},
+%%            \qquad \bm{v}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\delta})
+%%        \label{eq:group}
+%%    \end{gather}
+%
+%    \begin{equation}
+%        \bm{\eta}_{t+1}=
+%            \bm{T}_{T} \bm{\eta}_{t} + \bm{G}_{T} \bm{\gamma} + \bm{\omega}_{T,t}
+%        \label{eq:trend_state}
+%    \end{equation}
+%
+%    where:
+%    \begin{itemize}
+%        \item $\bm{T}_T$ $(2m \times 2m)$ transition matrix that applies the learning rate $\rho$
+%        \item $\bm{\eta}_{t}$ $(2m \times 1)$ state vector that contains the trend components for all time series at time $t$
+%        \item $\bm{G}_T$ $(2m \times 1)$ transition vector that applies the long-term slope $\gamma$
+%        \item $\bm{\gamma}$ $(m \times 1)$ is the long-term slope
+%        \item $\bm{\omega}_{T,t}$ $(2m \times 2m)$ is the trend disturbance at time $t$,
+%            where $w_{T,t} \sim \mathcal{N}(0, \bm{\Sigma}_{T})$
+%    \end{itemize}
+%
+%    The updated state equation becomes, for times series $i$, can be represented as:
+%
+%    \begin{equation}
+%        \left[
+%            \begin{array}{c}
+%                \mu_{t+1}^{(i)} \\
+%                \delta_{t+1}^{(i)}
+%            \end{array}
+%        \right] =
+%        \left[
+%            \begin{array}{cc}
+%                1 & 1 \\
+%                0 & \rho^{(i)}
+%            \end{array}
+%        \right]
+%        \left[
+%            \begin{array}{c}
+%                \mu_{t}^{(i)} \\
+%                \delta_{t}^{(i)}
+%            \end{array}
+%        \right] +
+%        \left[
+%            \begin{array}{c}
+%                0 \\
+%                1 - \rho^{(i)}
+%            \end{array}
+%        \right]
+%        \gamma^{(i)} +
+%        \left[
+%            \begin{array}{c}
+%                \omega_{t}^{(\mu,i)} \\
+%                \omega_{t}^{(\delta,i)}
+%            \end{array}
+%        \right]
+%        \label{eq:state_update}
+%    \end{equation}
+%
+%    The combined transition matrix $\bm{T}_T$ for $m$ time series is a block-diagonal matrix:
+%
+%    \begin{equation}
+%        \mathbf{T}_T=
+%            \left[
+%                \begin{array}{cccc}
+%                    \mathbf{T}_{T, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
+%                    \mathbf{0}        & \mathbf{T}_{T, 2} & \cdots & \mathbf{0} \\
+%                    \vdots            & \vdots            & \ddots & \vdots     \\
+%                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{T, m}
+%                \end{array}
+%            \right]
+%        \label{eq:state_transition_mv}
+%    \end{equation}
+%
+%    where each block of the diagonal matrix is a $(2 \times 2)$ for one time series,
+%    represented in equation~\ref{eq:state_update}.
+%    The model features a parameter $\bm{\rho}$ $(0 < \bm{\rho}^{(i)} < 1)$ which represents the learning rate
+%    that underlies the local trend update process, providing the ability to balance short-term and long-term information.
+%    Specifically, when $\bm{\rho}^{(i)} = 1$, the model induces a random walk within the associated slope,
+%    leading to a non-stationary trend component.
+%
+%    The state vector $\bm{\eta}_{t}$ contains the trend components for all time series at time $t$.
+%    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
+%    individual time series.
+%
+%    \begin{equation}
+%        \bm{\eta}_{t}^{(i)}=
+%            \left[
+%                \begin{array}{c}
+%                    \mu_{t}^{(1)} \\
+%                    \delta_{t}^{(1)} \\
+%                    \mu_{t}^{(2)} \\
+%                    \delta_{t}^{(2)} \\
+%                    \vdots \\
+%                    \mu_{t}^{(m)} \\
+%                    \delta_{t}^{(m)}
+%                \end{array}
+%            \right]
+%        \label{eq:trend_state_vector}
+%    \end{equation}
+%
+%    The aggregate disturbance term $\bm{\omega}_{T,t}$ is assumed to be a white noise variable with a multivariate normal distribution
+%    with a covariance matrix $\bm{\Sigma}_{T}$ of the order $(2m \times 2m)$.\ The covariance matrix $\bm{\Sigma}_{T}$
+%    is a block-diagonal matrix, where each block of the diagonal matrix are assumed to be independent.
+%    The combined covariance matrix $\bm{\Sigma}_{T}$ can be represented as:
+%
+%    \begin{equation}
+%        \bm{\Sigma}_{T} =
+%            \left[
+%                \begin{array}{cc}
+%                    \mathbf{\Sigma}_{\mu} & \mathbf{0} \\
+%                    \mathbf{0}            & \mathbf{\Sigma}_{\delta}
+%                \end{array}
+%            \right]
+%        \label{eq:trend_covariance}
+%    \end{equation}
+%
+%    Where:
+%    \begin{itemize}
+%        \item $\mathbf{\Sigma}_{\mu}$ covariance matrix of the trend disturbances $\omega_{t}^{(\mu,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\mu})$
+%        \item $\mathbf{\Sigma}_{\delta}$ covariance matrix of the trend increments $\omega_{t}^{(\delta,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\delta})$
+%    \end{itemize}
+%
+%\subsubsection{Seasonality}
+%    \label{sec:seasonality_component}
+%
+%    Whenever a time series consists of hourly, quarterly or yearly data, it is common to observe a seasonal pattern.
+%    The seasonal component $\bm{\tau}_{t}$ at time $t$ can be modelled using various methods,
+%    such as a trigonometric form using Fourier series, categorical proxies known as "dummy variables"
+%    or methods involving seasonal splines~\cite{proietti_seasonality_2023}.
+%    In prevalent usage exists a model that leverages deterministic means coupled with an error term,
+%    thus permitting the accommodation of alterations across time.
+%    This characteristic renders this model proficient in apprehending both,
+%    patterns that appear with regularity and fluctuations that are more sporadic,
+%    thereby establishing robustness when applied to disparate types of sequences of time that exhibit seasonality.
+%
+%    A seasonal effects modelled using a deterministic approach along with a white noise error term~\cite{qiu_multivariate_2018} is:
+%
+%    \begin{equation}
+%        \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
+%            \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
+%            \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\tau})
+%        \label{eq:seasonal}
+%    \end{equation}
+%
+%    where:
+%    \begin{itemize}
+%        \item $S_{i}$ represents the seasonal period, e.g. weekly (s=7), monthly (s=12), hourly (s=24)
+%        \item $\bm{\tau}_{t}^{i}$ ($m \times (s-1)$): seasonal effect for $i$-th time series and at time $t$
+%        \item $\bm{w}_{t}^{i}$ ($(m \times (s-1)) \times 1$): white noise seasonal disturbance,
+%            which is assumed to follow a multivariate normal distribution: $w_{t} \sim \mathcal{N}(\bm{\Sigma}_{\tau})$
+%    \end{itemize}
+%
+%    The transition matrix, in the univariate case, for the seasonal effects in the state space is a $(s-1) \times (s-1)$ matrix,
+%    due to the sum-zero constraint over one seasonal cycle.\ The structure of the matrix is:
+%
+%    \begin{equation}
+%        \mathbf{T}_s^{(i)}=
+%            \left[
+%                \begin{array}{ccccc}
+%                    -1             & -1         & \cdots &  -1        & -1 \\
+%                    1              & \mathbf{0} & \cdots & \mathbf{0} & \mathbf{0} \\
+%                    \mathbf{0}     & 1          & \cdots & \mathbf{0} & \mathbf{0} \\
+%                    \vdots         & \vdots     & \ddots & \vdots     & \vdots \\
+%                    \mathbf{0}     & \mathbf{0} & \cdots & 1          & \mathbf{0}
+%                \end{array}
+%            \right]
+%    \label{eq:seasonal_transition_uni}
+%    \end{equation}
+%
+%    In a multivariate scenario, when there are $m$ time series each with its own seasonal components,
+%    the overall transition matrix $\mathbf{T}_s$ is a block-diagonal matrix, where each block of the diagonal matrix
+%    is $(s-1) \times (s-1)$ for one time matrix.
+%    The combined transition matrix $\mathbf{T}_{s}$ can be represented as:
+%
+%    \begin{equation}
+%        \mathbf{T}_s=
+%            \left[
+%                \begin{array}{cccc}
+%                    \mathbf{T}_{s, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
+%                    \mathbf{0}        & \mathbf{T}_{s, 2} & \cdots & \mathbf{0} \\
+%                    \vdots            & \vdots            & \ddots & \vdots     \\
+%                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{s, m}
+%                \end{array}
+%            \right]
+%        \label{eq:seasonal_transition_mv}
+%    \end{equation}
+%
+%    where $\mathbf{T}_{s}$ has the size $(m \times (s-1)) \times (m \times (s-1))$ matrix.
+%    Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ as it is assumed that the seasonal transition
+%    for different time series is independent in this model.
+%    The state vector $\bm{\tau}_t$ contains the seasonal effects for all time series at time $t$.
+%    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
+%    individual time series.\ The state vector $\bm{\tau}_t$ representation is:
+%
+%    \begin{equation}
+%        \tau_{t+1}=
+%            \left[
+%                \begin{array}{c}
+%                    \tau_{t+1}^{(1)} \\
+%                    \tau_{t+1}^{(2)} \\
+%                    \hfill \vdots \hfill \\
+%                    \tau_{t+1}^{(m)}
+%                \end{array}\right]
+%            =\left[
+%                \begin{array}{l}
+%                    \tau_t^{(1)}, \tau_{t-1}^{(1)}, \ldots, \tau_{t-10}^{(1)} \\
+%                    \tau_t^{(2)}, \tau_{t-1}^{(2)}, \ldots, \tau_{t-10}^{(2)} \\
+%                    \hfill \vdots \hfill \\
+%                    \tau_t^{(m)}, \tau_{t-1}^{(m)}, \ldots, \tau_{t-10}^{(m)}
+%                \end{array}
+%            \right]
+%        \label{eq:seasonal_state}
+%    \end{equation}
+%
+%    The white noise error term $\bm{w}_{t}$ plays a crucial role in the seasonal component model,
+%    by allowing random variations around the deterministic seasonal pattern.
+%    For $m$ time series, the combined white noise term $\bm{w}_{t}$ is:
+%
+%    \begin{equation}
+%        w_t=
+%            \left[
+%                \begin{array}{c}
+%                    w_{t}^{(1)} \\
+%                    w_{t}^{(2)} \\
+%                    \vdots \\
+%                    w_{t)}^{(m)}
+%                \end{array}
+%            \right]
+%           =
+%            \left[
+%                \begin{array}{c}
+%                    w_{t, 1}^{(1)} \\
+%                    w_{t, 2}^{(1)} \\
+%                    \vdots \\
+%                    w_{t, (s-1)}^{(1)} \\
+%                    w_{t, 1}^{(2)} \\
+%                    w_{t, 2}^{(2)} \\
+%                    \vdots \\
+%                    w_{t, (s-1}^{(2)} \\
+%                    \vdots \\
+%                    w_{t, 1}^{(m)} \\
+%                    w_{t, 2}^{(m)} \\
+%                    \vdots \\
+%                    w_{t, (s-1)}^{(m)}
+%                \end{array}
+%            \right]
+%    \label{eq:seasonal_error}
+%    \end{equation}
+%
+%    When considering a multivariate time series model, the white noise error term $\bm{w}_{t}$ is assumed to follow
+%    a multivariate normal distribution with a covariance matrix $\bm{\Sigma}_{\tau}$ of the order $(s-1) \times (s-1)$.
+%    The covariance matrix $\bm{\Sigma}_{\tau}$ is a block-diagonal matrix, where each block of the diagonal matrix are
+%    assumed to be uncorrelated between different time series.
+%
+%    The combined covariance matrix $\bm{\Sigma}_{\tau}$ can be represented as:
+%
+%    \begin{equation}
+%        \bm{\Sigma}_{\tau} =
+%            \left[
+%                \begin{array}{cccc}
+%                    \mathbf{\Sigma}_{\tau, 1} & \mathbf{0}                 & \cdots & \mathbf{0} \\
+%                    \mathbf{0}                & \mathbf{\Sigma}_{\tau, 2}  & \cdots & \mathbf{0} \\
+%                    \vdots                    & \vdots                     & \ddots & \vdots     \\
+%                    \mathbf{0}                & \mathbf{0}                 & \cdots & \mathbf{\Sigma}_{\tau, m}
+%                \end{array}
+%            \right]
+%    \label{eq:seasonal_covariance}
+%    \end{equation}
+%
+%\subsubsection{Cyclical}
+%    \label{sec:cyclical_component}
+%
+%    The cyclic part of the structural time series model signifies the medium-to-long term oscillations.
+%    In the context of financial mathematics, the term `financial market cycles` generally indicates repeated fluctuations
+%    that don't follow a strict periodic pattern around the data series' path.
+%    A model incorporating a cyclic element can effectively emulate critical characteristics often recognized in statistical analyses.
+%    These include evidence of major autocorrelation, the recurrence and alternation of phases within the data,
+%    the damping or amplification of cycles and the absence of long-term persistence in the data series~\cite{qiu_multivariate_2018}.
+%
+%    Cyclical factors are often modelled using a deterministic approach, such as a trigonometric function or a polynomial.
+%    In this case, a trigonometric function is used to model the cyclical component with dumping is postulated as:
+%
+%    \begin{equation}
+%        \bm{\omega}_{t+1} = \bm{\rho}^{(i)} \bm{T}_c^{(i)} \bm{\omega}_{t}^{(i)} + \bm{\kappa}_{t},
+%            \qquad \bm{\kappa}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\omega})
+%        \label{eq:cyclical_state}
+%    \end{equation}
+%
+%    where:
+%    \begin{itemize}
+%        \item $\bm{\omega}_{t}$ ($2m \times 1$): cyclical component at time $t$
+%        \item $\bm{\rho}^{(i)}$ ($m \times 1$): damping factors vector per series $i$
+%        \item $\bm{T}_c^{(i)}$ ($2m \times 2m$): transition matrix for the cyclical component
+%        \item $\bm{\kappa}_{t}$ ($2m \times 1$): cyclical disturbance at time $t$
+%        \item $\bm{\Sigma}_{\omega}$ ($2m \times 2m$): variance of the cyclical disturbance
+%    \end{itemize}
+%
+%    For each time series $i$, the cyclical component state vector $\bm{\omega}_{t}$ can be represented as:
+%
+%    \begin{equation}
+%        \bm{\omega}_{t}^{(i)}=
+%            \left[
+%                \begin{array}{c}
+%                    \alpha_{t}^{(1)} \\
+%                    \beta_{t}^{(1)} \\
+%                    \alpha_{t}^{(2)} \\
+%                    \beta_{t}^{(2)} \\
+%                    \vdots \\
+%                    \alpha_{t}^{(m)} \\
+%                    \beta_{t}^{(m)}
+%                \end{array}
+%            \right]
+%        \label{eq:cyclical_state_vector}
+%    \end{equation}
+%
+%    where the transition matrix $\bm{T_c^{(i)}}$ for the time series $i$ is:
+%
+%    \begin{equation}
+%        \bm{T}_c^{(i)}=
+%            \left[
+%                \begin{array}{cc}
+%                    \cos \left(\lambda_i\right) & \sin \left(\lambda_i\right) \\
+%                    -\sin \left(\lambda_i\right) & \cos \left(\lambda_i\right)
+%                \end{array}
+%            \right]
+%        \label{eq:cyclical_transition_matrix}
+%    \end{equation}
+%
+%    The combined transition matrix for an $m$ time series model is a block-diagonal matrix,
+%    where each block of the diagonal matrix is affected by its respective dampening factor $\bm{\rho}^{(i)}$ is:
+%
+%    \begin{equation}
+%        \bm{\rho}^{(i)} \bm{T}_c^{(i)} =
+%        \left[
+%            \begin{array}{ccccc}
+%                \rho_1 \bm{T}_c^{(1)} & \mathbf{0} & \cdots & \mathbf{0} \\
+%                \mathbf{0} & \rho_2 \bm{T}_c^{(2)} & \cdots & \mathbf{0} & \\
+%                \vdots & \vdots & \ddots & \vdots & \\
+%                \mathbf{0} & \mathbf{0} & \cdots & \rho_m \bm{T}_c^{(m)}
+%            \end{array}
+%        \right]
+%        \label{eq:cyclical_transition_mv}
+%    \end{equation}
+%
+%    For the factor $\bm{\rho}^{(i)}$ be in fact dampening, should be $ 0 < \rho < 1$.
+%    The frequency $\lambda_i = 2\pi/q_i $, where $q_i$ is the period such that $0 < \lambda_i < \pi$.
+%    When $\lambda_i$ is 0 or $\pi$, the model degenerates to the AR(1) process.
+%    The dampening factor should be strictly less than one for stationary purpose.
+%    If this damping factor surpasses unity, it induces an unrestricted cyclical motion,
+%    which consequently leads to an increased magnitude of the cycle in the model.~\cite{qiu_multivariate_2018}.
+%    A fundamental distinction that arises between the cyclical and seasonal constituents pertains exactly to this dampening factor.
+%    In the context of the cyclical component, there is a characteristic decay in its amplitude as time progresses.
+%    This phenomenon can be pragmatically utilized in the analysis of time series data,
+%    particularly those impacted by exogenous shocks,
+%    lending valuable insights to scholars operating outside the confines of a traditional mathematical or statistical framework.
+%
+%
+%    The combined white noise vector for the cyclical component $\kappa^{(c)}$ for $m$ time series is a vector of dimension $2m \times 1$.
+%    Each element $\bm{\kappa}_{t}^{(i)}$ in this vector corresponds to the white noise term for the state variables of the cyclical component of each time series.
+%
+%    \begin{equation}
+%        \bm{\kappa}_{t}^{(i)}=
+%            \left[
+%                \begin{array}{c}
+%                    \kappa_{t}^{(c,1)} \\
+%                    \kappa_{t}^{(c,2)} \\
+%                    \vdots \\
+%                    \kappa_{t}^{(c,m)}
+%                \end{array}
+%            \right]
+%        \label{eq:cyclical_error_mv}
+%    \end{equation}
+%
+%    Each $\bm{\kappa}_{t}^{(i)}$ is a $2 \times 1$ vector:
+%
+%    \begin{equation}
+%        \bm{\kappa}_{t}^{(i)}=
+%            \left[
+%                \begin{array}{c}
+%                    \kappa_{t}^{(\alpha,i)} \\
+%                    \kappa_{t}^{(\beta,i)}
+%                \end{array}
+%            \right]
+%        \label{eq:cyclical_error}
+%    \end{equation}
+%
+%    where $\kappa_{t}^{(\alpha,i)}$ and $\kappa_{t}^{(\beta,i)}$ are the white noise terms for the state variables
+%    $\alpha^{(i)}$ and $\beta^{(i)}$ respectively.
+%
+%    The variance-covariance matrix $\bm{\Sigma}_{\omega}$ for the white noise term $\omega_t^{(c)}$ is a block diagonal
+%    matrix of dimension $2m \times 2m$.\ Each block on the diagonal corresponds to the variance-covariance matrix of the
+%    white noise term for the cyclical component of each time series.
+%
+%    \begin{equation}
+%        \bm{\Sigma}_{\omega} =
+%            \left[
+%                \begin{array}{cccc}
+%                    \bm{\Sigma}_{\omega, 1} & \mathbf{0} & \cdots & \mathbf{0} \\
+%                    \mathbf{0} & \mathbf{\Sigma}_{\omega, 2} & \cdots & \mathbf{0} \\
+%                    \vdots & \vdots & \ddots & \vdots \\
+%                    \mathbf{0} & \mathbf{0} & \cdots & \mathbf{\Sigma}_{\omega, m}
+%                \end{array}
+%            \right]
+%        \label{eq:cyclical_covariance}
+%    \end{equation}
+%
+%    Each block on the diagonal of the matrix $\bm{\Sigma}_{\omega}$ is a $2 \times 2$ matrix representing the variance-covariance
+%    white noise term $\omega_t^{(\alpha, i)}$ and $\omega_t^{(\beta, i)}$:
+%
+%    \begin{equation}
+%        \bm{\Sigma}_{\omega, i} =
+%            \left[
+%                \begin{array}{cc}
+%                    \sigma_{\alpha, i}^2    & \sigma_{\alpha\beta, i} \\
+%                    \sigma_{\alpha\beta, i} & \sigma_{\beta, i}^2
+%                \end{array}
+%            \right]
+%        \label{eq:cyclical_covariance_block}
+%    \end{equation}
+%
+%    By structuring the white noise terms and their variance-covariance matrix this way,
+%    clearly separate the noise affecting each time series while allowing for the noise terms of the cyclical
+%    state variables within each series to be correlated.
+%
+%\subsubsection{Regression Component}
+%    \label{sec:regression_component}
+%
+%    The regression component of the structural time series model is a flexible element that allows the incorporation of
+%    exogenous variables that can influence the target time series.
+%    The regression component is modelled as a linear combination of the exogenous variables.
+%    The regression component of the~\gls{mbsts} can be expressed as:
+%
+%    \begin{equation}
+%        \bm{\xi}_{t} = \bm{X}_t \bm{\beta} + \bm{\epsilon}_{t},
+%            \qquad \bm{\epsilon}_{t} \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})
+%        \label{eq:regression_state}
+%    \end{equation}
+%
+%    Where:
+%
+%    \begin{itemize}
+%        \item $\bm{\xi}_{t}$ ($m \times 1$): regression component at time $t$
+%        \item $\bm{X}_t$ ($m \times p$): matrix of exogenous variables at time $t$
+%        \item $\bm{\beta}$ ($p \times 1$): regression coefficients at time $t$
+%        \item $\bm{\epsilon}_{t}$ ($m \times 1$): regression disturbance at time $t$,
+%            where $\bm{\epsilon}_{t} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})$
+%        \item $\bm{\Sigma}_{\epsilon}$ ($m \times m$): variance-covariance matrix of the regression disturbance
+%    \end{itemize}
+%
+%    The covariates matrix $\bm{X}_t$ is a $m \times p$ matrix, where $m$ is the number of time series and $p$ is the number of predictors.
+%    Each row of the matrix $\bm{X}_t$ corresponds to the exogenous variables for each time series at time $t$,
+%    and each column corresponds to a covariate. The matrix $\bm{X}_t$ can be represented as:
+%
+%    \begin{equation}
+%        \bm{X}_t =
+%            \left[
+%                \begin{array}{cccc}
+%                    x_{t1,1} & x_{t1,2} & \cdots & x_{t1,p} \\
+%                    x_{t2,1} & x_{t2,2} & \cdots & x_{t2,p} \\
+%                    \vdots  & \vdots  & \ddots & \vdots  \\
+%                    x_{tm,1} & x_{tm,2} & \cdots & x_{tm,p}
+%                \end{array}
+%            \right]
+%        \label{eq:regression_covariates}
+%    \end{equation}
+%
+%    In the overall~\gls{mbsts}, the regression component is combined with the trend, seasonality,
+%    and cyclical intends to capture the full dynamics of the time series.
+%    The regression component specifically supports to model the influence of known external factors on the time series.
+%    By incorporating covariates, the model can explain parts of the variability in the time series that are attributable
+%    to these external factors, thus improving the accuracy and interpretability of the model.
+%
+%
+%\subsection{Generatate Wind Series Forecast Scenarios}
+%    \label{sec:wind_forecast_scenarios}
+%
+%    As conventional in Bayesian data analysis, predictions are derived from our model's posterior predictive distribution.
+%    This is achieved by drawing samples of model parameters and unseen or hidden states from their respective posterior distribution.
+%    Therefore, the posterior predictive distribution of $\hat{Y}$, representing the collection of forecasted values, can be described as:
+%
+%    \begin{equation}
+%        p(\hat{Y} | Y) = \int p(\hat{Y} | \psi) p(\psi | Y) d\psi
+%    \label{eq:posterior_predictive}
+%    \end{equation}
+%
+%    Where $Y$ is the observed data and $\psi$ is the set of all the model parameters and latent states randomly drawn from
+%    $p(\psi | Y)$.
+%
+%    The posterior distribution of the model parameters can be trained by using \gls{mcmc} algorithms.
+%    Taking advantage of working in the state space methods, forecast can be obtained continuing the Kalman filter after
+%    the last observation in the time series.
+%    This is known as the one-step-ahead forecast~\cite{durbin_time_2012}. \\
+%
+%    It is important to note that in this model, the predictive probability density is not contingent on parameter estimates,
+%    nor on the inclusion or exclusion of predictors with stationary regression coefficients these have all been fully integrated.
+%    The Bayesian model averaging ensures that we do not unduly commit to any specific set of covariates,
+%    thus helping us avoid an arbitrary selection, and neither do we settle for point estimates of their coefficients,
+%    thereby preventing overfitting.
+%
+%    The correlations amongst multiple target series are naturally accounted for when sampling for prediction values.
+%    The posterior predictive density is designed as a joint distribution over all predicted target series rather than a
+%    mere collection of univariate distributions.
+%    This methodology enables to project multiple target series in a comprehensive manner rather than examining each individually,
+%    as disjoint segments~\cite{qiu_multivariate_2018}.
+%
+%    This can be particularly beneficial when generating summary statistics, such as the mean and variance-covariance,
+%    derived from the joint empirical distribution of forecast values.
+%
+%\section{Capacity Factor}
+%    \label{sec:capacity_factor}
+%
+%    Within the scope of this thesis, the capacity utilisation factor, also known as the capacity factor, we be employed
+%    as an indicator of a power production asset's performance capabilities.
+%    This factor represents an asset's actual output over a determined period compared to its potential output
+%    if it were possible for it to operate at full capacity continuously over the same timeframe.
+%    A higher capacity factor effectively signifies a more efficient energy production.
+%    When the mechanisms of energy trading are articulated, this factor can be converted directly into projected revenue,
+%    thus providing a tangible correlation between an asset’s performance and its financial implications.
+%
+%    As previously mentioned, in chapter~\ref{sec:wind_futures},
+%    the capacity factor is the metric that indexes, such as NASDAQ WIDE, adopted to model future wind contracts.
+%    Therefore, the portfolio capacity factor will be considered to model futures' contracts and evaluate the
+%    performance of the hedging strategies.
+%
+%    The capacity factor is calculated using the following equation:
+%
+%    \begin{equation}
+%        cf_t =
+%%        \frac{\text{Energy generated at period t}}{\text{Nominal Capacity Production at time t}} =
+%        \frac{g_{t}}{C \cdot h_{t}}
+%    \label{eq:capacity_factor}
+%    \end{equation}
+%
+%    Where $g_{t}$ is the actual energy production, $C$ is the nominal capacity production and $h_{t}$ is the
+%    number of hours in the period $t$.
+%    The nominal capacity production refers to the maximum possible energy output under ideal conditions.
+%    The capacity factor is a dimensionless value, usually expressed as a percentage.
+%
+%    For $T$ periods defined as ($t=1,....,T$), the revenue $R$ generated by a wind farm can be calculated as:
+%
+%    \begin{equation}
+%        R = C \left( \sum_{t=1}^{T} h_{t} cf_{t} p_{t} \right)
+%    \label{eq:revenue_wf}
+%    \end{equation}
+%
+%    Where $p_{t}$ is the price of energy at time $t$.
+%    Energy agents typically have a multiple wind generators, where can be organised in different portfolios.
+%    Extending the previous definition, the revenue $R$ generated by a wind portfolio composed by N assets, indexed by
+%    $i= 1,2, ..., N$, where $i$ can be a generation project or location.
+%    Let $C_{p}$ be the portfolio's nominal production capacity,
+%    the revenue $R_{p}$ generated by a wind portfolio can be calculated as:
+%
+%    \begin{align}
+%        R_{p} &= \sum_{i=1}^{N} R_{i} \\
+%        \Rightarrow C_{p} \left( \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} \right) &=
+%        \sum_{i=1}^{N} C_{i} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right)
+%    \label{eq:revenue_pf}
+%    \end{align}
+%
+%    where $cf_{tp}$ is the portfolio's (weighted average) capacity factor at time $t$, $R_{i}$ is the revenue generated by
+%    the asset $i$ and $cf_{it}$ is the $i$th-asset's capacity factor at time $t$.
+%    Dividing both sides by the portfolio's total capacity $C_{p}$:
+%
+%    \begin{align}
+%        \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} &=
+%        \sum_{i=1}^{N} \frac{C_{i}}{C_{p}} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right) \\
+%        \Rightarrow \overline{R}_{p} &= \sum_{i=1}^{N} x_{i} R_{i}
+%    \label{eq:revenue_std}
+%    \end{align}
+%
+%    In this context, $\overline{R}_{p}$ denotes the revenue per megawatt (MW) of installed capacity and $x_{i}$
+%    elucidates the proportion of the total capacity of the portfolio denoted by asset $i$,
+%    which is also indicative of the weight of asset $i$ in the portfolio.
+%    It is essential to note that, assuming the equivalence of prices for all assets integrated within the portfolio,
+%    equation~\ref{eq:revenue_std} retains its validity across any given price $p_{tp}$.
+%
+%
+%
+%
+%
+%
+%
