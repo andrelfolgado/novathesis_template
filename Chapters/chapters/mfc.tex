@@ -23,7 +23,7 @@
     This assignment for the Computational Financial Mathematics course explores and applies various financial
     modelling and computational techniques.
     The project encompasses key topics such as financial mathematics, discrete-time and continuous-time modelling,
-    partial differential equations, Monte Carlo simulation and sensitivity analysis.
+    partial differential equations, Monte Carlo simulation, and sensitivity analysis.
     The Binomial model for option pricing will be examined, and the Black-Scholes model will be derived and implemented.
     Option pricing problems will be solved using PDEs,
     and Monte Carlo simulations will be used to model asset price evolution.
@@ -31,23 +31,113 @@
     Practical examples and computational implementations will be demonstrated using Python,
     ensuring a comprehensive understanding of the concepts covered.
 
-
 \section{Financial Mathematics}
     \label{sec:fin_math}
 
-    The generation of wind power is intrinsically dependent on the velocity of wind.
-    The symbiotic relationship between wind speed and the consequent energy production can be represented through the
-    utilisation of turbine power curves.
-    These curves provide a quantitative method
-    to determine the power output of a wind turbine corresponding to a particular wind speed.
+%    Review and describe the main concepts of financial mathematics,
+%    namely the concepts of Equities, Commodities, Forwards, Futures and Options.
 
-    Crucially, the power curve is associated with two significant thresholds of wind speed.
-    The thresholds are defined using the Betz law, which indicates the maximum power that can be extracted from the wind,
-    independent of the design of a wind turbine in open flow.
-    The first one is identified as the cut-in value, below which the turbine blades fail to generate power.
-    This is due to the insufficient kinetic energy present in the wind to instigate their motion.
-    Conversely, exceeding the second threshold, known as the cut-out value,
-    leads to the safeguarding mechanism activating to prevent any potential structural damage to the system.
+    Financial mathematics is a branch of applied mathematics that deals with financial markets and instruments.
+    It is a fundamental tool for understanding and analysing financial markets, pricing financial instruments,
+    and managing financial risk.
+    Key examples include equities, commodities, forwards, futures, and options.
+    These concepts are essential for understanding the functioning of financial markets and the valuation of
+    financial instruments.
+    They are built upon core concepts such as the time value of money, risk and return, and arbitrage.
+    Financial mathematics provides the tools and models to analyse these assets and understand their behaviour in the market.
+
+    \subsection{Equities}
+        \label{sec:equities}
+
+        Equities, also known as stocks or shares, represent ownership in a company.
+        When an investor buys shares of a company,
+        they become a part-owner of the company and are entitled to a share of the company's profits.
+        Equities are traded on stock exchanges, and their prices are determined by supply and demand in the market.
+        Traditional Equity investors can make money through:
+
+        \begin{enumerate}
+            \item Capital appreciation: Investors buy shares with the expectation that the value will increase over time,
+                allowing them to sell at a higher price and realise a profit.
+            \item Dividends: Companies distribute a portion of their profits to shareholders in the form of dividends.
+            \item Short selling: Investors can also make money by selling borrowed shares with the intention of buying
+                them back at a lower price.
+        \end{enumerate}
+
+        In addition to traditional equity investments,
+        investors can also invest in equity derivatives, such as options and futures,
+        which allow them to speculate on the price movements of equities without owning the underlying shares.
+
+    \subsection{Forwards}
+        \label{sec:forwards}
+
+        A forward contract is a financial agreement between two parties to buy or sell an asset at a predetermined price,
+        with the transaction set to occur at a specified future date.
+        The contract price is established at the time the agreement is initiated.
+        Forward contracts play a significant role in managing financial risk,
+        particularly as a hedge against adverse price fluctuations,
+        while also serving as a vehicle for speculation on future pricing trends.
+        One of the key advantages of forward contracts lies in their flexibility,
+        as they can be tailored to the unique requirements and preferences of the parties involved.
+
+    \subsection{Futures}
+        \label{sec:futures}
+
+        A futures contract shares similarities with a forward contract in its purpose and structure;
+        however, it differs by being standardised and traded on a regulated exchange.
+        These standardised terms ensure greater transparency and facilitate market efficiency.
+        Futures contracts are widely used in financial markets for two primary purposes: hedging,
+        where they help mitigate the risks associated with price fluctuations, and speculation,
+        where they allow participants to express views on future price movements\cite{hull_options_2012}. \\
+
+        One of the primary advantages of futures contracts is their high liquidity,
+        stemming from the fact that they can be easily bought or sold on an exchange.
+        This liquidity enhances their appeal to market participants,
+        particularly those seeking flexibility in managing risk or capitalising on market opportunities.
+        Moreover, these instruments are used across a broad spectrum of markets, encompassing commodities, equities,
+        and interest rate derivatives, highlighting their versatility and significance in modern financial markets. \\
+
+        Table~\ref{tab:futures_forwards} outlines the key differences between futures and forwards contracts:
+
+        \begin{xltabular}{\textwidth}
+            {   % This is the column specification for the table
+                >{\ttfamily\raggedleft\arraybackslash}m{0.33\textwidth}
+                >{\ttfamily\centering\arraybackslash}m{0.33\textwidth}
+                >{\ttfamily\centering\arraybackslash}m{0.33\textwidth}
+            }
+            \hline
+                                & \textbf{Futures} & \textbf{Forwards} \\
+                \hline
+            \textbf{Contract}    & Highly standardized & Custom \\
+                \hline
+            \textbf{Exchange}    & Established & OTC \\
+                \hline
+            \textbf{Mark to Mkt} & Yes & No \\
+                \hline
+            \textbf{Settled @}   & Ending price ($P_T$) & Contract price ($F_0$) \\
+                \hline
+            \textbf{Credit risk} & No (counter party is clearinghouse) & Yes \\
+                \hline
+            \textbf{Duration}    & Traded continuously & Held until maturity \\
+                \hline
+            \textbf{Cash flow}   & Daily + Margin Req. & At delivery \\
+            \hline
+            \label{tab:futures_forwards}
+        \end{xltabular}
+
+    \subsection{Commodities}
+        \label{sec:commodities}
+
+        Commodities represent fundamental raw materials or primary agricultural products
+        that serve as the foundation of global trade and economic activity.
+        Examples include metals such as gold, energy resources like oil,
+        and agricultural products such as wheat and coffee. These assets are traded on organised commodity exchanges,
+        where their prices are governed by the dynamic interplay of supply and demand.
+        The inherent volatility in commodity prices is influenced by a variety of factors,
+        including weather variability, geopolitical uncertainties,
+        and shifts in global economic conditions\cite{wilmott_paul_2007}.
+        Understanding and modelling such price behaviour,
+        particularly through quantitative methods rooted in mathematics and statistics,
+        is of critical importance in developing robust risk management and trading strategies
 
 %    In practice, turbine manufactors provide a table of values for the power output at discrete wind speeds.
 %    Within the range of these two critical thresholds,
@@ -96,21 +186,413 @@
 %        \item The spacial factor to diferentiate turbine surroundings.
 %    }
 
-\section{Descrite-Time Modelling}
+\section{Descrite-Time Modelling: Binomial Model}
     \label{sec:desc_time}
 
-    The focus of this section is to model wind power generation based on historical real and forecasted data.
-    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
-    data streams influenced by multifaceted predictors or features.
-    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+    The Black-Scholes formula caused a shock to the financial world when it
+    was published in 1973~\cite{black_pricing_1973}. Only later did the
+    financial community realize that the formula was a special case of a more general theory of option pricing.
+    The mathematical background based on diffusion models, coupled with a strong economic principles,
+    might have seemed too complex for some practitioners at the time.
+    This motivated the research for a simpler framework to price options, that would preserve important
+    properties of the Black-Scholes model, such as no-arbitrage and risk-neutral pricing. \\
 
-    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
-    time series applications.
-    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
-    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+    The foundational work of \gls{crr}~\cite{cox_option_1979} introduced the binomial option pricing model,
+    providing a discrete-time method for valuing options.
+    From the perspective of numerical analysis within the Black-Scholes framework,
+    the validity of the binomial approach derives from Donsker's Theorem~\cite{billingsley_convergence_1999}.
+    This theorem establishes the weak convergence of suitably scaled random walks to Brownian motion.
+    Specifically, as the time discretization within the binomial model is refined, as $\delta t \to 0$,
+    the sequence of binomial processes converges weakly to a geometric Brownian motion.
 
+    The binomial model became widely used as a numerical pricing tool for American and exotic options,
+    when analytical solutions are not available.
+    The model's simplicity and intuitive appeal made it a popular choice for teaching option pricing theory,
+    as the arbitrage-free pricing principle, market completeness, and risk-neutral valuation are easily demonstrated.
+
+    \subsection{Option Princing and the Binomial Tree}
+        \label{sec:bin_tree}
+
+    An n-period binomial tree is a discrete-time stochastic model for the dynamic evolution of an
+    underlying asset's price over time. Can be represented such that
+    \begin{equation}
+        S^{(n)}(i+1) =
+            \begin{cases}
+                u S^{(n)}(i), & \text{if the price increases from period } i \text{ to } i+1, \\
+                d S^{(n)}(i), & \text{if the price decreases from period } i \text{ to } i+1.
+            \end{cases}
+        \label{eq:equation}
+    \end{equation}
+    where $u$ is the up factor and $d$ is the down factor. Coupled with each upward or downward movement,
+    a probability $p$ can be assigned to the up movement, and $1-p$ to the down movement,
+    see Fig.~\ref{fig:binomial_tree}.
+
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[scale=1, every node/.style={scale=0.8}, every path/.style={thick}]
+
+            % Nodes
+            \node[fill=black, circle, inner sep=1.5pt] at (0,0) (N0) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (2,1) (N11) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (2,-1) (N12) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (4,2) (N21) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (4,0) (N22) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (4,-2) (N23) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (6,3) (N31) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (6,1) (N32) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (6,-1) (N33) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (6,-3) (N34) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (8,4) (N41) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (8,2) (N42) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (8,0) (N43) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (8,-2) (N44) {};
+            \node[fill=black, circle, inner sep=1.5pt] at (8,-4) (N45) {};
+
+            % Lines
+            \draw (N0) -- (N11);
+            \draw (N0) -- (N12);
+
+            \draw (N11) -- (N21);
+            \draw (N11) -- (N22);
+            \draw (N12) -- (N22);
+            \draw (N12) -- (N23);
+
+            \draw (N21) -- (N31);
+            \draw (N21) -- (N32);
+            \draw (N22) -- (N32);
+            \draw (N22) -- (N33);
+            \draw (N23) -- (N33);
+            \draw (N23) -- (N34);
+
+            \draw (N31) -- (N41);
+            \draw (N31) -- (N42);
+            \draw (N32) -- (N42);
+            \draw (N32) -- (N43);
+            \draw (N33) -- (N43);
+            \draw (N33) -- (N44);
+            \draw (N34) -- (N44);
+            \draw (N34) -- (N45);
+
+            % Labels
+            \node[above] at (N0) {$1$};
+            \node[left]  at (N0) {$S_0$};
+            \node[above] at (N11) {$p$};
+            \node[below] at (N12) {$1-p$};
+
+            \node[above] at (N21) {$p^2$};
+            \node[above] at (N22) {$2p(1-p)$};
+            \node[below] at (N23) {$(1-p)^2$};
+
+            \node[above] at (N31) {$p^3$};
+            \node[above] at (N32) {$3p^2(1-p)$};
+            \node[below] at (N33) {$3p(1-p)^2$};
+            \node[below] at (N34) {$(1-p)^3$};
+
+            \node[above] at (N41) {$p^4$};
+            \node[above] at (N42) {$4p^3(1-p)$};
+            \node[above] at (N43) {$6p^2(1-p)^2$};
+            \node[below] at (N44) {$4p(1-p)^3$};
+            \node[below] at (N45) {$(1-p)^4$};
+
+
+            % Payoff Values
+            \node[right] at (9.3,4) {$u^4S$};
+            \node[right] at (9.3,2) {$u^3vS$};
+            \node[right] at (9.3,0) {$u^2v^2S$};
+            \node[right] at (9.3,-2) {$uv^3S$};
+            \node[right] at (9.3,-4) {$v^4S$};
+
+            % Vertical Lines
+            \draw[dashed] (9,4.5) -- (9,-4.5);
+            \draw[dashed] (10.5,4.5) -- (10.5,-4.5);
+
+            % Asset Prices Label
+            \node[below] at (9.7,-5) {$S^{N}_{j}$};
+
+        \end{tikzpicture}
+        \caption{Binomial Tree for Option Pricing.}
+        \label{fig:binomial_tree}
+    \end{figure}
+
+    where $S^{N}_{j}$ is the price at time step N and represents the asset price at the $j$-th tree's node.
+
+    A relation is required $u > d$ and $S^{(n)}(0) = S_0$ is the initial price.
+    A discrete-time framework is considered with equidistant time steps,
+    such that $\delta t = T/n$ represents the length of each period which $T$ denotes the time to maturity
+    and n is the number of periods.
+    The \gls{crr} model employs a recombining binomial tree,
+    achieved by imposing the condition $u = 1/d$.
+    This recombination property,
+    where an upward movement followed by a downward movement (or vice versa) results in the same price,
+    significantly reduces the computational complexity.
+    Specifically, a recombining tree with $n$ time steps contains $2n+1$ nodes,
+    as opposed to $2^n$ nodes in a general non-recombining binomial tree.
+    This enhanced computational efficiency makes the \gls{crr} model particularly attractive for practical applications.
+    Furthermore, the recombining structure facilitates the convergence of continuous-time processes,
+    such as geometric Brownian motion in the limit as $\delta t \to 0$~\cite{billingsley_convergence_1999}.
+
+    The risk-free rate is constant and assumed to be equal to $r$.
+    In addition to trading this asset,
+    an investor can also invest in a back account with a continuously compounded interest rate $r$.
+    Considering continuous compounding, the value of the back account grows by the factor $e^{r\delta t}$ in each period.
+    The no-arbitrage principle implies that
+
+    \begin{equation}
+        u > e^{r\delta t} > d
+        \label{eq:no_arbitrage_ud}
+    \end{equation}
+
+    If the above relation is violated, one can generate money without investing their own funds by either
+    selling the stock short $ u < e^{r \delta t}$ or
+    financing a stock purchase by a credit (in the case of $d > e^{r \delta t} $).
+
+    The binomial method can therefore be applied as a discrete time numerical valuation of options,
+    as an approximation to the Black-Scholes model.
+    It is required that $p$ be chosen such that the first and second moment of the one-period log-returns is preserved,
+    so that the binomial stock price framework approximates Black-Scholes.
+    The parameter specification initially suggested made by \gls{crr} was
+
+   \begin{equation}
+        u = e^{\sigma \sqrt{\Delta t}}, \quad
+        d = \frac{1}{u}, \quad
+        p = \frac{1}{2} \left( 1 + \left( r - \frac{1}{2} \sigma^2 \right) \frac{1}{\sigma} \sqrt{\Delta t} \right)
+        \label{eq:crr_parameters}
+   \end{equation}
+
+    note that the parameter $u=e^{\sigma \sqrt{\delta t}}$ comes from the need to match the variance of the
+    binomial model to that of the Black-Scholes lognomal underlying price process.
+    This methodology provides a closed-form expression for $u$, $d$ and $p$,
+    making its implementations straightforward and computationally efficient. \\
+
+    To implicitly include both the drift and volatility in the binomial model,
+    Wilmott~\cite{wilmott_paul_2007} derives parameters $u$, $d$ and $p$ to allow more flexibility in adjusting
+    for approximations or alternative assumptions.\ Despite slight differences,
+    both methods follow the same principles of a lognormal underlying price process, risk-neutral valuation,
+    moment matching and both require $\delta t$ to be small enough to ensure convergence to the Black-Scholes model.
+
+    \begin{equation}
+        puS + (1 - p)dS =
+            SE \left[ e^{\left(\mu -\frac{1}{2} \sigma^2 \right) \delta t + \sigma \phi \sqrt{\delta t}} \right] =
+            S e^{\mu \, \delta t}
+        \label{eq:pw_drift}
+    \end{equation}
+
+    where $\phi$ is the standard normal random variable $\phi \sim N(0,1)$.
+    Taking the expectation of S in the Black-Scholes model, we have
+
+    \begin{equation}
+        pu + (1 - p)d = e^{\mu \ \delta t}
+        \label{eq:pw_s_expectation]}
+    \end{equation}
+
+    Rearranging equation~\ref{eq:pw_s_expectation]}
+
+    \begin{equation}
+        p = \frac{e^{\mu \delta t} - d}{u - d}
+        \label{eq:pw_p}
+    \end{equation}
+
+    The probability $p$ here is obtained by matching the expectation of the binomial random walk with the expected
+    value of the stochastic geometric Brownian motion as the underlying price process. \\
+
+    For the binomial walk, to have the correct variance, we have again to match the variance of the binomial model
+    with that of the Black-Scholes lognormal underlying price process.
+    The variance is defined as $V[x] = E(x^2) - E(x)^2$.
+    For both the lognormal process and the binomial walk, the variance can be expressed as follows:
+
+    \begin{align}
+        V[S] &= e^{(2\mu + \sigma^2)\delta t} - \left(e^{\mu \delta t}\right)^2 \\
+        V[BinWalk] &= p u^2 + (1 - p) d^2 - \left(p u + (1 - p) d\right)^2
+        \label{eq:pw_variance}
+    \end{align}
+
+    Then, from the equations~\ref{eq:pw_variance} above
+
+    \begin{equation}
+        p u^2 + (1 - p) d^2 = e^{(2\mu + \sigma^2)\delta t}
+        \label{eq:pw_bw_variance}
+    \end{equation}
+
+    Using the relation to ensure node recombination $u = 1/d$, together with the equations
+    ~\ref{eq:pw_p} and~\ref{eq:pw_bw_variance}, we can get the following expression for the upward factor $u$:
+
+    \begin{equation}
+        u = \frac{1}{2} \left( e^{-\mu \delta t} + e^{(\mu + \sigma^2)\delta t} \right)
+            + \frac{1}{2} \sqrt{\left( e^{-\mu \delta t} + e^{(\mu + \sigma^2)\delta t} \right)^2 - 4}
+        \label{eq:pw_u}
+    \end{equation}
+
+    \subsection{Binomial Option Pricing}
+        \label{sec:bin_option_pricing}
+
+    An option is a financial derivative that provides the holder with the right, but not the obligation,
+    to either purchase or sell an underlying asset at a predetermined price, referred to as the strike price,
+    denoted by $K$.
+    The options that can only be exercised at the expiration date are known as European options,
+    while those that can be exercised at any time before the expiration date are referred to as American options.
+    Options are categorized into two types:
+    \begin{itemize}
+        \item \textbf{Call Option}: Grants the holder the right to purchase the underlying asset. \\
+        The payoff is: \( \max(S_T - K, 0) \)
+        \item \textbf{Put Option}: Grants the holder the right to sell the underlying asset. \\
+        The payoff is: \( \max(K - S_T, 0) \)
+    \end{itemize}
+
+    The no-arbitrage principle can be extended to a generalized framework by considering a stock with an initial price
+    $S_0$ and an associated option (or any derivative dependent on the stock) with a current value of $V$.
+    If the stock price rises to $S_0 u$, the option's payoff is $V_u$, and if the stock price falls to $S_0 d$,
+    the option's payoff is $V_d$.
+
+    To analyze the pricing, we construct a portfolio consisting of one option and short position in a quantity $\Delta$
+    of the underlying.
+    The value of $\Delta$ is derived such that the portfolio becomes risk-neutral.
+    A risk-free portfolio means that the value of the portfolio is the same regardless of whether
+    the stock price moves up or down.
+    To achieve this, we set the values of the portfolio equal in the two scenarios:
+
+    \begin{equation}
+        S_0 u \Delta- V_u = S_0 d \Delta - V_d
+        \label{eq:risk_neutral}
+    \end{equation}
+
+    this means the amount of $\Delta$ should be
+
+    \begin{equation}
+        \Delta = \frac{V_u - V_d}{(u - d) S_0}
+        \label{eq:delta}
+    \end{equation}
+
+    In this case, the portfolio is risk-less and, for there to be no arbitrage opportunities,
+    it must earn the risk-free interest rate.
+    Equation~\ref{eq:delta} shows that $\Delta$ is the ratio of the change in the option price to the change
+    in the stock price as we move between the nodes at time $T$.
+
+    By the no-arbitrage principle, the cost of setting up the portfolio must be equal to the present value of the portfolio.
+
+    \begin{equation}
+        S_0 \Delta - V = (S_0 u \Delta - V_u)e^{-rT}
+        \label{eq:no_arbitrage}
+    \end{equation}
+
+    If we denote the risk-free interest rate by $r$ for the present value,
+    assuming continuous discounting $e^{-rT}$.
+    Rearrange the equation to get the option value $V$ and substitute $\Delta$ from equation~\ref{eq:delta}
+
+    \begin{equation}
+        V = e^{-rT} [p V_u + (1 - p) V_d]
+        \label{eq:option_value}
+    \end{equation}
+
+    where
+
+    \begin{equation}
+        p = \frac{e^{rT} - d}{u - d}
+        \label{eq:prob_value}
+    \end{equation}
+
+    American-style exercise can be effectively implemented within a binomial framework.
+    Consider dividing the life of an American option into $N$ intervals, each of length $\Delta t$.
+    The $j$th node at time $i \Delta t$ will be denoted as the $(i, j)$ node,
+    where $0 \leq i \leq N$ and $0 \leq j \leq i$.
+    Let $V_{i,j}$ represent the value of the option at the $(i, j)$ node.
+    The underlying asset price at the $(i, j)$ node is given by $S_0 u^j d^{i-j}$.
+    For a call option, its value at time $T$ (the expiration date) is expressed as
+
+    \begin{equation}
+        V_{N,j} = \max
+            \left\lbrace
+                S_0 u^j d^{N-j} - K, 0
+            \right\rbrace, \quad j = 0, 1, \ldots, N
+        \label{eq:call_option}
+    \end{equation}
+
+    As presented in~\ref{fig:binomial_tree},
+    there is a probability $p$ of moving from the $(i, j)$ node at time $i \delta t$ to the $(i+1, j+1)$
+    node at time $(i+1) \delta t$, and a probability $1 - p$ of moving from the $(i, j)$ node at
+    time $i \delta t$ to the $(i+1, j)$ node at time $(i+1) \delta t$.
+    Assuming no early exercise (European), a risk-neutral valuation gives:
+
+    \begin{equation}
+        V_{i,j} = e^{-r \Delta t} \left[ p V_{i+1, j+1} + (1 - p) V_{i+1, j} \right]
+        \label{eq:european_option}
+    \end{equation}
+
+    for $0 \leq i \leq N-1$ and $0 \leq j \leq i$.
+    To take account of early exercise (American),
+    this value for $V_{i,j}$ must be compared with the option's intrinsic value, so that for a call:
+
+    \begin{equation}
+        V_{i,j} = \max
+            \left\lbrace
+                S_0 u^j d^{i-j} - K, \, e^{-r \Delta t} \left[ p V_{i+1, j+1} + (1 - p) V_{i+1, j} \right]
+            \right\rbrace
+        \label{eq:american_call_option}
+    \end{equation}
+
+    The primary distinction between European and American option pricing lies in the ability to exercise
+    an American option at any point prior to expiration.
+    Consequently, at each node in the pricing model,
+    the value of the option must be compared to its intrinsic value to determine whether early exercise is optimal.
+
+    Below is a Python code snippet that implements the binomial option pricing model for the American option.
+    The European option is also implemented in the same way, using equation~\ref{eq:european_option} instead.
+    To implement the model efficiently, the code uses the NumPy library and operations are fully vectorized.
+    Due the recursive nature of the model, the code uses a backward induction approach to calculate the option price.
+
+    \begin{lstlisting}[
+       language=Python,
+       caption={Python Code: American\_option\_price},
+       label={lst:american_option_price}
+    ]
+def american_option_price(S0, sigma, r, K, T, N, option_type):
+   # Time step
+   dt = T / N
+
+   # Discount factor
+   disc = np.exp(-r * dt)
+
+   # Up and down factors
+   temp1 = np.exp((r + sigma ** 2) * dt)
+   temp2 = 0.5 * (temp1 + disc)
+   u = temp2 + np.sqrt(temp2 ** 2  - 1)
+   d = 1 / u
+
+   # Probability
+   p = (np.exp(r * dt) - d) / (u - d)
+
+   # Generate stock prices at maturity
+   j = np.arange(N + 1)
+   S = S0 * (u ** j) * (d ** (N - j))
+
+   payoff = (S - K) if option_type == "call" else (K - S)
+   v_mat = np.maximum(payoff, 0)
+
+   V = np.zeros((N + 1, N + 1))
+   V[:,-1] = v_mat
+
+   # Backward induction through the tree
+   for n in range(N - 1, -1, -1):
+       # Adjust stock prices from the previous step
+       S = S[:-1] / d
+       start_idx = N - n
+       end_idx = -N-1+n
+
+       disc_value = (
+           p * V[start_idx:, n+1] + (1 - p) * V[start_idx-1:-1, n+1]
+       ) * disc
+
+       # Calculate payoff based on option type
+       payoff = (S - K) if option_type == "call" else (K - S)
+
+       # Update option values
+       V[start_idx:, end_idx] = np.maximum(disc_value, np.maximum(payoff, 0))
+
+   # Return the option values in a upper triangular matrix
+   return V[::-1]
+   \end{lstlisting}
+
+
+    
 
 \section{Continuous-Time Modelling}
     \label{sec:cont_time}
@@ -119,29 +601,31 @@
     Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
     data streams influenced by multifaceted predictors or features.
     This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics, and weather conditions.\\
 
     One interest of this thesis is to explore recent techniques that work well for feature selection problems in
     time series applications.
     A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
     Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+    the~\gls{bsts} model is a powerful tool for feature selection,
+time series forecasting, and inferring causal relationships. \\
 
 
 \section{Partial Differential Equations}
     \label{sec:pde}
 
     The focus of this section is to model wind power generation based on historical real and forecasted data.
-    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
+    Conventional assumptions, like data independence and identical distribution, fall short when handling time-stamped
     data streams influenced by multifaceted predictors or features.
     This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics, and weather conditions.\\
 
     One interest of this thesis is to explore recent techniques that work well for feature selection problems in
     time series applications.
     A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
     Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+    the~\gls{bsts} model is a powerful tool for feature selection,
+time series forecasting, and inferring causal relationships. \\
 
 
 \section{Monte Carlo Simulation}
@@ -151,13 +635,14 @@
     Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
     data streams influenced by multifaceted predictors or features.
     This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics, and weather conditions.\\
 
     One interest of this thesis is to explore recent techniques that work well for feature selection problems in
     time series applications.
     A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
     Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+    the~\gls{bsts} model is a powerful tool for feature selection,
+time series forecasting, and inferring causal relationships. \\
 
 
 \section{Sensitity Analysis}
@@ -167,13 +652,14 @@
     Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
     data streams influenced by multifaceted predictors or features.
     This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics and weather conditions.\\
+    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics, and weather conditions.\\
 
     One interest of this thesis is to explore recent techniques that work well for feature selection problems in
     time series applications.
     A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
     Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection, time series forecasting and inferring causal relationships. \\
+    the~\gls{bsts} model is a powerful tool for feature selection,
+time series forecasting, and inferring causal relationships. \\
 
 
 
