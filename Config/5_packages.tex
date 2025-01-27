@@ -68,9 +68,19 @@
 
 % \usepackage{minted}    % Fontification of source code listings
 
-% \usepackage{listings}    % Fontification of source code listingsConfig/5_packages.tex
+\usepackage{listings}    % Fontification of source code listingsConfig/5_packages.tex
 %                          % In alternative, use the package “minted” (highly recomended)
 
+\lstset{
+       language=Python,
+       frame=single,
+       backgroundcolor=\color{lightgray!10},
+       basicstyle=\ttfamily\small,
+       keywordstyle=\color{blue}\bfseries,
+       commentstyle=\color{green!50!black},
+       stringstyle=\color{orange},
+       columns=fullflexible,
+}
 % \lstset{
 %     captionpos=t,
 %     basicstyle={\ttfamily\footnotesize},
