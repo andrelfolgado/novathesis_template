@@ -55,13 +55,14 @@
         Equities are traded on stock exchanges, and their prices are determined by supply and demand in the market.
         Traditional Equity investors can make money through:
 
-        \begin{enumerate}
+        \begin{itemize}
             \item Capital appreciation: Investors buy shares with the expectation that the value will increase over time,
                 allowing them to sell at a higher price and realise a profit.
             \item Dividends: Companies distribute a portion of their profits to shareholders in the form of dividends.
             \item Short selling: Investors can also make money by selling borrowed shares with the intention of buying
                 them back at a lower price.
-        \end{enumerate}
+            \label{item:equity_investing}
+        \end{itemize}
 
         In addition to traditional equity investments,
         investors can also invest in equity derivatives, such as options and futures,
@@ -541,10 +542,12 @@
 
     \begin{lstlisting}[
        language=Python,
-       caption={Python Code: American\_option\_price},
+       caption={Python Code: American option price},
        label={lst:american_option_price}
     ]
 import numpy as np
+
+
 def binomial_recomb_uptriang(a, n):
     # Create a grid of indices for powers
     rows, cols = np.triu_indices(n + 1)
@@ -597,13 +600,513 @@ def american_option_price(S0, sigma, r, K, T, N, option_type):
    \end{lstlisting}
 
 
-\section{Continuous-Time Modelling}
+\section{Continuous-Time Modelling: Black-Scholes Model}
     \label{sec:cont_time}
 
 
     The Black-Scholes model, introduced in 1973 by Fischer Black and Myron Scholes,
-    transformed the field of quantitative finance by providing a rigorous mathematical framework for pricing European-style options \cite{black_pricing_1973}. The model derives theoretical estimates of option prices based on a set of key factors and assumptions.
+    transformed the field of quantitative finance by providing a rigorous mathematical framework for
+    pricing European-style options~\cite{black_pricing_1973}.
+    The model derives theoretical estimates of option prices based on a set of key factors and
+    assumptions~\cite{wilmott_paul_2007}:
+    \enumerate{
+        \item The underlying asset follows a lognormal stochastic process
+        \item The risk-free interest rate is a known function of time
+        \item There are no dividends paid on the underlying asset
+        \item There are no transaction costs or taxes
+        \item Delta hedging is done continuously
+        \item The market is frictionless, with no arbitrage opportunities
+    }
 
+    The reasoning underlying the equation, in essence, parallels to the methodology applied in
+    the binomial lattice~\ref{sec:desc_time}.
+    At every discrete time step, a selection of two obtainable financial instruments is performed,
+    which guides the assembly of a portfolio.
+    The design of this portfolio is such that it emulates the local dynamics of the derivative security. \\
+
+    Let the price $S$ denote the underlying security be governed by a geometric Brownian motion process
+    over a time interval $[0, T]$ described by the stochastic differential equation:
+
+    \begin{equation}
+        dS = \mu S dt + \sigma S dW
+        \label{eq:geometric_brownian}
+    \end{equation}
+
+    where $\mu$ is the drift rate (expected return), $\sigma$ is the volatility and $W$ is a
+    standard Wiener process.
+
+    Using $\Pi$ to represent the portfolio value, the Black-Scholes model is derived by constructing a
+    long option position and a short position in the underlying asset in some quantity $\Delta$,
+    similar to what was donein the binomial model~\ref{eq:risk_neutral}:
+
+    \begin{equation}
+        \Pi = V(S,t) - \Delta S
+        \label{eq:portfolio_value}
+    \end{equation}
+
+    Therefore, it can be surmised that the fluctuations in the portfolio's value can be attributed to the temporal
+    changes in the option's value and its underlying asset.
+
+    \begin{equation}
+        d\Pi = dV - \Delta dS
+        \label{eq:portfolio_fluctuation}
+    \end{equation}
+
+    Applying Itô's lemma to the option value $V(S,t)$~\cite{kuo_introduction_2006}, we have
+
+    \begin{gather}
+        \begin{split}
+            dS(t)
+                = g(S,t) dt + f(S,t) dW(t) \\
+        \end{split}
+        \label{eq:itos_process}
+            \\
+        \begin{split}
+            dV(S, t)
+                =
+                    \left(
+                        \frac{\partial V}{\partial t}
+                        + \frac{\partial V}{\partial S} g(S,t)
+                        + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} f(S,t)^2
+                    \right) dt
+                    + \frac{\partial V}{\partial S} f(t) dW(t)
+        \end{split}
+        \label{eq:itos_lemma}
+            \\
+        \begin{split}
+            g(S,t) = \mu S, \quad f(S,t) = \sigma S
+        \end{split}
+        \label{eq:itos_functionals}
+    \end{gather}
+
+    applying eq.~\ref{eq:itos_functionals} into eq.~\ref{eq:itos_lemma} we have
+
+    \begin{equation}
+        dV =
+            \left(
+                \frac{\partial V}{\partial t}
+                    + \frac{\partial V}{\partial S} \mu S
+                    + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2
+            \right) dt
+            + \frac{\partial V}{\partial S} \sigma S dW
+        \label{eq:itos_bs}
+    \end{equation}
+
+    Observe that the component situated within the parentheses, whose value is contingent upon $dt$,
+    is deterministic in nature.
+    The stochastic part of the equation is the last term,
+    which is the product of the option's delta and the Wiener process.
+
+    Substituting eq.~\ref{eq:itos_bs} into eq.~\ref{eq:portfolio_fluctuation} we have
+
+    \begin{equation}
+        d\Pi =
+            \left(
+                \frac{\partial V}{\partial t}
+                    + \frac{\partial V}{\partial S} \mu S
+                    + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2
+            \right) dt
+            + \frac{\partial V}{\partial S} \sigma S dW
+            - \Delta dS
+        \label{eq:portfolio_fluctuation_bs}
+    \end{equation}
+
+    now including back the underlying asset price $S$~eq.\ref{eq:geometric_brownian} we have
+
+    \begin{equation}
+        d\Pi =
+            \left(
+                \frac{\partial V}{\partial t}
+                    + \frac{\partial V}{\partial S} \mu S
+                    + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2
+            \right) dt
+            + \frac{\partial V}{\partial S} \sigma S dW
+            - \Delta \left( \mu S dt + \sigma S dW \right)
+        \label{eq:portfolio_fluctuation_bs_s}
+    \end{equation}
+
+    To eliminate the stochastic term, the parameter $\Delta$ is chosen such that the coefficient of $dW$ is zero.
+    This condition is known as the delta-hedging strategy, which ensures that the portfolio is risk-free.
+    Delta hedging is an example of a dynamic hedging strategy.
+    From one time step to the next the quantity $\frac{\partial V}{\partial S}$ changes, since it is, like V,
+    a function of the ever-changing variablesS and t.
+    This means that the perfect hedge must be continually rebalanced.
+    Choosing carefully the quantity $\Delta$ we have
+
+    \begin{equation}
+        \Delta = \frac{\partial V}{\partial S}
+        \label{eq:delta_hedge}
+    \end{equation}
+
+    Substituting eq.~\ref{eq:delta_hedge} into eq.~\ref{eq:portfolio_fluctuation_bs_s} we have
+
+    \begin{equation}
+        d\Pi =
+            \left(
+                \frac{\partial V}{\partial t}
+                + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2
+            \right) dt
+        \label{eq:portfolio_fluctuation_bs_s_delta}
+    \end{equation}
+
+    With respect to the delta-hedging strategy implemented, the term $\frac{\partial V}{\partial S} \mu S dt$ dissipates.
+    This approach ascertains a risk-free portfolio by concurrently eliminating both the stochastic and drift terms.
+    From an economic perspective, the rationale behind this phenomenon is anchored on the risk elimination
+    brought about by a perfect hedge using the underlying asset.
+    As such, there is no reward corresponding to unnecessary risk exposure.
+    Only the risk-free rate of return is incorporated in the equation.
+    This fundamental principle implies that with a mutual agreement on an asset's volatility,
+    there is a likelihood of agreeing on the valuation of its derivatives,
+    despite possible deviations in the estimates of the drift.  \\
+
+    Examining the implications of eq.~\ref{eq:portfolio_fluctuation_bs_s_delta} culminates in the derivation that
+    it is entirely devoid of risk.
+    An invariable change in the portfolio value, denoted as $\Pi$, which is risk-free, should align coherently with
+    the appreciation derived from investing an equivalent amount of capital in a risk-free interest-bearing account:
+
+    \begin{equation}
+        d\Pi = r \Pi dt
+        \label{eq:risk_free}
+    \end{equation}
+
+    Substituting into eq.~\ref{eq:portfolio_fluctuation_bs_s_delta} eq.~\ref{eq:risk_free}, taking into account the
+    portfolio value $\Pi$ from eq.~\ref{eq:portfolio_value} and $\Delta$~\ref{eq:delta_hedge}, we have:
+
+    \begin{equation}
+        \left(
+            \frac{\partial V}{\partial t}
+            + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2
+        \right) dt
+        = r \left( V - \frac{\partial V}{\partial S} S \right) dt
+        \label{eq:portfolio_fluctuation_bs_s_delta_r}
+    \end{equation}
+
+    Rearranging the terms in eq.~\ref{eq:portfolio_fluctuation_bs_s_delta_r} we have the Black-Scholes partial
+    differential equation:
+
+    \begin{equation}
+        \frac{\partial V}{\partial t}
+        + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2
+        + r S \frac{\partial V}{\partial S}
+        - r V = 0
+        \label{eq:black_scholes}
+    \end{equation}
+
+    To solve this partial differential equation, the Black-Scholes model requires the specification of the option's
+    boundary conditions.
+    For a European call option, the boundary conditions are:
+    \begin{itemize}
+        \item At \textbf{$T$}: the option's value is the payoff: $V(S, T) = \max(S - K, 0)$
+        \item As \textbf{$S \to 0$}: the option's value approaches zero: $V(0, t) = 0$
+        \item As \textbf{$S \to \infty$}: the option's value approaches the stock price:
+            $V(S, t) \approx S - Ke^{-r\left( T-t \right)}$
+        \label{eq:boundary_conditions}
+    \end{itemize}
+
+    The Black-Scholes eq.~\ref{eq:black_scholes} can be accurately interpreted as a reaction-convection-diffusion
+    equation. It is a parabolic partial differential equation, meaning that it is a second-order derivative with respect
+    to the underlying asset price $S$ and first-order derivative with respect to time $t$.
+    Equations of this type are commonly used in physics to model phenomena such as heat conduction and diffusion.
+    Making a close analogy to the heat equation, its terms can be interpreted as follows:
+
+    \begin{itemize}
+        \item $\frac{\partial V}{\partial t}$: represents the option's time decay
+        \item $\frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2$:
+        diffusion component, which quantifies of the inherent volatility in the price of the option.
+        \item $r S \frac{\partial V}{\partial S}$: is the convection term, which accounts for the option's drift
+        \item $r V$: is the reaction term, which describes for the risk-free interest rate
+        \label{eq:bs_terms}
+    \end{itemize}
+
+    The strategy for solving the Black-Scholes equation is to transform it into a heat equation,
+    which is a well-known partial differential equation with a known solution.
+
+
+    We start by switching from the present value of the option to a future value perspective.
+    Since the payoff takes place at time $T$ but we are valuing it at the earlier time $t$,
+    we introduce a varible $\tau = T - t$, since we are solving the equation backwards in time.
+    Defining the derivative value function $V(S,t)$, as the present value of the option to future value terms:
+
+    \begin{equation}
+        V(S,\tau) = e^{-r \tau},U(S,\tau)
+        \label{eq:future_val}
+    \end{equation}
+
+    Substituting eq.~\ref{eq:future_val} into eq.~\ref{eq:black_scholes} and rearranging the terms to have:
+
+    \begin{equation}
+        \frac{\partial U}{\partial \tau}
+        = \frac{1}{2} \sigma^2 \frac{\partial^2 U}{\partial S^2}
+        + rS \frac{\partial U}{\partial S}
+        \label{eq:heat_eq}
+    \end{equation}
+
+    Since stock prices often follow a log-normal process, we define $z = ln(S)$.
+    This change of variables yields the following derivatives:
+
+    \begin{equation*}
+        \begin{aligned}
+            \frac{\partial}{\partial S} &= e^{-z}\,\frac{\partial}{\partial z}
+        \end{aligned}
+        \qquad
+        \begin{aligned}
+            \frac{\partial^2}{\partial S^2} &= e^{-2z}\,\frac{\partial^2}{\partial z^2}
+            - e^{-2z}\,\frac{\partial}{\partial z}
+        \end{aligned}
+    \end{equation*}
+
+    Substituting these derivatives into eq.~\ref{eq:heat_eq}, we have:
+
+    \begin{equation}
+        \frac{\partial U}{\partial \tau} =
+        \frac{1}{2} \sigma^2 \frac{\partial^2 U}{\partial z^2}
+        + \left( r - \frac{1}{2} \sigma^2 \right) \frac{\partial U}{\partial z}
+        \label{eq:heat_eq_z}
+    \end{equation}
+
+    We have thus recast the problem from 0 < S < $\infty$ (S is log-normal) to $-\infty$ < z < $\infty$. Moreover,
+    all coefficients in eq.~\ref{eq:heat_eq_z} are constant, which makes it a linear partial differential equation.
+
+    Finally, we define $U = u(x, \tau)$ and perform a shift in the $(z,\tau)$ coordinate system:
+
+    \begin{equation}
+        x = z + \left( r - \frac{1}{2} \sigma^2 \right) \tau
+        \label{eq:shift}
+    \end{equation}
+
+    This translation is analogous to using a forward price in place of the spot price.
+    Under this change of variables~\ref{eq:shift},
+    the Black-Scholes equation becomes the diffusion equation which has a known solution.
+
+    \begin{equation}
+        \frac{\partial u}{\partial \tau} = \frac{1}{2} \sigma^2 \frac{\partial^2 u}{\partial x^2}
+        \label{eq:diffusion_eq}
+    \end{equation}
+
+    The exact solution, applying the boundary conditions defined in~\ref{eq:boundary_conditions},
+    ~\cite{wilmott_paul_2007}, is given by the solution in the integral form:
+
+    \begin{equation}
+        V(S,t) =
+            \frac{e^{-r(T-t)}}{\sigma \sqrt{2 \pi (T-t)}}
+            \int_{0}^{\infty} e^{-\frac{1}{2}\left(
+                 \frac{\log(S/S') + (r - \frac{1}{2}\sigma^2)(T-t)}{\sigma \sqrt{T-t}}
+            \right)^2}
+            \text{Payoff}(S') \frac{dS'}{S'}
+        \label{eq:bs_solution_integral}
+    \end{equation}
+
+    where x' = log(S') and Payoff(S') is the payoff function of the option at expiration.
+
+    The payoff function for a European call option can be expressed as $max(S - K, 0)$.
+    Substituting this into the integral representation for the option price yields integrals involving $S$ and $K$
+    that can be rewritten in the form
+
+    \begin{equation}
+        \int_{d}^{\infty} e^{-\tfrac{1}{2} x^2} \,\frac{dx}{x}
+            \longrightarrow
+            N(x) = \int_{-\infty}^{x} e^{-\tfrac{1}{2} \phi^2} d\phi
+        \label{eq:form_integral}
+    \end{equation}
+
+    illustrating how these terms relate to the standard Normal cumulative distribution function.
+    Thus, the Black-Scholes model provides a closed-form solution for European options can be elegantly expressed:
+
+    \begin{equation}
+        C(S,t) = S N(d_1) - K e^{-r(T-t)} N(d_2)
+        \label{eq:bs_solution}
+    \end{equation}
+
+    where
+
+    \begin{equation}
+        \begin{aligned}
+            d_1 &= \frac{\log(S/K) + (r + \tfrac{1}{2}\sigma^2)(T-t)}{\sigma \sqrt{T-t}} \\
+            d_2 &= d_1 - \sigma \sqrt{T-t}
+        \end{aligned}
+        \label{eq:bs_d1_d2}
+    \end{equation}
+
+    To demonstrate a practical application of the Black--Scholes model for pricing call options,
+    we now consider a delta-hedged short call position.
+    One begins by assuming that the underlying asset is overvalued, intending to profit from the high option premium.
+    This position consists of two main components:
+    selling the call option and simultaneously purchasing a fraction (the delta) of the underlying asset.
+    The fraction purchased serves to hedge against adverse movements in the option’s price.
+
+    In this example, we construct what is termed a self-financing portfolio, meaning that there is
+    no initial net cash outflow. Specifically, the premium received from the sale of the call option
+    is used in conjunction with borrowing at the risk-free rate to acquire the delta amount of the
+    underlying asset. For simplicity, we do not incorporate rebalancing, which in a more general
+    treatment would involve continuously adjusting the delta-hedged position to maintain an effective hedge.
+    This lack of rebalancing is a notable simplification, as the Black-Scholes framework typically assumes
+    the ability to rebalance continuously throughout the life of the option.
+    The three main components of the position are:
+
+    \begin{itemize}
+        \item Short 1 call option: The premium received from selling the call option
+        \item Buy delta shares: The cost of purchasing the delta amount of the underlying asset
+        \item Borrow cash: The amount borrowed to net the initial cash flow to zero
+        \label{eq:position_components}
+    \end{itemize}
+
+    Below is a Python code snippet that demonstrates a delta-hedged short call position using the Black-Scholes model.
+    The code calculates the call price and delta using the Black-Scholes formula, sets up the position under the
+    following assumptions:
+
+    \begin{itemize}
+        \item Underlying price (S0) = \$100
+        \item Strike (K) = \$100
+        \item Time to maturity (T) = 1 year
+        \item Risk-free rate (r) = 5\%
+        \item Volatility (sigma) = 25\%
+        \item Terminal stock prices at maturity: \$90 and \$120
+        \label{eq:position_setup}
+    \end{itemize}
+
+    where for each terminal stock price ($[S < K ,S > K]$), the final payoff is calculated,
+    ignoring continuous rebalancing.
+    In practice, the delta of a call option can be computed using the Black-Scholes formula. Such that
+
+    \begin{equation}
+        \Delta = N(d_1)
+        \label{eq:delta_bs}
+    \end{equation}
+
+    where $N$ is the standard normal cumulative distribution function and $d_1$ is given by eq.~\ref{eq:bs_d1_d2}.
+
+    \begin{lstlisting}[
+       language=Python,
+       caption={Python Code: Delta hedge short call example},
+       label={lst:delta_hedged_short_call}
+    ]
+import numpy as np
+from scipy.stats import norm
+
+def black_scholes_call(
+    S: float,    # Underlying price
+    K: float,    # Strike price
+    T: float,    # Time to maturity
+    r: float,    # Risk-free rate
+    sigma: float # Volatility
+) -> tuple[float, float]:
+
+    # d1 and d2
+    d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+    d2 = d1 - sigma * np.sqrt(T)
+
+    # Call price
+    call_price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+
+    # Delta
+    delta_call = norm.cdf(d1)
+
+    return call_price, delta_call
+
+def delta_hedged_short_call_example(S, K, T, r, sigma, terminal_prices):
+
+    # Demonstrates a delta-hedged short call using:
+    #  - The short call option
+    #  - A delta hedge in the underlying
+    #  - A risk-free borrowing/lending position
+    #
+    # It sets up the position,\so the initial net cash flow is zero,
+    # then calculates the final P&L at two potential stock prices at maturity
+    # and ignoring continuous balancing.
+
+    # 1) Compute call price and delta using Black-Scholes
+    call_price, delta_call = black_scholes_call(S, K, T, r, sigma)
+
+    print("=== Black-Scholes Computations ===")
+    print(f"Underlying price (S0) = {S:.2f}")
+    print(f"Strike (K)            = {K:.2f}")
+    print(f"Time to maturity (T)  = {T:.2f} year(s)")
+    print(f"Risk-free rate (r)    = {r:.2%}")
+    print(f"Volatility (sigma)    = {sigma:.2%}\n")
+    print(f"Call Price = ${call_price:.2f}")
+    print(f"Call Delta = {delta_call:.3f}\n")
+
+    # 2) Set up the delta-hedged short call
+
+    # Short 1 call => collect premium
+    premium_received = call_price
+
+    # Buy delta_call shares => negative cashflow
+    cost_shares = delta_call * S
+
+    # Borrow the difference so initial net = 0
+    borrowed = cost_shares - premium_received
+
+    print("=== Position Setup (Initial) ===")
+    print(f"Short 1 call: +${premium_received:.2f} premium")
+    print(f"Buy {delta_call:.3f} shares: -${cost_shares:.2f}")
+    print(f"""Borrow cash:
+        +${borrowed:.2f} (to net initial cashflow to $0.00)\n""")
+
+    # 3) Evaluate final payoff for two terminal prices
+    #    ignoring continuous rebalancing
+
+    print("=== Payoff at Expiry (Discrete, No Rebalancing or Interest) ===")
+    for S_T in terminal_prices:
+        # Short call payoff: -(max(S_T - K, 0)) #plus the call premium
+        call_exercise_value = max(S_T - K, 0.0)
+        short_call_pnl = premium_received - call_exercise_value
+
+        # Stock payoff: final stock value minus what we paid at inception
+        stock_final_value = delta_call * S_T
+        stock_pnl = stock_final_value - cost_shares
+
+        # Bond/cash payoff: we owe exactly the borrowed amount
+        # (ignoring interest)
+        bond_pnl = borrowed - borrowed * (1+r)**T
+
+        total_pnl = short_call_pnl + stock_pnl + bond_pnl
+
+        print(f"Final Stock Price: S_T = ${S_T:.2f}")
+        print(f"  - Short Call P&L  = ${short_call_pnl:.2f}")
+        print(f"  - Stock P&L       = ${stock_pnl:.2f}")
+        print(f"  - Bond (Borrowed) = ${bond_pnl:.2f}")
+        print(f"  --> TOTAL P&L     = ${total_pnl:.2f}\n")
+
+
+delta_hedged_short_call_example(
+    S=100.0,
+    K=100.0,
+    T=1.0,
+    r=0.05,
+    sigma=0.25,
+    term_prices=[90.0, 120.0]
+
+# === Black-Scholes Computations ===
+Call Price = $12.34
+Call Delta = 0.627
+
+# === Position Setup (Initial) ===
+Short 1 call: +$12.34 premium
+Buy 0.627 shares: -$62.74
+Borrow cash: +$50.40 (to net initial cashflow to $0.00)
+
+# === Payoff at Expiry (Discrete, No Rebalancing or Interest) ===
+# Final Stock Price: S_T = $90.00
+  - Short Call P&L  = $12.34
+  - Stock P&L       = $-6.27
+  - Bond (Borrowed) = $-2.52
+  --> TOTAL P&L     = $3.54
+
+# Final Stock Price: S_T = $120.00
+  - Short Call P&L  = $-7.66
+  - Stock P&L       = $12.55
+  - Bond (Borrowed) = $-2.52
+  --> TOTAL P&L     = $2.36
+)
+   \end{lstlisting}
+
+    Final net P\&L from the three positions ends up very close to $0$,
+    apart from small differences due to ignoring that Delta would actually change as the stock price moved.
+    In an ideal Black–Scholes world with continuous rebalancing,
+    the result would hedge out the stock’s movements perfectly,
+    and your profit (if any) would come from the option’s implied volatility being overpriced compared to
+    realised volatility.
 
 \section{Partial Differential Equations}
     \label{sec:pde}
