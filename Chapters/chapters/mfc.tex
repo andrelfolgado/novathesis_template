@@ -192,10 +192,10 @@
 
     The Black-Scholes formula caused a shock to the financial world when it
     was published in 1973~\cite{black_pricing_1973}. Only later did the
-    financial community realize that the formula was a special case of a more general theory of option pricing.
-    The mathematical background based on diffusion models, coupled with a strong economic principles,
+    financial community realise that the formula was a special case of option's pricing theory.
+    The mathematical background based on diffusion models, coupled with a strong economic principle,
     might have seemed too complex for some practitioners at the time.
-    This motivated the research for a simpler framework to price options, that would preserve important
+    This motivated the research for a simpler framework to price options that would preserve important
     properties of the Black-Scholes model, such as no-arbitrage and risk-neutral pricing. \\
 
     The foundational work of \gls{crr}~\cite{cox_option_1979} introduced the binomial option pricing model,
@@ -599,16 +599,15 @@ def american_option_price(S0, sigma, r, K, T, N, option_type):
     return V
    \end{lstlisting}
 
-
-\section{Continuous-Time Modelling: Black-Scholes Model}
+\section{Continuous-Time Modelling: Black-Scholes Closed Form}
     \label{sec:cont_time}
-
 
     The Black-Scholes model, introduced in 1973 by Fischer Black and Myron Scholes,
     transformed the field of quantitative finance by providing a rigorous mathematical framework for
     pricing European-style options~\cite{black_pricing_1973}.
     The model derives theoretical estimates of option prices based on a set of key factors and
     assumptions~\cite{wilmott_paul_2007}:
+
     \enumerate{
         \item The underlying asset follows a lognormal stochastic process
         \item The risk-free interest rate is a known function of time
@@ -616,6 +615,7 @@ def american_option_price(S0, sigma, r, K, T, N, option_type):
         \item There are no transaction costs or taxes
         \item Delta hedging is done continuously
         \item The market is frictionless, with no arbitrage opportunities
+        \label{itm:bs_assumptions}
     }
 
     The reasoning underlying the equation, in essence, parallels to the methodology applied in
@@ -966,7 +966,8 @@ def american_option_price(S0, sigma, r, K, T, N, option_type):
 
     where for each terminal stock price ($[S < K ,S > K]$), the final payoff is calculated,
     ignoring continuous rebalancing.
-    In practice, the delta of a call option can be computed using the Black-Scholes formula. Such that
+    In practice, the delta of a call option can be computed using the Black-Scholes formula
+    ~\cite{luenberger_investment_2014}:
 
     \begin{equation}
         \Delta = N(d_1)
@@ -1076,7 +1077,7 @@ delta_hedged_short_call_example(
     r=0.05,
     sigma=0.25,
     term_prices=[90.0, 120.0]
-
+)
 # === Black-Scholes Computations ===
 Call Price = $12.34
 Call Delta = 0.627
@@ -1098,7 +1099,7 @@ Borrow cash: +$50.40 (to net initial cashflow to $0.00)
   - Stock P&L       = $12.55
   - Bond (Borrowed) = $-2.52
   --> TOTAL P&L     = $2.36
-)
+
    \end{lstlisting}
 
     Final net P\&L from the three positions ends up very close to $0$,
@@ -1108,739 +1109,753 @@ Borrow cash: +$50.40 (to net initial cashflow to $0.00)
     and your profit (if any) would come from the option’s implied volatility being overpriced compared to
     realised volatility.
 
-\section{Partial Differential Equations}
+\section{Numerical Methods: Black-Scholes PDE}
     \label{sec:pde}
 
-    The focus of this section is to model wind power generation based on historical real and forecasted data.
-    Conventional assumptions, like data independence and identical distribution, fall short when handling time-stamped
-    data streams influenced by multifaceted predictors or features.
-    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics, and weather conditions.\\
+    In many practical scenarios, deriving closed-form expressions for option valuations proves
+    to be challenging. Consequently, it becomes necessary to approach these problems using
+    numerical techniques. One commonly studied approach is the binomial method, see section~\ref{sec:desc_time},
+    in which a finite tree structure is constructed to model the evolution of the underlying asset price
+    from the current time until the expiry date. The binomial method may be interpreted as
+    a specialized technique for discretizing a partial differential equation. Its generalization
+    lies in finite-difference methods, where grids and meshes replace the notion of trees.
 
-    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
-    time series applications.
-    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
-    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection,
-time series forecasting, and inferring causal relationships. \\
+    When transforming a differential equation (e.g Black–Scholes equation) into
+    a difference equation, it is often more convenient to use a uniform grid rather than a
+    tree structure. This approach simplifies the process, and there exist numerous enhancements
+    that can improve both the efficiency and accuracy of the finite-difference method. In contrast,
+    the binomial method is less flexible regarding modifications.
+
+    One fundamental difference between binomial and finite-difference methods is how
+    diffusion (i.e., volatility) is represented. In the binomial approach, the diffusion is
+    embedded within the branching structure. By contrast, finite-difference methods fix the
+    underlying mesh and instead adjust certain parameters to capture changing diffusion
+    dynamics~\cite{wilmott_paul_2006}.
+
+    Using a finite-difference method, we need to define the domain of the problem,
+    going from continuous $D = \left\{S_{min} < S < S_{max}; 0 < \tau < T \right\}$ to a discrete grid.
+    Since a geometric Brownian motion stochastic process is assumed for the underlying, $S$ is log-normally distributed,
+    hence $S_{min} = 0$.
+
+    \begin{equation}
+        D =
+            \begin{cases}
+                S_i = i \delta S,   \delta S = \frac{S_{max}}{M},   i = 0, 1, \ldots, M \\
+                t_k = T - k \delta t,   \delta t = \frac{T}{N}, k = 0, 1, \ldots, N \\
+                V_{i}^{k} = V(S_i, t_k)
+            \end{cases}
+        \label{eq:grid_domain}
+    \end{equation}
+
+    where the grid is descritized by the number of points in the stock price dimension $M$
+    and the number of points in the time dimension $N$.
+
+    The Black-Scholes partial differential equation~\ref{eq:black_scholes} previously derived can be discretized
+    using a finite-difference method.
+    Applying it to the space state varibles we can easily compute the Greeks~\cite{hirsa_computational_2024}:
+
+    \begin{itemize}
+        \item Delta ($\Delta$):
+            \begin{equation}
+                \Delta \approx \frac{V_{j+1}^{m} - V_{j-1}^{m}}{2\Delta S}.
+                \label{eq:greek_delta}
+            \end{equation}
+
+        \item Gamma ($\Gamma$):
+            \begin{equation}
+                \Gamma \approx \frac{V_{j+1}^{m} - 2V_{j}^{m} + V_{j-1}^{m}}{(\Delta S)^{2}}
+                \label{eq:greek_gamma}
+            \end{equation}
+    \end{itemize}
+
+    The Delta was computed using the central difference method, which is a second-order accurate approximation,
+    whereas the Gamma comes from a Taylor series expansion of the Delta.
+    Both approximations have an error of the order $O(\Delta S^2)$~\cite{wilmott_paul_2006}.
+    With regards to the spacial discretization, the Black-Scholes equation can be approximated, substituting the
+    Delta and Gamma approximations, as follows:
+
+    \begin{equation}
+        a_{j} \left( V_{j+1}^{m} - 2V_{j}^{m} + V_{j-1}^{m} \right)
+        + b_{j} \left( V_{j+1}^{m} - V_{j-1}^{m} \right)
+        + c_{j} V_{j}^{m}
+        \label{eq:spacial_discretization}
+    \end{equation}
+
+    where the coefficients $a_{j}$, $b_{j}$, and $c_{j}$ are given by:
+
+    \begin{equation}
+            a_j = \frac{\sigma^2 S_{j}^2}{2(\Delta S)^2},  \qquad
+            b_j = \frac{r S_j}{2 \Delta S}, \qquad
+            c_j = -r
+        \label{eq:coefficients}
+    \end{equation}
+
+    The time discretization is mostly performed using a first-order accurate approximation. There three main schemes
+    used in the literature: explicit, implicit methods and combination of both, the Crank-Nicolson method.
+
+    \subsection{Explicit (Forward-Time, Central-Space)}
+    \label{sec:explicit}
+
+    In the explicit scheme, we use the forward difference in time to compute (the Greek $\theta$):
+
+    \begin{equation}
+        \theta = \frac{\partial V}{\partial t} \approx \frac{V_j^{m+1} - V_j^m}{\Delta t}
+        \label{eq:forward_diff}
+    \end{equation}
+
+    Hence, from the Black-Scholes PDE:
+
+    \begin{equation}
+        \frac{V_j^{m+1} - V_j^m}{\Delta t} =
+            a_j \left(V_{j+1}^m - 2V_j^m + V_{j-1}^m\right) + b_j \left(V_{j+1}^m - V_{j-1}^m\right) + c_j V_j^m
+        \label{eq:explicit_scheme}
+    \end{equation}
+
+    Rearrange to solve for $V_j^{m+1}$:
+
+    \begin{equation}
+        V_j^{m+1} =
+            V_j^m
+            + \Delta t \left[
+                a_j \left(V_{j+1}^m - 2V_j^m + V_{j-1}^m\right)
+                + b_j \left(V_{j+1}^m - V_{j-1}^m\right)
+                + c_j V_j^m
+            \right]
+        \label{eq:explicit_scheme_rearranged}
+    \end{equation}
+
+    Now group the terms involving $V_{j-1}^m$, $V_j^m$ and $V_{j+1}^m$ on the right-hand side.
+    We define:
+    \begin{equation*}
+        \begin{aligned}
+            A_j &= \Delta t \left(a_j - b_j\right), \\
+            B_j &= 1 + \Delta t \left(-2a_j + c_j\right),\\
+            C_j &= \Delta t \left(a_j + b_j\right)
+        \end{aligned}
+        \label{eq:abc}
+    \end{equation*}
+
+    Then we can write:
+
+    \begin{equation}
+        V_j^{m+1} = A_j V_{j-1}^m + B_j V_j^m + C_j V_{j+1}^m
+        \label{eq:explicit_scheme_final}
+    \end{equation}
+
+    All values $V_{j-1}^m$, $V_j^m$$V_{j+1}^m$ are known at time level $m$, so $V_j^{m+1}$ can be computed explicitly.
+    We do this for $j = 1, 2, \ldots, N-1$.
+    The boundary points $j = 0$ and $j = N$ are handled by boundary conditions.
+
+    \subsection{Fully Implicit (Backward-Time, Central-Space)}
+    \label{sec:implicit}
+
+    In the fully implicit method, we use a backward difference in time:
+
+    \begin{equation}
+        \frac{\partial V}{\partial t} \approx \frac{V_j^m - V_j^{m-1}}{\Delta t}
+        \label{eq:backward_diff}
+    \end{equation}
+
+    So the Black-Scholes PDE at time level $m$ (unknown) becomes:
+
+    \begin{equation}
+        \frac{V_j^m - V_j^{m-1}}{\Delta t} =
+            a_j \left(V_{j+1}^m - 2V_j^m + V_{j-1}^m\right)
+            + b_j \left(V_{j+1}^m - V_{j-1}^m\right)
+            + c_j V_j^m
+        \label{eq:implicit_scheme}
+    \end{equation}
+
+    Rearrange to group all the $V_j^m$-terms on the left side:
+
+    \begin{equation}
+        V_j^m - \Delta t \left[
+            a_j \left(V_{j+1}^m - 2V_j^m + V_{j-1}^m\right)
+            + b_j \left(V_{j+1}^m - V_{j-1}^m\right)
+            + c_j V_j^m
+        \right] = V_j^{m-1}
+        \label{eq:implicit_scheme_rearranged}
+    \end{equation}
+
+    Distribute $\Delta t$ and collect like terms in $V_{j-1}^m$, $V_j^m$, and $V_{j+1}^m$.
+    We get a tridiagonal system of the form:
+
+    \begin{equation}
+        -A_j V_{j-1}^m + B_j V_j^m - C_j V_{j+1}^m = V_j^{m-1}
+        \label{eq:tridiagonal_system}
+    \end{equation}
+
+    where:
+
+    \begin{equation*}
+        \begin{aligned}
+            A_j &= \Delta t \left(a_j - b_j\right), \\
+            A_j &= 1 + \Delta t \left(2a_j - c_j\right), \\
+            A_j &= \Delta t \left(a_j + b_j\right)
+        \end{aligned}
+        \label{eq:abc_coeffs}
+    \end{equation*}
+
+    Here the unknowns are $V_1^m, V_2^m, \ldots, V_{N-1}^m$.
+    We solve this tridiagonal system at each time step $m$.
+    Once solved, we move backward from $m = M$ down to $m = 0$.
+
+    \subsection{Crank–Nicolson (CN) Method}
+    \label{sec:crank_nicolson}
+
+    The Crank–Nicolson scheme is a time-centered method often viewed as the average of the explicit and implicit methods.
+    It approximates:
+
+    \begin{equation}
+        \frac{\partial V}{\partial t} \bigg|_{m+\frac{1}{2}} \approx \frac{V_j^{m+1} - V_j^m}{\Delta t}
+        \label{eq:cn_approx}
+    \end{equation}
+
+    and uses the spatial derivatives evaluated at the midpoint in time, i.e.,
+    \begin{equation*}
+        \frac{1}{2} \left[\text{spatial derivative at } m+1 \right]
+        + \frac{1}{2} \left[\text{spatial derivative at } m\right].
+    \end{equation*}
+
+    Concretely, for the Black-Scholes PDE:
+
+    \begin{equation}
+        \begin{aligned}
+            \frac{V_j^{m+1} - V_j^m}{\Delta t}
+            &= \frac{1}{2} \underbrace{
+                \Bigl[
+                a_j \bigl(V_{j+1}^{m+1} - 2V_j^{m+1} + V_{j-1}^{m+1}\bigr)
+                + b_j \bigl(V_{j+1}^{m+1} - V_{j-1}^{m+1}\bigr)
+                + c_j V_j^{m+1}
+                \Bigr]
+            }_{\text{implicit part}} \\
+            &+ \underbrace{
+                \Bigl[
+                a_j \bigl(V_{j+1}^m - 2V_j^m + V_{j-1}^m\bigr)
+                + b_j \bigl(V_{j+1}^m - V_{j-1}^m\bigr)
+                + c_j V_j^m
+                \Bigr]
+            }_{\text{explicit part}}
+        \end{aligned}
+        \label{eq:cn_black_scholes}
+    \end{equation}
+
+    We then rearrange terms to get a system of the form:
+
+    \begin{equation}
+        \left[
+            1 - \frac{\Delta t}{2} \left(-2a_j + c_j\right)
+        \right] V_j^{m}
+        + \frac{\Delta t}{2} \left(a_j + b_j\right) V_{j+1}^{m}
+        + \frac{\Delta t}{2} \left(a_j - b_j\right) V_{j-1}^{m}
+        \propto V^{m+1}
+        \label{eq:cn_rearranged}
+    \end{equation}
+
+    But more commonly, we place all $m+1$-terms on the left and all $m$-terms on the right in the standard linear-algebra form:
+
+    \begin{equation}
+        \underbrace{
+            \left(I + \frac{\Delta t}{2} L\right)
+        }_{\text{\textbf{A}}}
+        V^{m+1}
+        =
+        \underbrace{
+            \left(I - \frac{\Delta t}{2} L\right)
+        }_{\text{\textbf{B}}}
+        V^m
+        \label{eq:cn_matrix_form}
+    \end{equation}
+
+    where $L$ is the discrete operator in $S$-space (involving $A_j, B_j, C_j$).
+    In tridiagonal form, for each interior node $j = 1, \ldots, N-1$:
 
 
-\section{Monte Carlo Simulation}
+    \begin{itemize}
+        \item \textbf{$V^{m+1}$} Implicit coefficients:
+            \begin{equation*}
+                \begin{aligned}
+                    A_j^{I} &= -\frac{\Delta t}{2} \left(a_j - b_j\right) \\
+                    B_j^{I} &= 1 + \frac{\Delta t}{2} \left(-2a_j + c_j\right) \\
+                    C_j^{I} &= -\frac{\Delta t}{2} \left(a_j + b_j\right)
+                \end{aligned}
+            \end{equation*}
+
+        \item \textbf{$V^m$} Explicit coefficients:
+            \begin{equation*}
+                \begin{aligned}
+                    A_j^{E} &= \frac{\Delta t}{2} \left(a_j - b_j\right) \\
+                    B_j^{E} &= 1 - \frac{\Delta t}{2} \left(-2a_j + c_j\right) \\
+                    C_j^{E} &= \frac{\Delta t}{2} \left(a_j + b_j\right)
+                \end{aligned}
+            \end{equation*}
+    \end{itemize}
+
+    Hence at each time step, we construct the left-hand matrix $A$ and multiply the right-hand matrix $B$ by the known
+    vector $V^m$ to get a right-hand side.
+    Then we solve $\textbf{A} V^{m+1} = \textbf{B} V^m$.
+
+    To solve the tridiagonal system, we can use the Thomas algorithm,
+    which is a simplified version of Gaussian elimination~\cite{tavella_pricing_2000}.
+
+    \subsection{Initial/Terminal Conditions and Boundary Conditions}
+    \label{sec:conditions}
+
+    To solve the Black–Scholes PDE numerically, we need \textit{initial/terminal conditions} and \textit{boundary conditions}:
+
+    \subsubsection{Terminal Condition ($t = T$)}
+        \begin{equation}
+            V(T, S) = \text{Payoff}(S)
+            \label{eq:terminal_condition}
+        \end{equation}
+
+        For a European call:
+        \begin{equation*}
+            \text{max}(S - K, 0)
+        \end{equation*}
+
+    \subsubsection{Boundary Condition for $S = 0$}
+        For a European call, when $S = 0$, the call is worthless, so:
+        \begin{equation}
+            V(t, 0) = 0 \quad \text{for all } t
+            \label{eq:boundary_s0}
+        \end{equation}
+
+        (For a put, $V(t, 0) \approx Ke^{-r(T-t)}$)
+
+    \subsubsection{Boundary Condition for $S \to \infty$}
+        For a call, when $S$ is very large:
+        \begin{equation*}
+            V(t, S) \approx S - Ke^{-r(T-t)}
+        \end{equation*}
+
+        Numerically, we choose $S_{\text{max}}$ sufficiently large and set:
+        \begin{equation}
+            V(t, S_{\text{max}}) = S_{\text{max}} - Ke^{-r(T-t)}
+            \label{eq:boundary_smax}
+        \end{equation}
+
+        (If we want a more precise boundary, or simply use the payoff-based approach as $S \to \infty$.)
+
+    \subsubsection{American Options}
+        American options add the condition:
+        \begin{equation}
+            V(t, S) \geq \text{Payoff}(S)
+            \label{eq:american_option_condition}
+        \end{equation}
+        and at any grid point, if the \textit{continuation value} given by the PDE is less than the payoff,
+        we reset $V$ to the payoff. This ``free boundary'' condition (early exercise feature) complicates the solution
+        because an implicit or iterative approach is typically used at each time step to enforce:
+
+        \begin{equation*}
+            V \geq \text{Payoff}(S)
+        \end{equation*}
+
+    Below is a Python code snippet that demonstrates the Crank-Nicolson method for an American call option.
+    The implementation was vectorized to improve performance, and the Thomas algorithm was used to solve the tridiagonal system.
+
+    \begin{lstlisting}[
+   language=Python,
+   caption={Python Code: CN Method for American Call Option},
+   label={lst:delta_hedged_short_call}
+    ]
+import numpy as np
+def crank_nicolson_american_call(S0, K, T, r, sigma, Smax, M, N):
+
+    dS = Smax / M
+    dt = T / N
+
+    # Stock price grid: S_j = j * dS
+    S_values = np.linspace(0, Smax, M + 1)
+    # Option value grid: v[n, j] = V(t_n, S_j)
+    v = np.zeros((N + 1, M + 1))
+
+    # 1) Terminal condition at t = T
+    v[N, :] = np.maximum(S_values - K, 0.0)
+
+    # 2) Crank-Nicolson loop (backwards in time)
+    for n in reversed(range(N)):
+        t_n = n * dt
+
+        # Example parameter setup
+        j_vec = np.arange(1, M)
+
+        # Compute necessary values based on j_vec
+        A = 0.5 * (sigma**2) * (j_vec**2)
+        B = 0.5 * r * j_vec
+
+        alpha = 0.5 * dt * (A - B)
+        gamma = 0.5 * dt * (A + B)
+
+        # Left-hand side coefficients
+        aL = -alpha
+        bL = 1 + dt * r + alpha + gamma
+        cL = -gamma
+
+        # Right-hand side coefficients
+        aR = alpha
+        bR = 1 - dt * r - (alpha + gamma)
+        cR = gamma
+
+        # Fill out a, b, c with boundary conditions
+        a = np.empty(M - 1)
+        b = np.empty(M - 1)
+        c = np.empty(M - 1)
+
+        # a[0] is zero for j=1, while remaining entries come from aL
+        a[0] = 0.0
+        a[1:] = aL[1:]
+
+        # b is directly from bL
+        b[:] = bL
+
+        # c[-1] is zero for j=M-1, while preceding entries come from cL
+        c[:-1] = cL[:-1]
+        c[-1] = 0.0
+
+        # Construct the right-hand side in a vectorized fashion
+        rhs = bR * v[n + 1, j_vec]   # middle term
+
+        # For j>1: add aR * v[n+1, j-1]
+        rhs[1:] += aR[1:] * v[n + 1, j_vec[1:] - 1]
+
+        # For j<M-1: add cR * v[n+1, j+1]
+        rhs[:-1] += cR[:-1] * v[n + 1, j_vec[:-1] + 1]
+
+        # Handle boundary at j=M-1 (using v[n+1, M])
+        rhs[-1] += cR[-1] * v[n + 1, M]
+
+        # Solve the tridiagonal system for the interior points
+        sol_interior = thomas_solve(a, b, c, rhs)
+
+        # Vectorized assignment for the interior points
+        v[n, 1:M] = sol_interior
+
+
+        # Boundary conditions
+        v[n, 0] = 0.0
+        v[n, M] = S_values[M] - K * np.exp(-r * (T - t_n))
+
+        # 3) Early-exercise condition for American call:
+        v[n, 1:M] = np.maximum(v[n, 1:M], S_values[1:M] - K)
+
+    # Interpolate or pick nearest grid point for S0
+    jstar = int(S0 / dS)
+    price_approx = v[0, jstar]
+    return price_approx
+
+
+def thomas_solve(a, b, c, d):
+    """
+    Solve A x = d for a tridiagonal system:
+    A = diag(b) + diag(a, -1) + diag(c, +1).
+    """
+    n = len(d)
+    for i in range(1, n):
+        w = a[i] / b[i - 1]
+        b[i] -= w * c[i - 1]
+        d[i] -= w * d[i - 1]
+    x = np.zeros(n)
+    x[-1] = d[-1] / b[-1]
+    for i in reversed(range(n - 1)):
+        x[i] = (d[i] - c[i] * x[i + 1]) / b[i]
+    return x
+
+
+if __name__ == "__main__":
+    price = crank_nicolson_american_call(
+        S0=100,     # Initial stock price
+        K=100,      # Strike price
+        T=1.0,      # Time to maturity (years)
+        r=0.05,     # Risk-free rate
+        sigma=0.2,  # Volatility
+        Smax=300,   # Maximum grid value for S
+        M=200,      # Number of spatial steps
+        N=200       # Number of time steps
+    )
+    print(f"American Call Price (Crank-Nicolson) = {price:.4f}")
+
+   \end{lstlisting}
+
+
+\section{Monte Carlo Simulation: European Options}
     \label{sec:mc_sim}
 
-    The focus of this section is to model wind power generation based on historical real and forecasted data.
-    Conventional assumptions, like data independence and identically distribution, fall short when handling time-stamped
-    data streams influenced by multifaceted predictors or features.
-    This challenge necessitates the application of time series models to capture the inherent temporal dependencies,
-    such as those stemming from macroeconomic indicators, enterprise operation, market dynamics, and weather conditions.\\
+    The Black-Scholes model assumes that the underlying asset price follows a geometric Brownian motion:
 
-    One interest of this thesis is to explore recent techniques that work well for feature selection problems in
-    time series applications.
-    A technique that can join Bayesian inference with time series models is the~\gls{bsts}.
-    Initially introduced and further explored by Scott and Varian~\cite{scott_predicting_2013, scott_bayesian_2013},
-    the~\gls{bsts} model is a powerful tool for feature selection,
-time series forecasting, and inferring causal relationships. \\
+    \begin{equation}
+        dS_t = \mu S_t dt + \sigma S_t dW_t
+        \label{eq:geometric_brownian_bs}
+    \end{equation}
 
+    where $S_t$ is the asset price at time $t$, $\mu$ is the drift rate, $\sigma$ is the volatility,
+    and $dW_t$ is the Wiener process increment.
 
-\section{Sensitity Analysis}
+    Under the risk-neutral measure, the drift $\mu$ is replaced by the risk-free rate $r$:
+
+    \begin{equation}
+        dS_t = r S_t dt + \sigma S_t dW_t
+        \label{eq:geometric_brownian_risk_neutral}
+    \end{equation}
+
+    The solution to this stochastic differential equation is given by~\cite{brandimarte_numerical_2006}:
+
+    \begin{equation}
+        S_T = S_0 \exp \left( \left( r - \frac{1}{2} \sigma^2 \right) T + \sigma \sqrt{T} Z \right)
+        \label{eq:geometric_brownian_solution}
+    \end{equation}
+
+    where $S_0$ is the initial asset price, $T$ is the time to maturity,
+    and $Z \sim N(0,1)$ is a standard normal variable.
+
+    To estimate the option price, a large number of simulations for $S_T$ are generated using random samples of $Z$.
+    The payoff for a European call option is:
+
+    \begin{equation*}
+        \begin{aligned}
+            \text{Call Payoff} &= \max(S_T - K, 0) \\
+            \text{Put Payoff} &= \max(K - S_T, 0)
+        \end{aligned}
+    \end{equation*}
+
+    where $K$ is the strike price.
+    The expected payoff is then computed by averaging the simulated payoffs,
+    and the present value of the option is obtained by discounting at the risk-free rate:
+
+    \begin{equation}
+        \begin{aligned}
+            C &= e^{-rT} \mathbb{E}[\max(S_T - K, 0)] \\
+            P &= e^{-rT} \mathbb{E}[\max(K - S_T, 0)]
+        \end{aligned}
+        \label{eq:monte_carlo_call_put}
+    \end{equation}
+
+    By using a sufficiently large number of simulations, the Monte Carlo approach provides an accurate
+    approximation of the European option prices.
+    If the option has a closed-form solution, the Monte Carlo simulation can be used to validate the results.
+
+        \begin{lstlisting}[
+   language=Python,
+   caption={Python Code: Monte Carlo Simulation - European Options},
+   label={lst:monte_carlo_sim}
+    ]
+import numpy as np
+
+def monte_carlo_sim(S0, K, T, r, sigma, num_simulations):
+    # Generate random numbers for Monte Carlo simulation
+    Z = np.random.standard_normal(num_simulations)
+    S_T = S0 * np.exp((r - 0.5 * sigma ** 2) * T + sigma * np.sqrt(T) * Z)
+    # Calculate Payoffs
+    call_payoffs = np.maximum(S_T - K, 0)  # European call option
+    put_payoffs = np.maximum(K - S_T, 0)  # European put option
+    # Discount payoffs to present value
+    call_price = np.exp(-r * T) * np.mean(call_payoffs)
+    put_price = np.exp(-r * T) * np.mean(put_payoffs)
+
+    return call_price, put_price
+
+call_price, put_price = monte_carlo_sim(
+    S0 = 100,  # Initial stock price
+    K = 100,   # Strike price
+    T = 1.0,  # Time to maturity (1 year)
+    r = 0.05,  # Risk-free rate
+    sigma = 0.2,  # Volatility
+    num_simulations = 100000  # Number of Monte Carlo simulations
+)
+
+print(f'European Call Option Price: {call_price:.2f}')
+print(f'European Put Option Price: {put_price:.2f}')
+
+   \end{lstlisting}
+
+\section{Sensitity Analysis: Black-Scholes' Greeks}
     \label{sec:sens_analysis}
 
-    SEE BORELL
+    In the Black–Scholes framework, the Greeks serve as key measures of an option’s price sensitivity to fluctuations
+    in parameters such as the underlying asset price, volatility, interest rate, and time to maturity.
+    The primary Greeks include Delta ($\Delta$), Gamma ($\Gamma$), Theta ($\Theta$), Vega ($\nu$), and Rho ($\rho$).
+    These quantities are especially relevant for pricing European call options,
+    as they capture the partial derivatives of the option’s value with respect to various inputs.
 
+    Below, we present the derivations of these primary Greeks,
+    showing how each arises from the partial differentiation of the Black–Scholes formula,
+    previously presented in the section~\ref{sec:cont_time}
+    on equations~\ref{eq:black_scholes, eq:bs_solution, eq:bs_d1_d2}.
 
+    \subsection{Delta ($\Delta$)}
+        Delta measures the sensitivity of the option price to changes in the stock price ($S$):
+        \begin{equation}
+            \Delta = \frac{\partial C}{\partial S}.
+            \label{eq:delta_definition}
+        \end{equation}
+        From the Black-Scholes formula:
+        \begin{equation}
+            C = S \Phi(d_1) - K e^{-rT} \Phi(d_2),
+            \label{eq:bs_formula}
+        \end{equation}
+        where
+        \begin{equation}
+            d_1 = \frac{\ln(S/K) + (r + \sigma^2/2)T}{\sigma \sqrt{T}}, \quad d_2 = d_1 - \sigma \sqrt{T}.
+            \label{eq:d1_d2_definitions}
+        \end{equation}
+        Differentiating \eqref{eq:bs_formula} with respect to $S$~\cite{borell_introduction_2012}:
+        \begin{equation}
+            \Delta = \Phi(d_1) + S \phi(d_1) \frac{\partial d_1}{\partial S} - K e^{-rT} \phi(d_2) \frac{\partial d_2}{\partial S}.
+            \label{eq:delta_derivation}
+        \end{equation}
+        From the definitions in \eqref{eq:d1_d2_definitions}:
+        \begin{equation}
+            \frac{\partial d_1}{\partial S} = \frac{1}{S \sigma \sqrt{T}}, \quad \frac{\partial d_2}{\partial S} = \frac{\partial d_1}{\partial S}.
+            \label{eq:d1_d2_derivatives}
+        \end{equation}
+        Substituting \eqref{eq:d1_d2_derivatives} into \eqref{eq:delta_derivation}:
+        \begin{equation}
+            \Delta = \Phi(d_1).
+            \label{eq:delta_result}
+        \end{equation}
 
-%    Structural time series models are a class of state space models that decompose a time series into several components of interest.
-%    They have a considerable intuitive appeal, particularly for economic and social times.
-%    Furthermore, they provide a clear link with regressions' models, both in their technical formulation and in the model selection
-%    methodology that they employ~\cite{harvey_forecasting_1990}. \\
-%
-%    The key to handling structural time series models is the state space representation, with the state of the system
-%    representing the unobserved components of the time series, such as trends and seasonal effects.
-%    Once in the state space, the Kalman filter plays a fundamental role as it recursively computes the predictive distribution
-%    of the state variables, given the observations up to that point in time.
-%
-%    Initially introduced by Jammalamadaka et al.~\cite{qiu_multivariate_2018}, the~\gls{bsts} can be extended to a multivariate
-%    time series model, which is particularly useful for the analysis of multiple time series that are related to each other.
-%    The~\gls{mbsts} can be used to explicitly model the correlations between different asset returns in a portfolio through
-%    the covariance structure specified by $\Sigma_{t}$, see equation~\ref{eq:mbsts_obs}.
-%
-%\subsection{The \gls{mbsts} model}
-%    \label{sec:mbsts}
-%
-%    Models of structural time series, exemplified by the~\gls{mbsts},
-%    are categorized under state space models tailored for time series data. They are represented by the ensuing equations:
-%
-%    \begin{align}
-%        y_{t} &= Z_{t} \alpha_{t} + \varepsilon_{t}, \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{t})
-%        \label{eq:mbsts_obs}\\
-%        \notag \\
-%        \alpha_{t+1} &= T_{t} \alpha_{t} + R_{t} \eta_{t}, \qquad \eta_{t} \sim N_{q}(0, Q_{t})
-%        \label{eq:mbsts_trans}
-%    \end{align}
-%
-%
-%    Equation~\ref{eq:mbsts_obs} is the observation equation, which relates the $m \times 1$
-%    vector of observations at time $t$ $y_{t}$ to the $d \times 1$ unobserved latent states $\alpha_{t}$,
-%    where $d$ is the total number of latent states.
-%    The $m \times p$ matrix of coefficients $Z_{t}$ links the unobserved factors and regressions' effects
-%    with the observations' vector $y_{t}$.
-%    The $m \times 1$ is the vector of observation disturbances $\varepsilon_{t}$ and are assumed to have zero means and
-%    represented by a variance-covariance matrix $\Sigma_{t}$ of the order $m \times m$.\\
-%
-%    The second equation~\ref{eq:mbsts_trans} is the transition equation, which describes the evolution of the state vector
-%    $\alpha_{t}$ over time, characterized by the $d \times d$ transition matrix $T_{t}$.
-%    The $d \times q$ matrix of coefficients $R_{t}$ is often referred to as the control matrix.
-%    The matrix $\eta_{t}$ is an $q \times 1$ error vector,
-%    with a state diffusion matrix $Q_{t}$ of the order $q \times q$, where $q \leq d$.
-%    In many standard cases, $q = d$ and $Q_{t}$ is the identity matrix $I_{d}$.
-%    Although matrix $Q_{t}$ can be specified freely,
-%    it is often composed of a selection from the $q$ columns of the identity matrix $I_{d}$~\cite{commandeur_introduction_2007}.\\
-%
-%    In summary, the~\gls{mbsts} model is defined by the following set of parameters:
-%
-%    \begin{itemize}
-%        \item $y_{t}$ ($m \times 1$): Observations at time $t$
-%        \item $\alpha_{t}$ ($d \times 1$): Unobserved latent states $d$
-%        \item $Z_{t}$ ($m \times p$): Coefficients linking the unobserved factors and regression effects
-%            with the observations vector $y_{t}$
-%        \item $\varepsilon_{t}$ ($m \times 1$): Observation disturbances, assumed to have zero means,
-%            represented by the variance-covariance matrix $\Sigma_{t}$
-%        \item $T_{t}$ ($d \times d$): Transition matrix characterizing the evolution of the state vector $\alpha_{t}$
-%        \item $R_{t}$ ($d \times q$): Control matrix of coefficients
-%        \item $\eta_{t}$ ($q \times 1$): Error vector with a state diffusion matrix $Q_{t}$ of the order $q \times q$ where $q \leq d$
-%        \item $\Sigma_{t}$ ($m \times m$): Covariance matrix of the order $m \times m$ representing the observation disturbances
-%        \item $Q_{t}$ ($q \times q$): State diffusion matrix
-%    \end{itemize}
-%
-%    As per developed by Harvey~\cite{harvey_forecasting_1990}, a basic structural time series model can be represented
-%    by a direct interpretation of its underlying components.
-%    In a general, the model can be expressed as:
-%
-%    \begin{equation}
-%        y_{t} = \mu_{t} + \theta{t} + \omega_{t} + \xi_{t} + \varepsilon_{t} ,
-%        \qquad \varepsilon_{t} \sim N_{m}(0, \Sigma_{\varepsilon}), \quad t = 1, 2, ..., n
-%    \label{eq:sts}
-%    \end{equation}
-%
-%    where $y_{t}$, $\mu_{t}$, $\theta{t}$, $\omega_{t}$, $\xi_{t}$ and $\varepsilon_{t}$ are m-dimension vectors,
-%    representing targeted time series, linear trend, seasonal, cyclical and regression components
-%    with the observation disturbances respectively.
-%    For simplicity, $\Sigma_{\varepsilon}$ is a $m \times m$, positive definite matrix and assumed to be constant over time.
-%
-%    Elucidating further on the state space form, $\alpha_{t}$ aggregates these multifaceted components,
-%    depicting the concealed and unobserved latent states, such that:
-%
-%   \begin{equation}
-%        \alpha_{t} = [\mu_{t}, \theta_{t}, \omega_{t}, \xi_{t}]^T
-%    \label{eq:sts_latent}
-%    \end{equation}
-%
-%
-%    In the prevailing model, each component of the state is compiled individually,
-%    where every component produces an incremental influence on $y_{t}$.
-%    The adaptability of this model facilitates the incorporation of various model elements specific to each target series.
-%
-%    % Develope the different components states
-%\subsection{State Components}
-%    \label{sec:state_components}
-%
-%    A structural time series model is composed of several components, each representing a distinct aspect of the time series,
-%    allowing to add flexibility and contributing to the overall model's predictive capabilities.
-%    The model components are typically divided into four main categories: trend, seasonal, cyclical and regression components.
-%    In the current model formulation, components are modelled explicitly and are assembled independently,
-%    with each yielding an additive contribution to $y_{t}$.
-%
-%\subsubsection{Trend Component}
-%    \label{sec:trend_component}
-%
-%    The trend component is a fundamental element of the structural time series model.
-%    It represents the long-term movement of the time series, capturing the underlying growth or decline over time.
-%    The trend component is typically modelled as a linear or non-linear function of time.
-%    The linear trend component can be portrait as:
-%
-%%    \begin{gather}
-%%        \bm{\mu}_{t+1} = \bm{\mu}_{t} + \bm{\delta}_{t} + \bm{u}_{t},
-%%            \qquad \bm{u}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\mu}) \\
-%%        \notag \\
-%%        \bm{\delta}_{t+1} = \bm{d} + \bm{P}(\bm{\delta}_{t} - \bm{d}) + \bm{v}_{t},
-%%            \qquad \bm{v}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\delta})
-%%        \label{eq:group}
-%%    \end{gather}
-%
-%    \begin{equation}
-%        \bm{\eta}_{t+1}=
-%            \bm{T}_{T} \bm{\eta}_{t} + \bm{G}_{T} \bm{\gamma} + \bm{\omega}_{T,t}
-%        \label{eq:trend_state}
-%    \end{equation}
-%
-%    where:
-%    \begin{itemize}
-%        \item $\bm{T}_T$ $(2m \times 2m)$ transition matrix that applies the learning rate $\rho$
-%        \item $\bm{\eta}_{t}$ $(2m \times 1)$ state vector that contains the trend components for all time series at time $t$
-%        \item $\bm{G}_T$ $(2m \times 1)$ transition vector that applies the long-term slope $\gamma$
-%        \item $\bm{\gamma}$ $(m \times 1)$ is the long-term slope
-%        \item $\bm{\omega}_{T,t}$ $(2m \times 2m)$ is the trend disturbance at time $t$,
-%            where $w_{T,t} \sim \mathcal{N}(0, \bm{\Sigma}_{T})$
-%    \end{itemize}
-%
-%    The updated state equation becomes, for times series $i$, can be represented as:
-%
-%    \begin{equation}
-%        \left[
-%            \begin{array}{c}
-%                \mu_{t+1}^{(i)} \\
-%                \delta_{t+1}^{(i)}
-%            \end{array}
-%        \right] =
-%        \left[
-%            \begin{array}{cc}
-%                1 & 1 \\
-%                0 & \rho^{(i)}
-%            \end{array}
-%        \right]
-%        \left[
-%            \begin{array}{c}
-%                \mu_{t}^{(i)} \\
-%                \delta_{t}^{(i)}
-%            \end{array}
-%        \right] +
-%        \left[
-%            \begin{array}{c}
-%                0 \\
-%                1 - \rho^{(i)}
-%            \end{array}
-%        \right]
-%        \gamma^{(i)} +
-%        \left[
-%            \begin{array}{c}
-%                \omega_{t}^{(\mu,i)} \\
-%                \omega_{t}^{(\delta,i)}
-%            \end{array}
-%        \right]
-%        \label{eq:state_update}
-%    \end{equation}
-%
-%    The combined transition matrix $\bm{T}_T$ for $m$ time series is a block-diagonal matrix:
-%
-%    \begin{equation}
-%        \mathbf{T}_T=
-%            \left[
-%                \begin{array}{cccc}
-%                    \mathbf{T}_{T, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
-%                    \mathbf{0}        & \mathbf{T}_{T, 2} & \cdots & \mathbf{0} \\
-%                    \vdots            & \vdots            & \ddots & \vdots     \\
-%                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{T, m}
-%                \end{array}
-%            \right]
-%        \label{eq:state_transition_mv}
-%    \end{equation}
-%
-%    where each block of the diagonal matrix is a $(2 \times 2)$ for one time series,
-%    represented in equation~\ref{eq:state_update}.
-%    The model features a parameter $\bm{\rho}$ $(0 < \bm{\rho}^{(i)} < 1)$ which represents the learning rate
-%    that underlies the local trend update process, providing the ability to balance short-term and long-term information.
-%    Specifically, when $\bm{\rho}^{(i)} = 1$, the model induces a random walk within the associated slope,
-%    leading to a non-stationary trend component.
-%
-%    The state vector $\bm{\eta}_{t}$ contains the trend components for all time series at time $t$.
-%    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
-%    individual time series.
-%
-%    \begin{equation}
-%        \bm{\eta}_{t}^{(i)}=
-%            \left[
-%                \begin{array}{c}
-%                    \mu_{t}^{(1)} \\
-%                    \delta_{t}^{(1)} \\
-%                    \mu_{t}^{(2)} \\
-%                    \delta_{t}^{(2)} \\
-%                    \vdots \\
-%                    \mu_{t}^{(m)} \\
-%                    \delta_{t}^{(m)}
-%                \end{array}
-%            \right]
-%        \label{eq:trend_state_vector}
-%    \end{equation}
-%
-%    The aggregate disturbance term $\bm{\omega}_{T,t}$ is assumed to be a white noise variable with a multivariate normal distribution
-%    with a covariance matrix $\bm{\Sigma}_{T}$ of the order $(2m \times 2m)$.\ The covariance matrix $\bm{\Sigma}_{T}$
-%    is a block-diagonal matrix, where each block of the diagonal matrix are assumed to be independent.
-%    The combined covariance matrix $\bm{\Sigma}_{T}$ can be represented as:
-%
-%    \begin{equation}
-%        \bm{\Sigma}_{T} =
-%            \left[
-%                \begin{array}{cc}
-%                    \mathbf{\Sigma}_{\mu} & \mathbf{0} \\
-%                    \mathbf{0}            & \mathbf{\Sigma}_{\delta}
-%                \end{array}
-%            \right]
-%        \label{eq:trend_covariance}
-%    \end{equation}
-%
-%    Where:
-%    \begin{itemize}
-%        \item $\mathbf{\Sigma}_{\mu}$ covariance matrix of the trend disturbances $\omega_{t}^{(\mu,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\mu})$
-%        \item $\mathbf{\Sigma}_{\delta}$ covariance matrix of the trend increments $\omega_{t}^{(\delta,i)} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\delta})$
-%    \end{itemize}
-%
-%\subsubsection{Seasonality}
-%    \label{sec:seasonality_component}
-%
-%    Whenever a time series consists of hourly, quarterly or yearly data, it is common to observe a seasonal pattern.
-%    The seasonal component $\bm{\tau}_{t}$ at time $t$ can be modelled using various methods,
-%    such as a trigonometric form using Fourier series, categorical proxies known as "dummy variables"
-%    or methods involving seasonal splines~\cite{proietti_seasonality_2023}.
-%    In prevalent usage exists a model that leverages deterministic means coupled with an error term,
-%    thus permitting the accommodation of alterations across time.
-%    This characteristic renders this model proficient in apprehending both,
-%    patterns that appear with regularity and fluctuations that are more sporadic,
-%    thereby establishing robustness when applied to disparate types of sequences of time that exhibit seasonality.
-%
-%    A seasonal effects modelled using a deterministic approach along with a white noise error term~\cite{qiu_multivariate_2018} is:
-%
-%    \begin{equation}
-%        \bm{\tau}_{t+1} = - \sum_{k=0}^{S_{i}-2} \bm{\tau}_{t-k}^{(i)} + \bm{w}_{t}^{(i)},
-%            \qquad \bm{w}_{t} = [w_{t}^{(1)}, \ldots, w_{t}^{(m)}]^{T}
-%            \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\tau})
-%        \label{eq:seasonal}
-%    \end{equation}
-%
-%    where:
-%    \begin{itemize}
-%        \item $S_{i}$ represents the seasonal period, e.g. weekly (s=7), monthly (s=12), hourly (s=24)
-%        \item $\bm{\tau}_{t}^{i}$ ($m \times (s-1)$): seasonal effect for $i$-th time series and at time $t$
-%        \item $\bm{w}_{t}^{i}$ ($(m \times (s-1)) \times 1$): white noise seasonal disturbance,
-%            which is assumed to follow a multivariate normal distribution: $w_{t} \sim \mathcal{N}(\bm{\Sigma}_{\tau})$
-%    \end{itemize}
-%
-%    The transition matrix, in the univariate case, for the seasonal effects in the state space is a $(s-1) \times (s-1)$ matrix,
-%    due to the sum-zero constraint over one seasonal cycle.\ The structure of the matrix is:
-%
-%    \begin{equation}
-%        \mathbf{T}_s^{(i)}=
-%            \left[
-%                \begin{array}{ccccc}
-%                    -1             & -1         & \cdots &  -1        & -1 \\
-%                    1              & \mathbf{0} & \cdots & \mathbf{0} & \mathbf{0} \\
-%                    \mathbf{0}     & 1          & \cdots & \mathbf{0} & \mathbf{0} \\
-%                    \vdots         & \vdots     & \ddots & \vdots     & \vdots \\
-%                    \mathbf{0}     & \mathbf{0} & \cdots & 1          & \mathbf{0}
-%                \end{array}
-%            \right]
-%    \label{eq:seasonal_transition_uni}
-%    \end{equation}
-%
-%    In a multivariate scenario, when there are $m$ time series each with its own seasonal components,
-%    the overall transition matrix $\mathbf{T}_s$ is a block-diagonal matrix, where each block of the diagonal matrix
-%    is $(s-1) \times (s-1)$ for one time matrix.
-%    The combined transition matrix $\mathbf{T}_{s}$ can be represented as:
-%
-%    \begin{equation}
-%        \mathbf{T}_s=
-%            \left[
-%                \begin{array}{cccc}
-%                    \mathbf{T}_{s, 1} & \mathbf{0}        & \cdots & \mathbf{0} \\
-%                    \mathbf{0}        & \mathbf{T}_{s, 2} & \cdots & \mathbf{0} \\
-%                    \vdots            & \vdots            & \ddots & \vdots     \\
-%                    \mathbf{0}        & \mathbf{0}        & \cdots & \mathbf{T}_{s, m}
-%                \end{array}
-%            \right]
-%        \label{eq:seasonal_transition_mv}
-%    \end{equation}
-%
-%    where $\mathbf{T}_{s}$ has the size $(m \times (s-1)) \times (m \times (s-1))$ matrix.
-%    Off-diagonal elements are zero matriz with the size of $(s-1) \times (s-1)$ as it is assumed that the seasonal transition
-%    for different time series is independent in this model.
-%    The state vector $\bm{\tau}_t$ contains the seasonal effects for all time series at time $t$.
-%    When considering $m$ time series, the overall state vector is a concatenation of the state vectors for each
-%    individual time series.\ The state vector $\bm{\tau}_t$ representation is:
-%
-%    \begin{equation}
-%        \tau_{t+1}=
-%            \left[
-%                \begin{array}{c}
-%                    \tau_{t+1}^{(1)} \\
-%                    \tau_{t+1}^{(2)} \\
-%                    \hfill \vdots \hfill \\
-%                    \tau_{t+1}^{(m)}
-%                \end{array}\right]
-%            =\left[
-%                \begin{array}{l}
-%                    \tau_t^{(1)}, \tau_{t-1}^{(1)}, \ldots, \tau_{t-10}^{(1)} \\
-%                    \tau_t^{(2)}, \tau_{t-1}^{(2)}, \ldots, \tau_{t-10}^{(2)} \\
-%                    \hfill \vdots \hfill \\
-%                    \tau_t^{(m)}, \tau_{t-1}^{(m)}, \ldots, \tau_{t-10}^{(m)}
-%                \end{array}
-%            \right]
-%        \label{eq:seasonal_state}
-%    \end{equation}
-%
-%    The white noise error term $\bm{w}_{t}$ plays a crucial role in the seasonal component model,
-%    by allowing random variations around the deterministic seasonal pattern.
-%    For $m$ time series, the combined white noise term $\bm{w}_{t}$ is:
-%
-%    \begin{equation}
-%        w_t=
-%            \left[
-%                \begin{array}{c}
-%                    w_{t}^{(1)} \\
-%                    w_{t}^{(2)} \\
-%                    \vdots \\
-%                    w_{t)}^{(m)}
-%                \end{array}
-%            \right]
-%           =
-%            \left[
-%                \begin{array}{c}
-%                    w_{t, 1}^{(1)} \\
-%                    w_{t, 2}^{(1)} \\
-%                    \vdots \\
-%                    w_{t, (s-1)}^{(1)} \\
-%                    w_{t, 1}^{(2)} \\
-%                    w_{t, 2}^{(2)} \\
-%                    \vdots \\
-%                    w_{t, (s-1}^{(2)} \\
-%                    \vdots \\
-%                    w_{t, 1}^{(m)} \\
-%                    w_{t, 2}^{(m)} \\
-%                    \vdots \\
-%                    w_{t, (s-1)}^{(m)}
-%                \end{array}
-%            \right]
-%    \label{eq:seasonal_error}
-%    \end{equation}
-%
-%    When considering a multivariate time series model, the white noise error term $\bm{w}_{t}$ is assumed to follow
-%    a multivariate normal distribution with a covariance matrix $\bm{\Sigma}_{\tau}$ of the order $(s-1) \times (s-1)$.
-%    The covariance matrix $\bm{\Sigma}_{\tau}$ is a block-diagonal matrix, where each block of the diagonal matrix are
-%    assumed to be uncorrelated between different time series.
-%
-%    The combined covariance matrix $\bm{\Sigma}_{\tau}$ can be represented as:
-%
-%    \begin{equation}
-%        \bm{\Sigma}_{\tau} =
-%            \left[
-%                \begin{array}{cccc}
-%                    \mathbf{\Sigma}_{\tau, 1} & \mathbf{0}                 & \cdots & \mathbf{0} \\
-%                    \mathbf{0}                & \mathbf{\Sigma}_{\tau, 2}  & \cdots & \mathbf{0} \\
-%                    \vdots                    & \vdots                     & \ddots & \vdots     \\
-%                    \mathbf{0}                & \mathbf{0}                 & \cdots & \mathbf{\Sigma}_{\tau, m}
-%                \end{array}
-%            \right]
-%    \label{eq:seasonal_covariance}
-%    \end{equation}
-%
-%\subsubsection{Cyclical}
-%    \label{sec:cyclical_component}
-%
-%    The cyclic part of the structural time series model signifies the medium-to-long term oscillations.
-%    In the context of financial mathematics, the term `financial market cycles` generally indicates repeated fluctuations
-%    that don't follow a strict periodic pattern around the data series' path.
-%    A model incorporating a cyclic element can effectively emulate critical characteristics often recognized in statistical analyses.
-%    These include evidence of major autocorrelation, the recurrence and alternation of phases within the data,
-%    the damping or amplification of cycles and the absence of long-term persistence in the data series~\cite{qiu_multivariate_2018}.
-%
-%    Cyclical factors are often modelled using a deterministic approach, such as a trigonometric function or a polynomial.
-%    In this case, a trigonometric function is used to model the cyclical component with dumping is postulated as:
-%
-%    \begin{equation}
-%        \bm{\omega}_{t+1} = \bm{\rho}^{(i)} \bm{T}_c^{(i)} \bm{\omega}_{t}^{(i)} + \bm{\kappa}_{t},
-%            \qquad \bm{\kappa}_{t} \stackrel{\textit{iid}}{\sim} N_{m}(0, \bm{\Sigma}_{\omega})
-%        \label{eq:cyclical_state}
-%    \end{equation}
-%
-%    where:
-%    \begin{itemize}
-%        \item $\bm{\omega}_{t}$ ($2m \times 1$): cyclical component at time $t$
-%        \item $\bm{\rho}^{(i)}$ ($m \times 1$): damping factors vector per series $i$
-%        \item $\bm{T}_c^{(i)}$ ($2m \times 2m$): transition matrix for the cyclical component
-%        \item $\bm{\kappa}_{t}$ ($2m \times 1$): cyclical disturbance at time $t$
-%        \item $\bm{\Sigma}_{\omega}$ ($2m \times 2m$): variance of the cyclical disturbance
-%    \end{itemize}
-%
-%    For each time series $i$, the cyclical component state vector $\bm{\omega}_{t}$ can be represented as:
-%
-%    \begin{equation}
-%        \bm{\omega}_{t}^{(i)}=
-%            \left[
-%                \begin{array}{c}
-%                    \alpha_{t}^{(1)} \\
-%                    \beta_{t}^{(1)} \\
-%                    \alpha_{t}^{(2)} \\
-%                    \beta_{t}^{(2)} \\
-%                    \vdots \\
-%                    \alpha_{t}^{(m)} \\
-%                    \beta_{t}^{(m)}
-%                \end{array}
-%            \right]
-%        \label{eq:cyclical_state_vector}
-%    \end{equation}
-%
-%    where the transition matrix $\bm{T_c^{(i)}}$ for the time series $i$ is:
-%
-%    \begin{equation}
-%        \bm{T}_c^{(i)}=
-%            \left[
-%                \begin{array}{cc}
-%                    \cos \left(\lambda_i\right) & \sin \left(\lambda_i\right) \\
-%                    -\sin \left(\lambda_i\right) & \cos \left(\lambda_i\right)
-%                \end{array}
-%            \right]
-%        \label{eq:cyclical_transition_matrix}
-%    \end{equation}
-%
-%    The combined transition matrix for an $m$ time series model is a block-diagonal matrix,
-%    where each block of the diagonal matrix is affected by its respective dampening factor $\bm{\rho}^{(i)}$ is:
-%
-%    \begin{equation}
-%        \bm{\rho}^{(i)} \bm{T}_c^{(i)} =
-%        \left[
-%            \begin{array}{ccccc}
-%                \rho_1 \bm{T}_c^{(1)} & \mathbf{0} & \cdots & \mathbf{0} \\
-%                \mathbf{0} & \rho_2 \bm{T}_c^{(2)} & \cdots & \mathbf{0} & \\
-%                \vdots & \vdots & \ddots & \vdots & \\
-%                \mathbf{0} & \mathbf{0} & \cdots & \rho_m \bm{T}_c^{(m)}
-%            \end{array}
-%        \right]
-%        \label{eq:cyclical_transition_mv}
-%    \end{equation}
-%
-%    For the factor $\bm{\rho}^{(i)}$ be in fact dampening, should be $ 0 < \rho < 1$.
-%    The frequency $\lambda_i = 2\pi/q_i $, where $q_i$ is the period such that $0 < \lambda_i < \pi$.
-%    When $\lambda_i$ is 0 or $\pi$, the model degenerates to the AR(1) process.
-%    The dampening factor should be strictly less than one for stationary purpose.
-%    If this damping factor surpasses unity, it induces an unrestricted cyclical motion,
-%    which consequently leads to an increased magnitude of the cycle in the model.~\cite{qiu_multivariate_2018}.
-%    A fundamental distinction that arises between the cyclical and seasonal constituents pertains exactly to this dampening factor.
-%    In the context of the cyclical component, there is a characteristic decay in its amplitude as time progresses.
-%    This phenomenon can be pragmatically utilized in the analysis of time series data,
-%    particularly those impacted by exogenous shocks,
-%    lending valuable insights to scholars operating outside the confines of a traditional mathematical or statistical framework.
-%
-%
-%    The combined white noise vector for the cyclical component $\kappa^{(c)}$ for $m$ time series is a vector of dimension $2m \times 1$.
-%    Each element $\bm{\kappa}_{t}^{(i)}$ in this vector corresponds to the white noise term for the state variables of the cyclical component of each time series.
-%
-%    \begin{equation}
-%        \bm{\kappa}_{t}^{(i)}=
-%            \left[
-%                \begin{array}{c}
-%                    \kappa_{t}^{(c,1)} \\
-%                    \kappa_{t}^{(c,2)} \\
-%                    \vdots \\
-%                    \kappa_{t}^{(c,m)}
-%                \end{array}
-%            \right]
-%        \label{eq:cyclical_error_mv}
-%    \end{equation}
-%
-%    Each $\bm{\kappa}_{t}^{(i)}$ is a $2 \times 1$ vector:
-%
-%    \begin{equation}
-%        \bm{\kappa}_{t}^{(i)}=
-%            \left[
-%                \begin{array}{c}
-%                    \kappa_{t}^{(\alpha,i)} \\
-%                    \kappa_{t}^{(\beta,i)}
-%                \end{array}
-%            \right]
-%        \label{eq:cyclical_error}
-%    \end{equation}
-%
-%    where $\kappa_{t}^{(\alpha,i)}$ and $\kappa_{t}^{(\beta,i)}$ are the white noise terms for the state variables
-%    $\alpha^{(i)}$ and $\beta^{(i)}$ respectively.
-%
-%    The variance-covariance matrix $\bm{\Sigma}_{\omega}$ for the white noise term $\omega_t^{(c)}$ is a block diagonal
-%    matrix of dimension $2m \times 2m$.\ Each block on the diagonal corresponds to the variance-covariance matrix of the
-%    white noise term for the cyclical component of each time series.
-%
-%    \begin{equation}
-%        \bm{\Sigma}_{\omega} =
-%            \left[
-%                \begin{array}{cccc}
-%                    \bm{\Sigma}_{\omega, 1} & \mathbf{0} & \cdots & \mathbf{0} \\
-%                    \mathbf{0} & \mathbf{\Sigma}_{\omega, 2} & \cdots & \mathbf{0} \\
-%                    \vdots & \vdots & \ddots & \vdots \\
-%                    \mathbf{0} & \mathbf{0} & \cdots & \mathbf{\Sigma}_{\omega, m}
-%                \end{array}
-%            \right]
-%        \label{eq:cyclical_covariance}
-%    \end{equation}
-%
-%    Each block on the diagonal of the matrix $\bm{\Sigma}_{\omega}$ is a $2 \times 2$ matrix representing the variance-covariance
-%    white noise term $\omega_t^{(\alpha, i)}$ and $\omega_t^{(\beta, i)}$:
-%
-%    \begin{equation}
-%        \bm{\Sigma}_{\omega, i} =
-%            \left[
-%                \begin{array}{cc}
-%                    \sigma_{\alpha, i}^2    & \sigma_{\alpha\beta, i} \\
-%                    \sigma_{\alpha\beta, i} & \sigma_{\beta, i}^2
-%                \end{array}
-%            \right]
-%        \label{eq:cyclical_covariance_block}
-%    \end{equation}
-%
-%    By structuring the white noise terms and their variance-covariance matrix this way,
-%    clearly separate the noise affecting each time series while allowing for the noise terms of the cyclical
-%    state variables within each series to be correlated.
-%
-%\subsubsection{Regression Component}
-%    \label{sec:regression_component}
-%
-%    The regression component of the structural time series model is a flexible element that allows the incorporation of
-%    exogenous variables that can influence the target time series.
-%    The regression component is modelled as a linear combination of the exogenous variables.
-%    The regression component of the~\gls{mbsts} can be expressed as:
-%
-%    \begin{equation}
-%        \bm{\xi}_{t} = \bm{X}_t \bm{\beta} + \bm{\epsilon}_{t},
-%            \qquad \bm{\epsilon}_{t} \stackrel{\textit{iid}}{\sim} \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})
-%        \label{eq:regression_state}
-%    \end{equation}
-%
-%    Where:
-%
-%    \begin{itemize}
-%        \item $\bm{\xi}_{t}$ ($m \times 1$): regression component at time $t$
-%        \item $\bm{X}_t$ ($m \times p$): matrix of exogenous variables at time $t$
-%        \item $\bm{\beta}$ ($p \times 1$): regression coefficients at time $t$
-%        \item $\bm{\epsilon}_{t}$ ($m \times 1$): regression disturbance at time $t$,
-%            where $\bm{\epsilon}_{t} \sim \mathcal{N}_{m}(0, \bm{\Sigma}_{\epsilon})$
-%        \item $\bm{\Sigma}_{\epsilon}$ ($m \times m$): variance-covariance matrix of the regression disturbance
-%    \end{itemize}
-%
-%    The covariates matrix $\bm{X}_t$ is a $m \times p$ matrix, where $m$ is the number of time series and $p$ is the number of predictors.
-%    Each row of the matrix $\bm{X}_t$ corresponds to the exogenous variables for each time series at time $t$,
-%    and each column corresponds to a covariate. The matrix $\bm{X}_t$ can be represented as:
-%
-%    \begin{equation}
-%        \bm{X}_t =
-%            \left[
-%                \begin{array}{cccc}
-%                    x_{t1,1} & x_{t1,2} & \cdots & x_{t1,p} \\
-%                    x_{t2,1} & x_{t2,2} & \cdots & x_{t2,p} \\
-%                    \vdots  & \vdots  & \ddots & \vdots  \\
-%                    x_{tm,1} & x_{tm,2} & \cdots & x_{tm,p}
-%                \end{array}
-%            \right]
-%        \label{eq:regression_covariates}
-%    \end{equation}
-%
-%    In the overall~\gls{mbsts}, the regression component is combined with the trend, seasonality,
-%    and cyclical intends to capture the full dynamics of the time series.
-%    The regression component specifically supports to model the influence of known external factors on the time series.
-%    By incorporating covariates, the model can explain parts of the variability in the time series that are attributable
-%    to these external factors, thus improving the accuracy and interpretability of the model.
-%
-%
-%\subsection{Generatate Wind Series Forecast Scenarios}
-%    \label{sec:wind_forecast_scenarios}
-%
-%    As conventional in Bayesian data analysis, predictions are derived from our model's posterior predictive distribution.
-%    This is achieved by drawing samples of model parameters and unseen or hidden states from their respective posterior distribution.
-%    Therefore, the posterior predictive distribution of $\hat{Y}$, representing the collection of forecasted values, can be described as:
-%
-%    \begin{equation}
-%        p(\hat{Y} | Y) = \int p(\hat{Y} | \psi) p(\psi | Y) d\psi
-%    \label{eq:posterior_predictive}
-%    \end{equation}
-%
-%    Where $Y$ is the observed data and $\psi$ is the set of all the model parameters and latent states randomly drawn from
-%    $p(\psi | Y)$.
-%
-%    The posterior distribution of the model parameters can be trained by using \gls{mcmc} algorithms.
-%    Taking advantage of working in the state space methods, forecast can be obtained continuing the Kalman filter after
-%    the last observation in the time series.
-%    This is known as the one-step-ahead forecast~\cite{durbin_time_2012}. \\
-%
-%    It is important to note that in this model, the predictive probability density is not contingent on parameter estimates,
-%    nor on the inclusion or exclusion of predictors with stationary regression coefficients these have all been fully integrated.
-%    The Bayesian model averaging ensures that we do not unduly commit to any specific set of covariates,
-%    thus helping us avoid an arbitrary selection, and neither do we settle for point estimates of their coefficients,
-%    thereby preventing overfitting.
-%
-%    The correlations amongst multiple target series are naturally accounted for when sampling for prediction values.
-%    The posterior predictive density is designed as a joint distribution over all predicted target series rather than a
-%    mere collection of univariate distributions.
-%    This methodology enables to project multiple target series in a comprehensive manner rather than examining each individually,
-%    as disjoint segments~\cite{qiu_multivariate_2018}.
-%
-%    This can be particularly beneficial when generating summary statistics, such as the mean and variance-covariance,
-%    derived from the joint empirical distribution of forecast values.
-%
-%\section{Capacity Factor}
-%    \label{sec:capacity_factor}
-%
-%    Within the scope of this thesis, the capacity utilisation factor, also known as the capacity factor, we be employed
-%    as an indicator of a power production asset's performance capabilities.
-%    This factor represents an asset's actual output over a determined period compared to its potential output
-%    if it were possible for it to operate at full capacity continuously over the same timeframe.
-%    A higher capacity factor effectively signifies a more efficient energy production.
-%    When the mechanisms of energy trading are articulated, this factor can be converted directly into projected revenue,
-%    thus providing a tangible correlation between an asset’s performance and its financial implications.
-%
-%    As previously mentioned, in chapter~\ref{sec:wind_futures},
-%    the capacity factor is the metric that indexes, such as NASDAQ WIDE, adopted to model future wind contracts.
-%    Therefore, the portfolio capacity factor will be considered to model futures' contracts and evaluate the
-%    performance of the hedging strategies.
-%
-%    The capacity factor is calculated using the following equation:
-%
-%    \begin{equation}
-%        cf_t =
-%%        \frac{\text{Energy generated at period t}}{\text{Nominal Capacity Production at time t}} =
-%        \frac{g_{t}}{C \cdot h_{t}}
-%    \label{eq:capacity_factor}
-%    \end{equation}
-%
-%    Where $g_{t}$ is the actual energy production, $C$ is the nominal capacity production and $h_{t}$ is the
-%    number of hours in the period $t$.
-%    The nominal capacity production refers to the maximum possible energy output under ideal conditions.
-%    The capacity factor is a dimensionless value, usually expressed as a percentage.
-%
-%    For $T$ periods defined as ($t=1,....,T$), the revenue $R$ generated by a wind farm can be calculated as:
-%
-%    \begin{equation}
-%        R = C \left( \sum_{t=1}^{T} h_{t} cf_{t} p_{t} \right)
-%    \label{eq:revenue_wf}
-%    \end{equation}
-%
-%    Where $p_{t}$ is the price of energy at time $t$.
-%    Energy agents typically have a multiple wind generators, where can be organised in different portfolios.
-%    Extending the previous definition, the revenue $R$ generated by a wind portfolio composed by N assets, indexed by
-%    $i= 1,2, ..., N$, where $i$ can be a generation project or location.
-%    Let $C_{p}$ be the portfolio's nominal production capacity,
-%    the revenue $R_{p}$ generated by a wind portfolio can be calculated as:
-%
-%    \begin{align}
-%        R_{p} &= \sum_{i=1}^{N} R_{i} \\
-%        \Rightarrow C_{p} \left( \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} \right) &=
-%        \sum_{i=1}^{N} C_{i} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right)
-%    \label{eq:revenue_pf}
-%    \end{align}
-%
-%    where $cf_{tp}$ is the portfolio's (weighted average) capacity factor at time $t$, $R_{i}$ is the revenue generated by
-%    the asset $i$ and $cf_{it}$ is the $i$th-asset's capacity factor at time $t$.
-%    Dividing both sides by the portfolio's total capacity $C_{p}$:
-%
-%    \begin{align}
-%        \sum_{t=1}^{T} h_{t} cf_{tp} p_{tp} &=
-%        \sum_{i=1}^{N} \frac{C_{i}}{C_{p}} \left(  \sum_{t=1}^{T} h_{t} cf_{it} p_{tp} \right) \\
-%        \Rightarrow \overline{R}_{p} &= \sum_{i=1}^{N} x_{i} R_{i}
-%    \label{eq:revenue_std}
-%    \end{align}
-%
-%    In this context, $\overline{R}_{p}$ denotes the revenue per megawatt (MW) of installed capacity and $x_{i}$
-%    elucidates the proportion of the total capacity of the portfolio denoted by asset $i$,
-%    which is also indicative of the weight of asset $i$ in the portfolio.
-%    It is essential to note that, assuming the equivalence of prices for all assets integrated within the portfolio,
-%    equation~\ref{eq:revenue_std} retains its validity across any given price $p_{tp}$.
-%
-%
-%
-%
-%
-%
-%
+    \subsection{Gamma ($\Gamma$)}
+        Gamma measures the sensitivity of $\Delta$ to changes in the stock price ($S$):
+        \begin{equation}
+            \Gamma = \frac{\partial^2 C}{\partial S^2}.
+            \label{eq:gamma_definition}
+        \end{equation}
+        From $\Delta$ in \eqref{eq:delta_result}:
+        \begin{equation}
+            \Delta = \Phi(d_1),
+            \label{eq:gamma_delta}
+        \end{equation}
+        and
+        \begin{equation}
+            \frac{\partial d_1}{\partial S} = \frac{1}{S \sigma \sqrt{T}}.
+            \label{eq:gamma_d1_derivative}
+        \end{equation}
+        Differentiating $\Delta$ with respect to $S$:
+        \begin{equation}
+            \Gamma = \phi(d_1) \frac{\partial d_1}{\partial S}.
+            \label{eq:gamma_derivation}
+        \end{equation}
+        Substituting \eqref{eq:gamma_d1_derivative} into \eqref{eq:gamma_derivation}:
+        \begin{equation}
+            \Gamma = \frac{\phi(d_1)}{S \sigma \sqrt{T}}.
+            \label{eq:gamma_result}
+        \end{equation}
+
+    \subsection{Vega ($\nu$)}
+        Vega measures the sensitivity of the option price to changes in volatility ($\sigma$):
+        \begin{equation}
+            \nu = \frac{\partial C}{\partial \sigma}.
+            \label{eq:vega_definition}
+        \end{equation}
+        From the Black-Scholes formula \eqref{eq:bs_formula}:
+        \begin{equation}
+            \nu = S \phi(d_1) \frac{\partial d_1}{\partial \sigma}
+                - K e^{-rT} \phi(d_2) \frac{\partial d_2}{\partial \sigma}.
+            \label{eq:vega_derivation}
+        \end{equation}
+        From the definitions of $d_1$ and $d_2$ in \eqref{eq:d1_d2_definitions}:
+        \begin{equation}
+            \frac{\partial d_1}{\partial \sigma}
+            = \sqrt{T}, \quad \frac{\partial d_2}{\partial \sigma}
+            = \frac{\partial d_1}{\partial \sigma}.
+            \label{eq:vega_d1_d2_derivatives}
+        \end{equation}
+
+        Substituting \eqref{eq:vega_d1_d2_derivatives} into \eqref{eq:vega_derivation}:
+
+        \begin{equation}
+            \nu = S \phi(d_1) \sqrt{T}.
+            \label{eq:vega_result}
+        \end{equation}
+
+    \subsection{Theta ($\Theta$)}
+        Theta measures the sensitivity of the option price to the passage of time ($T$):
+        \begin{equation}
+            \Theta = -\frac{\partial C}{\partial T}.
+            \label{eq:theta_definition}
+        \end{equation}
+        From the Black-Scholes formula \eqref{eq:bs_formula}:
+        \begin{align}
+            \Theta &=
+                -S \phi(d_1) \frac{\partial d_1}{\partial T}
+                + rK e^{-rT} \Phi(d_2)
+                - K e^{-rT} \phi(d_2) \frac{\partial d_2}{\partial T}
+            \label{eq:theta_derivation1}
+        \end{align}
+        where
+        \begin{equation}
+            \frac{\partial d_1}{\partial T} = \frac{-\ln(S/K) - (r + \sigma^2/2)T}{2T^{3/2} \sigma}, \quad
+            \frac{\partial d_2}{\partial T} = \frac{\partial d_1}{\partial T}.
+            \label{eq:theta_d1_d2_derivatives}
+        \end{equation}
+        Simplifying:
+        \begin{equation}
+            \Theta = -\frac{S \phi(d_1) \sigma}{2\sqrt{T}} - rK e^{-rT} \Phi(d_2).
+            \label{eq:theta_result}
+        \end{equation}
+
+    \subsection{Rho ($\rho$)}
+    Rho measures the sensitivity of the option price to changes in the risk-free interest rate ($r$):
+        \begin{equation}
+            \rho = \frac{\partial C}{\partial r}.
+            \label{eq:rho_definition}
+        \end{equation}
+        From the Black-Scholes formula \eqref{eq:bs_formula}:
+        \begin{equation}
+            \rho = S \phi(d_1) \frac{\partial d_1}{\partial r}
+                + T K e^{-rT} \Phi(d_2) - K e^{-rT} \phi(d_2) \frac{\partial d_2}{\partial r}.
+            \label{eq:rho_derivation}
+        \end{equation}
+        From the definitions of $d_1$ and $d_2$:
+        \begin{equation}
+            \frac{\partial d_1}{\partial r} = \sqrt{T}, \quad \frac{\partial d_2}{\partial r} = \sqrt{T}.
+            \label{eq:rho_d1_d2_derivatives}
+        \end{equation}
+        Substituting:
+        \begin{equation}
+            \rho = K T e^{-rT} \Phi(d_2).
+            \label{eq:rho_result}
+        \end{equation}
+
+    A practical Python implementation of the Black-Scholes Greeks is shown below:
+
+            \begin{lstlisting}[
+   language=Python,
+   caption={Python Code: Sensitivity Analysis - Compute Greeks},
+   label={lst:sensitivity_analysis}
+    ]
+import numpy as np
+from scipy.stats import norm
+
+def black_scholes_greeks(S, K, T, r, sigma, option_type='call'):
+    d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+    d2 = d1 - sigma * np.sqrt(T)
+
+    delta = norm.cdf(d1) if option_type == 'call' else norm.cdf(d1) - 1
+    gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
+    theta = (- (S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T))
+             - r * K * np.exp(-r * T) * norm.cdf(d2) if option_type == 'call'
+             else - (S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T))
+             + r * K * np.exp(-r * T) * si.norm.cdf(-d2))
+    vega = S * np.sqrt(T) * norm.pdf(d1)
+    rho = (K * T * np.exp(-r * T) * norm.cdf(d2) if option_type == 'call'
+           else -K * T * np.exp(-r * T) * norm.cdf(-d2))
+
+    return {
+        'Delta': delta,
+        'Gamma': gamma,
+        'Theta': theta,
+        'Vega': vega,
+        'Rho': rho
+}
+
+# Example:
+S, K, T, r, sigma = 100, 100, 1, 0.05, 0.2  # Example parameters
+greeks_call = black_scholes_greeks(S, K, T, r, sigma, 'call')
+greeks_put = black_scholes_greeks(S, K, T, r, sigma, 'put')
+
+print("Call Option Greeks:", greeks_call)
+print("Put Option Greeks:", greeks_put)
+
+   \end{lstlisting}
+
