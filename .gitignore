@@ -395,4 +395,8 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/latex,windows,linux,macos
 #/.idea/
-/out/
+
+/out/*
+!/out/.gitkeep
+/auxil/*
+!/auxil/.gitkeep
