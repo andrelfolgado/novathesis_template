@@ -1,7 +1,9 @@
+from gemlib.database import load_data_azure
 from gemlib.database.utils import load_data_oracle, load_data_hub
 import pandas as pd
 # import warnings to avoid getting sqlalchemy warnings from load_data_hub
 import warnings
+import numpy as np
 
 warnings.filterwarnings('ignore')
 
@@ -12,6 +14,19 @@ def get_wind_prev_pivot(zones_names: tuple, hist_num_year: int):
 
     df_index = get_wind_prev_hist(zones_names)
 
+    column_types = {
+        "dia_aplicacao": "datetime64[ns]",
+        "hora_aplicacao": np.uint8,
+        "percentil": "category",
+        "valor": "float64",
+        "nomeZona": "string",
+        "zonaDescr": "string",
+        "unidade": "string",
+        "nome_Modelo": "string",
+        "modelo_Descr": "string"
+    }
+
+    df_index = df_index.astype(column_types)
     # df_index = df.copy()
 
     # filter datetime to get the last 2 years
@@ -27,7 +42,7 @@ def get_wind_prev_pivot(zones_names: tuple, hist_num_year: int):
     df_index.set_index('datetime', inplace=True)
 
     df_index.drop(
-        columns=['dia_aplicacao', 'hora_aplicacao', 'zonadescr', 'unidade', 'percentil', 'nomezona', 'modelo_descr'],
+        columns=['dia_aplicacao', 'hora_aplicacao', 'zonaDescr', 'unidade', 'percentil', 'nomeZona', 'modelo_Descr'],
         inplace=True)
     df_index.sort_index(inplace=True)
 
@@ -35,12 +50,12 @@ def get_wind_prev_pivot(zones_names: tuple, hist_num_year: int):
     # keeping the original index and nome_modelo eliminating the duplicates reset the nome_modelo index
     df_silver = (
         df_index
-        .groupby(['datetime', 'nome_modelo'])
+        .groupby(['datetime', 'nome_Modelo'])
         .mean()
-        .reset_index(level='nome_modelo')
+        .reset_index(level='nome_Modelo')
     )
 
-    df_silver['installed_capacity'] = df_silver['nome_modelo'].map(
+    df_silver['installed_capacity'] = df_silver['nome_Modelo'].map(
         df_zones_props.set_index('FACILITY_UNIT_ID_SHORT')['INSTALLED_CAPACITY']
     ) / 1000
 
@@ -48,7 +63,7 @@ def get_wind_prev_pivot(zones_names: tuple, hist_num_year: int):
 
     df_silver.drop(columns=['installed_capacity', 'valor'], inplace=True)
 
-    df_silver_pivot = df_silver.pivot(columns='nome_modelo', values='capacity_factor')
+    df_silver_pivot = df_silver.pivot(columns='nome_Modelo', values='capacity_factor')
 
     # substitute nan values with 0, to fill projects that started later than historical data retrieval
     df_silver_pivot.fillna(0, inplace=True)
@@ -62,7 +77,7 @@ def get_wind_prev_hist(zones_names):
         FROM POWERBI_EOL_PREV_HIST
         WHERE NOME_MODELO IN {zones_names}
     """
-    df = load_data_oracle(orc_wind_prev_hist)
+    df = load_data_azure(orc_wind_prev_hist)
     return df
 
 
@@ -77,4 +92,10 @@ def get_facilities_props(zones_names):
     df_fac_props['FACILITY_UNIT_ID_SHORT'] = df_fac_props['FACILITY_UNIT_ID'].apply(
         lambda x: '_'.join(x.split('_')[1:]) if '_' in x else x)
     df_zones_props = df_fac_props[df_fac_props['FACILITY_UNIT_ID_SHORT'].isin(zones_names)]
+
+    df_zones_props = (
+        df_zones_props
+        .sort_values(by="UPDATED_DATE")
+        .drop_duplicates(subset=["FACILITY_UNIT_ID_SHORT"], keep="last")
+    )
     return df_zones_props
