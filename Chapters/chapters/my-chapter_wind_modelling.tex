@@ -89,15 +89,15 @@
 
     As described, seven parameters are required to fully define the power curve of a wind turbine.
 
-    \enumerate{
+    \begin{enumerate}
         \item The cut-in wind speed, $v_{cut-in}$, below which the turbine is unable to generate power.
         \item The cut-out wind speed, $v_{cut-out}$, above which the turbine is unable to generate power.
         \item The rated wind speed, $v_{rated}$, at which the turbine is able to generate its maximum power.
         \item The rated power, $P_{rated}$, which is the maximum power output of the turbine.
-        \item The power curve provided by the manufactor, which will determine the production between the threshold.
+        \item The power curve provided by the manufacture, which will determine the production between the threshold.
         \item The hub height, $h$, at which the wind power is generated.
-        \item The spacial factor to diferentiate turbine surroundings.
-    }
+        \item The spacial factor to differentiate turbine surroundings.
+    \end{enumerate}
 
 \section{Wind Generation Modelling}
     \label{sec:wind_generation_modelling}
@@ -802,6 +802,10 @@
     which is also indicative of the weight of asset $i$ in the portfolio.
     It is essential to note that, assuming the equivalence of prices for all assets integrated within the portfolio,
     equation~\ref{eq:revenue_std} retains its validity across any given price $p_{tp}$.
+    Although, the perception of the portolio's wheight is conceptiionally different when applied to in the finantial context,
+    where the weight is the percentage of the invested capital under management.
+    This linear relationship between the portfolio's capacity factor and the individual assets' capacity factors,
+    allows to use a yield equivalent to the Markowitz portfolio theory~\cite{thomaidis_handling_2023}.
 
 
 
